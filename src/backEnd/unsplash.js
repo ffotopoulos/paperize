@@ -1,6 +1,13 @@
-import { setWallpaper } from './wallpaper';
-import { getSettingsOption } from './settings';
-import { deletePaperizePhotos, getPhotoPath } from './files';
+import {
+    setWallpaper
+} from './wallpaper';
+import {
+    getSettingsOption
+} from './settings';
+import {
+    deletePaperizePhotos,
+    getPhotoPath
+} from './files';
 let axios = require('axios');
 let fs = require('fs');
 let apiKey = "25dadce5805202367c5dbf98497f2a8d64ae4e71471d91c7a3ce06ae37fb1659";
@@ -77,11 +84,12 @@ let downloadAndSave = (url, destToSave, savePhoto, callback, ) => {
         console.log(destToSave)
         if (savePhoto) {
             let destination = getSettingsOption('options.saveLocation');
-            //delete prev photos if enabled
-            if (getSettingsOption('options.deletePrevImage')) {
-                deletePaperizePhotos(destination);
-            }
-            if (destination.trim() != '') {
+            if (destination.trim() != '' && fs.existsSync(destination.trim())) {
+                //delete prev photos if enabled
+                if (getSettingsOption('options.deletePrevImage')) {
+                    deletePaperizePhotos(destination);
+                }
+                console.log(url);
                 var downloadedFile = fs.createWriteStream(destination + `\\paperize_${Date.now()}.jpg`)
                 response.pipe(downloadedFile)
             }
