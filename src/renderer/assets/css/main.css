@@ -144,14 +144,14 @@ body {
 	box-sizing: border-box;
 }
 
-.offline{
+.offline {
 	position: absolute;
-    display: none;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    top: 35%;
-    z-index: 5;
+	display: none;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	top: 35%;
+	z-index: 5;
 }
 
 .loading {
@@ -203,13 +203,14 @@ body {
 	transition-duration: 0.3s;
 	-webkit-transition-property: transform;
 	transition-property: transform;
-  }
-  .grow:hover, .grow:focus, .grow:active {
+}
+
+.grow:hover,
+.grow:focus,
+.grow:active {
 	-webkit-transform: scale(1.1);
 	transform: scale(1.1);
-  }
-  
-
+}
 
 .hvr-glow {
 	display: inline-block;
@@ -247,7 +248,7 @@ body {
 	display: inline;
 }
 
-.playback-icon i {
+.roundedIcon {
 	cursor: pointer;
 	font-size: 12px;
 	display: inline-block;
@@ -313,29 +314,29 @@ body {
 
 .taskbar-drag {
 	height: 100%;
-    width: 60%;    
-    float: left;
-    -webkit-app-region: drag;
-    opacity: 0;
+	width: 60%;
+	float: left;
+	-webkit-app-region: drag;
+	opacity: 0;
 }
 
 .photoCredit {
-	float:left;
+	float: left;
 	width: 30%;
 	height: 100%;
 	font-family: Arimo;
 	font-size: 11px;
 	padding-left: 8px;
-	padding-top:5px;
+	padding-top: 5px;
 }
 
-.photoCredit.hidden{
+.photoCredit.hidden {
 	opacity: 0;
 }
 
 .taskbar-main .taskbar {
 	float: left;
-	font-size: 20px;	
+	font-size: 20px;
 	border-radius: 8%;
 	background-color: rgba(0, 0, 0, 0.07);
 	width: 10%;
@@ -425,7 +426,7 @@ a {
 	-moz-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
 	-webkit-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
 	-ms-transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
-	transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;	
+	transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
 	text-decoration: none;
 	color: inherit;
 }
@@ -1493,22 +1494,27 @@ button {
 }
 
 #gallery-wrapper .panel {
-	width: 240px;
-	margin: auto;
+	width: 100%;
+	text-align: center;
 	left: 0;
 	right: 0;
-	top: 9px;
-	margin-left: auto;
-	margin-right: auto;
-	/* width: 60px; */
+	top: 9px; 
 	position: absolute;
 }
 
 #gallery-wrapper .panel select {
-	width: 75%;
+	width: 200px;
 	margin-left: 20px;
 	display: inline;
 }
+
+#customGalleryCategoryInput {
+	width: 200px;
+	height: 25px;
+	text-align: center;
+	display: inline;
+}
+
 
 #gallery-wrapper .panel i {
 	cursor: pointer;
@@ -1558,7 +1564,7 @@ button {
 	cursor: pointer;
 	font-size: 20px;
 	display: inline-block;
-	border-radius: 60px;
+	border-radius: 50%;
 	box-shadow: 0px 0px 2px #888;
 	background-color: rgba(0, 0, 0, 0.85);
 	padding: 0.5em 0.6em;
@@ -1637,7 +1643,7 @@ button {
 	padding: 0.2em;
 	display: none;
 	z-index: 4;
-	margin-top:	0.2em;
+	margin-top: 0.2em;
 	margin-left: 60px;
 	margin-right: 60px;
 	border-radius: 10px;
@@ -1780,7 +1786,7 @@ button {
 	display: block;
 	height: 50px;
 	padding-left: 5px;
-    padding-top: 5px;
+	padding-top: 5px;
 }
 
 .checkmark__circle {

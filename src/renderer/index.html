@@ -34,7 +34,7 @@
 
     <div id="playback">
         <div class="playback-icon ">
-            <i class="fa fa-pause playback-toggle shrink"></i>
+            <i class="fa fa-pause roundedIcon playback-toggle shrink"></i>
         </div>
     </div>
 
@@ -146,14 +146,14 @@
                         <option value="art">Art</option>
                         <option value="animals">Animals</option>
                         <option value="food">Food</option>
-                        <option value="technology">Tech</option>
+                        <option value="technology">Technology</option>
                         <option value="custom">Custom</option>
                     </select>
 
                     <input type="text" id="customCategoryInput" style="width:400px;margin:auto;text-align: center;display:none" placeholder="type your category">
                 </div>
                 
-                <div class="group">
+                <div class="group" title="Enabling this option will stop the automatic wallpaper change when you change desktop wallpaper using randomize or gallery">
                     <span class="label">
                         randomize and gallery stop the timer
                     </span>
@@ -163,7 +163,7 @@
                     </div>
                 </div>
 
-                <div class="group">
+                <div class="group" title="Enabling this option will allow paperize to start as soon as you log in to Windows">
                     <span class="label">
                         start paperize with windows
                     </span>
@@ -174,7 +174,7 @@
                 </div>
                 
 
-                <div class="group">
+                <div class="group" title="Enabling this option will download and save the unsplash wallpaper image to your desired location">
                     <span class="label">
                         Save downloaded image
                     </span>
@@ -210,10 +210,13 @@
                     <option value="art">Art</option>
                     <option value="animals">Animals</option>
                     <option value="food">Food</option>
-                    <option value="technology">Tech</option>
+                    <option value="technology">Technology</option>
+                    <option value="custom">Custom</option>
                 </select>
-                <span style="padding-left:15px;">
-                    <i class="fa fa-sync gallery"> </i>
+                <input type="text" id="customGalleryCategoryInput" class="animated fadeIn" style="display:none" placeholder="type your category">
+
+                <span style="padding-left:10px;position: relative;top:-2px">
+                    <i class="roundedIcon fa fa-search gallery"> </i>
                 </span>
             </div>
             <div class="close closeGallery"></div>
