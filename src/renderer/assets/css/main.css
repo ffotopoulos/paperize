@@ -314,7 +314,7 @@ body {
 
 .taskbar-drag {
 	height: 100%;
-	width: 60%;
+	width: 65%;
 	float: left;
 	-webkit-app-region: drag;
 	opacity: 0;
@@ -339,13 +339,13 @@ body {
 	font-size: 20px;
 	border-radius: 8%;
 	background-color: rgba(0, 0, 0, 0.07);
-	width: 10%;
+	width: 5%;
+	text-align: center;
 }
 
 .taskbar .icon {
 	border-radius: 100%;
-	display: inline;
-	padding: 0.5em;
+	display: inline;	
 }
 
 .taskbar .icon:last-child {
