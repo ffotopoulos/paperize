@@ -6,7 +6,8 @@ import { initSettings, getSettingsOption } from './backEnd/settings';
 import { initTray } from './backEnd/tray';
 import { initAutoLaunch, toggleAutoLaunch } from './backEnd/autolaunch';
 import { events } from './backEnd/events';
-
+import {checkForUpdates} from './backEnd/update';
+import {initNotifyConfig} from './backEnd/notify';
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
     app.quit();
@@ -15,13 +16,15 @@ singleInstance();
 bypassLocalChecker();
 
 let startApplication = () => {
+    initNotifyConfig();
     initSettings();
     initAutoLaunch();
     toggleAutoLaunch(getSettingsOption('options.startOnLogin'));
     createSplashScreenWindow();
     createWindow();
     initTray();
-    events();
+    events();    
+    checkForUpdates();
 }
 
 let quitApplication = () => {

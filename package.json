@@ -30,15 +30,15 @@
       },
       "electronPackagerConfig": {
         "packageManager": "npm",
-        "arch":"ia32",
-        "platform":"win32",
-        "icon":"src/backEnd/icons/app-icon.ico",
-        "asar":true
+        "arch": "ia32",
+        "platform": "win32",
+        "icon": "src/backEnd/icons/app-icon.ico",
+        "asar": true
       },
       "electronWinstallerConfig": {
-        "name": "paperize",        
+        "name": "paperize",
         "iconUrl": "file:///E:/Documents/ElectronJS/paperize/src/backEnd/icons/app-icon.ico",
-        "setupIcon":"E:/Documents/ElectronJS/paperize/src/backEnd/icons/app-icon.ico"
+        "setupIcon": "E:/Documents/ElectronJS/paperize/src/backEnd/icons/app-icon.ico"
       },
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
@@ -53,11 +53,12 @@
     }
   },
   "dependencies": {
-    "electron-compile": "^6.4.3",
-    "electron-squirrel-startup": "^1.0.0",
     "auto-launch": "^5.0.5",
     "axios": "^0.18.0",
+    "electron-compile": "^6.4.3",
+    "electron-notify": "^0.1.0",
     "electron-settings": "^3.2.0",
+    "electron-squirrel-startup": "^1.0.0",
     "request": "^2.87.0",
     "wallpaper": "^3.0.0"
   },
