@@ -21,7 +21,7 @@ ipcRenderer.on('togglePlayback', (evt, msg) => {
 ipcRenderer.on('loadSettings', (event, result) => {
     loadSettings(result.options).then(() => {
         if (!$("#settings").is(":visible")) {
-            $("#header").hide();
+            hideHeader();
             $("#gallery-wrapper").hide();
             $("#checkmark").html('');
             $("#settings").show();
@@ -101,7 +101,7 @@ $("#customGalleryCategoryInput").keypress(function (ev) {
 
 $(".gallery").click(() => {
     if ($("#header").is(":visible")) {
-        $("#header").hide();
+        hideHeader();
     }
     if ($("#settings").is(":visible")) {
         $("#settings").hide();
@@ -120,14 +120,14 @@ $(".closeSettings").click(() => {
     // ipcRenderer.send("left-settings");
     $("#settings").hide();
     if (!$("#minimized").is(":visible"))
-        $("#header").show();
+       showHeader();
 })
 
 $(".closeGallery").click(() => {
     // ipcRenderer.send("left-settings");
     $("#gallery-wrapper").hide();
     if (!$("#minimized").is(":visible"))
-        $("#header").show();
+        showHeader();
 })
 
 $(".next").click(() => {
@@ -212,13 +212,32 @@ $(".open-url").click(function () {
 
 var toggleWraper = () => {
     $("#minimized").toggle();
-    $("#header").toggle();
+    toggleHeader();
     $("#bg").toggleClass("bg");
     $("#settings").hide();
     $("#gallery-wrapper").hide();
 }
 
+function toggleHeader() {
+    if ($("#header").is(":visible")) {
+        hideHeader();
+    }
+    else{
+        showHeader();
+    }
+}
 
+function showHeader() {
+    $("#header").show();
+    window.setTimeout(function () {
+        $("body").removeClass('preload');
+    }, 200);
+}
+
+function hideHeader() {
+    $("body").addClass("preload");
+    $("#header").hide();
+}
 
 function toggleOffline(isOnline) {
     console.log(isOnline)
@@ -349,6 +368,10 @@ function loadSettings(settings) {
     });
 }
 window.addEventListener('load', function () {
+    window.setTimeout(function () {
+        document.querySelector('body').classList.remove('preload');
+    }, 500);
+
     function sendConnectionStatus(event) {
         toggleOffline(navigator.onLine)
         ipcRenderer.send('online-status', navigator.onLine)
@@ -356,4 +379,5 @@ window.addEventListener('load', function () {
     window.addEventListener('online', sendConnectionStatus);
     window.addEventListener('offline', sendConnectionStatus);
     sendConnectionStatus();
+
 });
