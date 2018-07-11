@@ -18,8 +18,7 @@ let createSplashScreenWindow = () => {
         slashes: true
     }))
     splashWindow.on('closed', () => splashWindow = null);
-    splashWindow.webContents.on('did-finish-load', () => {
-        
+    splashWindow.webContents.on('did-finish-load', () => {        
         splashWindow.show();
     });
 }

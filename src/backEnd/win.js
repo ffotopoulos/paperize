@@ -4,6 +4,7 @@ import { getAllSettings, getSettingsOption } from './settings';
 import { getPhotoPath, photoExists } from './files';
 import { setTimer, changeWallpaper } from './timer';
 import { getOsWallpaperPath } from './wallpaper';
+import {setUpdateCheckTimer, checkForUpdates} from './update';
 let path = require('path');
 let url = require('url');
 let mainWindow = null;
@@ -48,7 +49,7 @@ let createWindow = (c) => {
                 changeWallpaper(true);
             }
         });
-
+        
         //hide splash screen
         closeSplashWindow();
 
@@ -59,6 +60,10 @@ let createWindow = (c) => {
         } else {
             mainWindow.show();
         }
+
+        //check for updates
+        checkForUpdates(true);
+        setUpdateCheckTimer();
     });
 
     // when the window is closed.
@@ -111,7 +116,7 @@ let windowSendSettings = () => {
 }
 
 let windowSendToggleLoading = (message) => {
-    message = message || "SERVING"
+    message = message || " "
     mainWindow.webContents.send('toggleLoading', message);
 }
 
@@ -127,6 +132,9 @@ let windowSendGalleryFunctionDone = () => {
     mainWindow.webContents.send('galleryFunctionDone');
 }
 
+let windowSendUpdateAvailability = (available) =>{            
+    mainWindow.webContents.send('updateAvailability', available)
+}
 export {
     closeWindow,
     createWindow,
@@ -138,5 +146,6 @@ export {
     windowSendToggleLoading,
     windowSendWallpaperChanged,
     windowSendGalleryItems,
-    windowSendGalleryFunctionDone
+    windowSendGalleryFunctionDone,
+    windowSendUpdateAvailability
 }

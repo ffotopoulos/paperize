@@ -1,7 +1,18 @@
-import { Menu, Tray } from 'electron';
-import { closeWindow, toggleWindow } from './win';
-import { changeWallpaper } from './timer';
-import { saveSettings,getSettingsOption } from './settings';
+import {
+    app,
+    Menu,
+    Tray
+} from 'electron';
+import {
+    toggleWindow
+} from './win';
+import {
+    changeWallpaper
+} from './timer';
+import {
+    saveSettings,
+    getSettingsOption
+} from './settings';
 let path = require('path');
 let tray;
 
@@ -26,9 +37,9 @@ let initTray = () => {
             icon: path.join(__dirname, './icons/random.png'),
             click: () => {
                 changeWallpaper(true, true).then(() => {
-                    if(getSettingsOption("options.clearTimer")){
+                    if (getSettingsOption("options.clearTimer")) {
                         saveSettings('interval', 0);
-                    }                    
+                    }
                 }).catch((err) => {
 
                 });
@@ -38,17 +49,29 @@ let initTray = () => {
             label: 'exit',
             icon: path.join(__dirname, './icons/exit.png'),
             click: () => {
-                closeWindow();
+                app.quit();
             }
         },
     ])
     tray.setToolTip('paperize')
+
     tray.setContextMenu(contextMenu);
     tray.on('click', () => {
         toggleWindow();
     })
 }
 
+let displayTrayBalloon = (title, content) => {
+    if (process.platform == "win32") {
+        tray.displayBalloon({
+            icon: path.join(__dirname, "./icons/app-icon.png"),
+            title: title,
+            content: content
+        });
+    }
+}
+
 export {
-    initTray
+    initTray,
+    displayTrayBalloon
 }

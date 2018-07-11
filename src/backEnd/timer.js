@@ -1,4 +1,3 @@
-import {ipcMain} from 'electron';
 import {windowSendToggleLoading,windowSendWallpaperChanged} from './win';
 import {getImageAndSetWallpaper} from './unsplash';
 import {getSettingsOption} from './settings';

@@ -1,11 +1,19 @@
 var customTypingTimer = null;
 var lastIntervalMs = 180000;
+ipcRenderer.on('updateAvailability', (event, available) => {
+    if (available) {
+        $(".updateNotifIcon").show();
+    } else {
+        $(".updateNotifIcon").hide();
+    }
+})
+
 ipcRenderer.on('wallpaper-changed', (evt, data) => {
     setAppBackground(data);
 });
 
-ipcRenderer.on('toggleLoading', (msg) => {
-    msg = msg || 'SERVING...'
+ipcRenderer.on('toggleLoading', (event, msg) => {
+    msg = msg || " ";
     toggleLoading(msg);
 })
 
@@ -68,6 +76,27 @@ ipcRenderer.on('loadGallery', (evt, items) => {
 ipcRenderer.on('settingsSaved', () => {
     showCheckMark("#checkmark");
 })
+//close popup
+$('.c-modal').on('click', function (event) {
+    if ($(event.target).is('.c-modal-close') || $(event.target).is('.c-modal')) {
+        event.preventDefault();
+        $(this).removeClass('is-visible');
+    }
+});
+//close popup when clicking the esc keyboard button
+$(document).keyup(function (event) {
+    if (event.which == '27') {
+        $('.c-modal').removeClass('is-visible');
+    }
+});
+$(".updateNotifIcon").click(() => {
+    $('.c-modal').addClass('is-visible');
+})
+
+$(".installUpdate").click(()=>{
+    $('.c-modal').removeClass('is-visible');
+    ipcRenderer.send('updateApp');
+})
 
 $(".minimize").click(() => {
     ipcRenderer.send('minimize-app');
@@ -120,7 +149,7 @@ $(".closeSettings").click(() => {
     // ipcRenderer.send("left-settings");
     $("#settings").hide();
     if (!$("#minimized").is(":visible"))
-       showHeader();
+        showHeader();
 })
 
 $(".closeGallery").click(() => {
@@ -221,8 +250,7 @@ var toggleWraper = () => {
 function toggleHeader() {
     if ($("#header").is(":visible")) {
         hideHeader();
-    }
-    else{
+    } else {
         showHeader();
     }
 }
@@ -252,7 +280,7 @@ function toggleOffline(isOnline) {
 }
 
 function toggleLoading(message) {
-    message = message || 'SERVING...';
+    message = message || ' ';
     $(".loadingHeader").html(message);
     $(".fade").toggle();
     $(".loading").toggle();

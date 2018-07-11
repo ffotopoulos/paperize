@@ -1,7 +1,7 @@
 {
   "name": "paperize",
   "productName": "paperize",
-  "version": "1.0.1",
+  "version": "1.0.7",
   "description": "Setting desktop wallpapers automatically",
   "main": "src/main.js",
   "scripts": {

@@ -24,8 +24,11 @@
         </div>
         <div class="taskbar">
             <div class="icon">
+                <i class="roundedIcon fa fa-flag shrink updateNotifIcon" title="update available"></i>
+            </div>            
+            <div class="icon minimIcon">
                 <i class=" minimize fa fa-times shrink" title="minimize to tray"></i>
-            </div>           
+            </div>
         </div>
     </div>
 
@@ -124,7 +127,7 @@
                         <option value="18000000">5 hours</option>
                         <option value="25200000">7 hours</option>
                         <option value="43200000">12 hours</option>
-                        <option value="86400000">1 day</option>                        
+                        <option value="86400000">1 day</option>
                     </select>
                 </div>
 
@@ -148,7 +151,7 @@
 
                     <input type="text" id="customCategoryInput" style="width:400px;margin:auto;text-align: center;display:none" placeholder="type your category">
                 </div>
-                
+
                 <div class="group" title="Enabling this option will stop the automatic wallpaper change when you change desktop wallpaper using randomize or gallery">
                     <span class="label">
                         randomize and gallery stop the timer
@@ -168,7 +171,7 @@
                         <label class="onoffswitch-label" for="startOnLogin"></label>
                     </div>
                 </div>
-                
+
 
                 <div class="group" title="Enabling this option will download and save the unsplash wallpaper image to your desired location">
                     <span class="label">
@@ -180,16 +183,16 @@
                     </div>
                     <span class="label saveLocationGroup animated fadeInLeft" style="display:none">
                         <span style="display:block">Folder path:</span>
-                    <input class="fileInput" type="text" id="saveLocationInput">
-                    <input id="saveDirectory" type="file" webkitdirectory style="display:none" />
-                    <span style="display:block;text-transform: lowercase;font-size:12.2px">
+                        <input class="fileInput" type="text" id="saveLocationInput">
+                        <input id="saveDirectory" type="file" webkitdirectory style="display:none" />
+                        <span style="display:block;text-transform: lowercase;font-size:12.2px">
                             delete previous images (images whose name starting with paperize_)
                             <input type="checkbox" class="settingsCheckbox" id="deletePrevImage">
                         </span>
                     </span>
 
                 </div>
-                
+
             </div>
 
         </div>
@@ -254,7 +257,18 @@
         </div>
         <div class="align-center loadingHeader">SERVING...</div>
     </div>
-
+    <div class="c-modal" role="alert">
+            <div class="c-modal-container">
+                <p>A new awesome update is available!
+                    <br>
+                     Do you want to install it?</p>
+                <ul class="c-modal-buttons">
+                    <li><a href="#0" class="installUpdate">Yes</a></li>
+                    <li><a href="#0" onclick="document.querySelector('.c-modal').classList.remove('is-visible')">No</a></li>
+                </ul>
+                <a href="#0" class="c-modal-close">Close</a>
+            </div> <!-- c-modal-container -->
+        </div> <!-- c-modal -->
 </body>
 <!-- Insert this line above script imports  -->
 <script>

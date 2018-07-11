@@ -16,6 +16,7 @@ import { loadGallery, downloadGalleryItem } from './gallery';
 import { downloadAndSave } from './unsplash';
 import { getPhotoPath } from './files';
 import { setWallpaper } from './wallpaper';
+import { updateApp } from './update';
 
 let events = () => {
     ipcMain.on('minimize-app', () => {
@@ -67,7 +68,7 @@ let events = () => {
         });
     })
     ipcMain.on('downloadGalleryItem', (event, arg) => {
-        windowSendToggleLoading('DOWNLOADING...');
+        windowSendToggleLoading();
         downloadGalleryItem(arg.url, arg.saveDir).then(() => {
             windowSendGalleryFunctionDone();
             windowSendToggleLoading();
@@ -90,6 +91,10 @@ let events = () => {
 
     ipcMain.on('online-status', (event, isOnline) => {
         setOnlineStatus(isOnline);
+    })
+
+    ipcMain.on('updateApp',()=>{
+        updateApp();
     })
 
 }
