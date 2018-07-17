@@ -32,7 +32,7 @@ let initTray = () => {
                 changeWallpaper(true);
             }
         },
-        {
+        {    
             label: 'randomize',
             icon: path.join(__dirname, './icons/random.png'),
             click: () => {
@@ -46,7 +46,11 @@ let initTray = () => {
             }
         },
         {
-            label: 'exit',
+            label:'separator',
+            type:'separator',
+        },
+        {
+            label: 'quit',           
             icon: path.join(__dirname, './icons/exit.png'),
             click: () => {
                 app.quit();
