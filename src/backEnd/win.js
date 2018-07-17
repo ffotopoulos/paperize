@@ -62,7 +62,7 @@ let createWindow = (c) => {
         }
 
         //check for updates
-        checkForUpdates(true);
+        checkForUpdates();
         setUpdateCheckTimer();
     });
 
@@ -135,6 +135,10 @@ let windowSendGalleryFunctionDone = () => {
 let windowSendUpdateAvailability = (available) =>{            
     mainWindow.webContents.send('updateAvailability', available)
 }
+
+let windowSendStartUpdate = () =>{            
+    mainWindow.webContents.send('startUpdate')
+}
 export {
     closeWindow,
     createWindow,
@@ -147,5 +151,6 @@ export {
     windowSendWallpaperChanged,
     windowSendGalleryItems,
     windowSendGalleryFunctionDone,
-    windowSendUpdateAvailability
+    windowSendUpdateAvailability,
+    windowSendStartUpdate
 }

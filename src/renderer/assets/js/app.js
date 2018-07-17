@@ -8,6 +8,11 @@ ipcRenderer.on('updateAvailability', (event, available) => {
     }
 })
 
+ipcRenderer.on('startUpdate', () => {
+    updateApp();
+})
+
+
 ipcRenderer.on('wallpaper-changed', (evt, data) => {
     setAppBackground(data);
 });
@@ -76,14 +81,14 @@ ipcRenderer.on('loadGallery', (evt, items) => {
 ipcRenderer.on('settingsSaved', () => {
     showCheckMark("#checkmark");
 })
-//close popup
+//close update popup
 $('.c-modal').on('click', function (event) {
     if ($(event.target).is('.c-modal-close') || $(event.target).is('.c-modal')) {
         event.preventDefault();
         $(this).removeClass('is-visible');
     }
 });
-//close popup when clicking the esc keyboard button
+//close update popup when clicking the esc keyboard button
 $(document).keyup(function (event) {
     if (event.which == '27') {
         $('.c-modal').removeClass('is-visible');
@@ -93,9 +98,8 @@ $(".updateNotifIcon").click(() => {
     $('.c-modal').addClass('is-visible');
 })
 
-$(".installUpdate").click(()=>{
-    $('.c-modal').removeClass('is-visible');
-    ipcRenderer.send('updateApp');
+$(".installUpdate").click(() => {
+    updateApp();
 })
 
 $(".minimize").click(() => {
@@ -117,6 +121,7 @@ $(".showSettings").click(() => {
 $("#galleryCategory").change(function () {
     if ($(this).val() == "custom") {
         $("#customGalleryCategoryInput").show();
+        $("#customGalleryCategoryInput").focus();
     } else {
         $("#customGalleryCategoryInput").hide();
     }
@@ -247,6 +252,12 @@ var toggleWraper = () => {
     $("#gallery-wrapper").hide();
 }
 
+function updateApp() {
+    $('.c-modal').removeClass('is-visible');
+    $(".updateNotifIcon").hide();
+    ipcRenderer.send('updateApp');
+}
+
 function toggleHeader() {
     if ($("#header").is(":visible")) {
         hideHeader();
@@ -296,7 +307,7 @@ function setAppBackground(photo) {
         $("#bgPicture").attr("src", photo.photoPath + "?" + Date.now());
 
         if (photo.userName && photo.userName != '') {
-            $(".photoCredit").html(`photo by: <a onclick="openUrl('${photo.userUrl}')" class="openUrl grow" style="padding-left:3px;vertical-align:0"> ${photo.userName} </a>`);
+            $(".photoCredit").html(`photo by: <a onclick="openUrl('${photo.userUrl}')" class="openUrl" style="padding-left:3px;vertical-align:0"> ${photo.userName} </a>`);
             $(".photoCredit").removeClass("hidden");
         } else {
             $(".photoCredit").html('');

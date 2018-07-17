@@ -20,9 +20,10 @@ let handleNextImage = (isRandom) => {
     isRandom = isRandom || false;
     return new Promise((resolve) => {
         var category = !isRandom ? getSettingsOption('options.category') : 'random';
-        getUnsplashImages(1, category).then((response) => {
+        getUnsplashImages(30, category).then((response) => {
             if (response) {
-                var downloadUrl = response.data[0].links.download_location + `?client_id=${apiKey}`
+                var randomIndex = Math.floor(Math.random() * response.data.length); 
+                var downloadUrl = response.data[randomIndex].links.download_location + `?client_id=${apiKey}`
                 axios.get(downloadUrl)
                     .then(downloadResponse => {
                         var imageDownloadUrl = downloadResponse.data.url;
@@ -31,22 +32,21 @@ let handleNextImage = (isRandom) => {
                             setWallpaper(getPhotoPath()).then((photoPath) => {
                                 var photo = {
                                     photoPath: photoPath,
-                                    userUrl: response.data[0].user.links.html,
-                                    userName: response.data[0].user.name
+                                    userUrl: response.data[randomIndex].user.links.html,
+                                    userName: response.data[randomIndex].user.name
                                 }
                                 resolve(photo);
                             })
                         });
                     })
-                    .catch((err) => {
-                        console.log(err);
-                        resolve();
-                    });
 
             } else {
                 resolve();
             }
-        })
+        }).catch((err) => {
+            console.log(err);
+            resolve();
+        });
     });
 }
 
@@ -57,13 +57,12 @@ let getImageAndSetWallpaper = (isRandom) => {
             resolve(photoPath);
         })
     })
-
 }
-
 
 let getUnsplashImages = (count, category) => {
     return new Promise((resolve) => {
-        var url = `https://api.unsplash.com/photos/random?orientation=landscape&query=${category.replace('@@CUSTOM','')}&count=${count}&client_id=${apiKey}`;
+        var url = `https://api.unsplash.com/photos/random?orientation=landscape&query=${category.replace('@@CUSTOM','')}&count=${count}&client_id=${apiKey}`;       
+        console.log(url);
         axios.get(url)
             .then(response => {
                 resolve(response);

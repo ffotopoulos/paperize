@@ -1,7 +1,7 @@
 {
   "name": "paperize",
   "productName": "paperize",
-  "version": "1.0.7",
+  "version": "1.0.11",
   "description": "Setting desktop wallpapers automatically",
   "main": "src/main.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "lint": "eslint src --color"
   },
   "keywords": [],
-  "author": "Fotis Fotopoulos",
+  "author": "Fotis Fotopoulos SF",
   "license": "MIT",
   "config": {
     "forge": {

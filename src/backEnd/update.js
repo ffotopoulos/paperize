@@ -6,7 +6,8 @@ import {
 } from './notify';
 import {
     windowSendUpdateAvailability,
-    windowSendToggleLoading
+    windowSendToggleLoading,
+    windowSendStartUpdate
 } from './win';
 import {
     clearTimer
@@ -14,15 +15,15 @@ import {
 let axios = require('axios');
 let updateCheckTimer = null;
 let installerFilePath = app.getPath('userData') + `\\paperize_setup.exe`;
-
+let firstTime = true;
 let getInstallerFilePath = ()=>{
     return installerFilePath;
 }
 
 let setUpdateCheckTimer = () => {
     updateCheckTimer = setInterval(() => {
-        checkForUpdates(false);
-    }, 1200000);
+        checkForUpdates();
+    }, 720000);
 }
 
 let getLatestVersion = () => {
@@ -39,14 +40,15 @@ let getLatestVersion = () => {
 
 }
 
-let checkForUpdates = (firstTime) => {
+let checkForUpdates = () => {
     getLatestVersion().then((version) => {
         console.log(`Latest version: ${version}`)
         if (version != app.getVersion()) {
             windowSendUpdateAvailability(true);
             if (firstTime) {
-                notifyUser("Update available!", "A new awesome update is available! Click here to download and install", () => {
-                    updateApp();
+                firstTime = false;
+                notifyUser("Update available!", `A new super awesome paperize update (v${version}) is available! Click here to download and install`, () => {
+                    windowSendStartUpdate();
                 })
             }
         } else {
