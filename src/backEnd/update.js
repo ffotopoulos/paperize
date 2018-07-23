@@ -16,14 +16,18 @@ let axios = require('axios');
 let updateCheckTimer = null;
 let installerFilePath = app.getPath('userData') + `\\paperize_setup.exe`;
 let firstTime = true;
-let getInstallerFilePath = ()=>{
+let getInstallerFilePath = () => {
     return installerFilePath;
 }
 
 let setUpdateCheckTimer = () => {
-    updateCheckTimer = setInterval(() => {
-        checkForUpdates();
-    }, 720000);
+    clearUpdateTimer().then(() => {
+        updateCheckTimer = setInterval(() => {
+            checkForUpdates();
+        }, 720000);
+    }).catch(error => {
+        console.log(error);        
+    });
 }
 
 let getLatestVersion = () => {
@@ -40,18 +44,22 @@ let getLatestVersion = () => {
 
 }
 
-let checkForUpdates = () => {
+let checkForUpdates = (notifyManually) => {
+    notifyManually = notifyManually || false
     getLatestVersion().then((version) => {
         console.log(`Latest version: ${version}`)
         if (version != app.getVersion()) {
             windowSendUpdateAvailability(true);
-            if (firstTime) {
+            if (firstTime || notifyManually) {
                 firstTime = false;
                 notifyUser("Update available!", `A new super awesome paperize update (v${version}) is available! Click here to download and install`, () => {
                     windowSendStartUpdate();
                 })
             }
         } else {
+            if(notifyManually){
+                notifyUser("You're cool.", "paperize is up to date");
+            }
             windowSendUpdateAvailability(false);
         }
     }).catch((error) => {
@@ -63,13 +71,14 @@ let checkForUpdates = () => {
 let downloadLatestVersion = () => {
     return new Promise((resolve, reject) => {
         let request = require('request');
-        if (process.platform == "win32") {            
+        if (process.platform == "win32") {
             request('http://paperize.co/download/paperize_setup.exe')
                 .pipe(require('fs').createWriteStream(installerFilePath))
                 .on('close', () => {
+                    console.log('done');
                     resolve(installerFilePath);
                 })
-                .on('error', () => {
+                .on('error', (error) => {                   
                     reject();
                 });
         } else if (process.platform = "darwin") {
@@ -83,6 +92,7 @@ let updateApp = () => {
     clearTimer();
     windowSendToggleLoading("UPDATING");
     downloadLatestVersion().then((exeFilePath) => {
+        console.log('hi');
         let child = require('child_process').execFile;
         child(exeFilePath, function (err, data) {
             if (err) {
@@ -92,8 +102,21 @@ let updateApp = () => {
         });
     }).catch(() => {
         console.log('cannot update');
+        windowSendToggleLoading();
+        notifyUser("Ooops...","Can't update app at the moment. Maybe due to traffic limitations. Try again later!")
     })
 }
+
+let clearUpdateTimer = () => {
+    return new Promise((resolve) => {
+        if (updateCheckTimer) {
+            clearInterval(updateCheckTimer);
+        }
+        resolve();
+    })
+
+}
+
 export {
     getInstallerFilePath,
     checkForUpdates,

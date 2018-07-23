@@ -13,6 +13,7 @@ import {
     saveSettings,
     getSettingsOption
 } from './settings';
+import { checkForUpdates } from './update';
 let path = require('path');
 let tray;
 
@@ -32,7 +33,7 @@ let initTray = () => {
                 changeWallpaper(true);
             }
         },
-        {    
+        {
             label: 'randomize',
             icon: path.join(__dirname, './icons/random.png'),
             click: () => {
@@ -46,11 +47,28 @@ let initTray = () => {
             }
         },
         {
-            label:'separator',
-            type:'separator',
+            role: 'help',
+            icon:path.join(__dirname, './icons/about.png'),
+            label: 'about',
+            submenu: [
+                {
+                    label: 'v' + app.getVersion() + ' check for updates',
+                    click() {
+                        checkForUpdates(true);
+                    }                 
+                },
+                {
+                    label:'buy me a beer here :)',
+                    click () { require('electron').shell.openExternal('https://paypal.me/ffsp') }      
+                }
+            ]
         },
         {
-            label: 'quit',           
+            label: 'separator',
+            type: 'separator',
+        },
+        {
+            label: 'quit',
             icon: path.join(__dirname, './icons/exit.png'),
             click: () => {
                 app.quit();

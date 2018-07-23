@@ -1,7 +1,7 @@
 {
   "name": "paperize",
   "productName": "paperize",
-  "version": "1.0.11",
+  "version": "1.0.13",
   "description": "Setting desktop wallpapers automatically",
   "main": "src/main.js",
   "scripts": {
@@ -37,9 +37,9 @@
       },
       "electronWinstallerConfig": {
         "name": "paperize",
-        "iconUrl": "file:///E:/Documents/ElectronJS/paperize/src/backEnd/icons/app-icon.ico",
-        "setupIcon": "E:/Documents/ElectronJS/paperize/src/backEnd/icons/app-icon.ico"
-      },
+        "iconUrl": "file:///E:/Electronjs/paperize/src/backEnd/icons/app-icon.ico",
+        "setupIcon": "E:/Electronjs/paperize/src/backEnd/icons/app-icon.ico"
+      },      
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
       "github_repository": {
