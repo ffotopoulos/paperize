@@ -7,7 +7,9 @@ import {
 import {
     windowSendUpdateAvailability,
     windowSendToggleLoading,
-    windowSendStartUpdate
+    windowSendStartUpdate,
+    windowSendShowProgress,
+    windowSendHideProgress
 } from './win';
 import {
     clearTimer
@@ -26,7 +28,7 @@ let setUpdateCheckTimer = () => {
             checkForUpdates();
         }, 720000);
     }).catch(error => {
-        console.log(error);        
+        console.log(error);
     });
 }
 
@@ -34,7 +36,7 @@ let getLatestVersion = () => {
     return new Promise((resolve, reject) => {
         axios.get("http://paperize.co/version.php")
             .then(response => {
-                resolve(response.data.version);
+                resolve(response.data);
             })
             .catch(error => {
                 console.log(error);
@@ -46,18 +48,18 @@ let getLatestVersion = () => {
 
 let checkForUpdates = (notifyManually) => {
     notifyManually = notifyManually || false
-    getLatestVersion().then((version) => {
-        console.log(`Latest version: ${version}`)
-        if (version != app.getVersion()) {
+    getLatestVersion().then((data) => {
+        console.log(`Latest version: ${data.version}`)
+        if (data.version != app.getVersion()) {
             windowSendUpdateAvailability(true);
             if (firstTime || notifyManually) {
                 firstTime = false;
-                notifyUser("Update available!", `A new super awesome paperize update (v${version}) is available! Click here to download and install`, () => {
+                notifyUser("Update available!", data.msg, () => {
                     windowSendStartUpdate();
                 })
             }
         } else {
-            if(notifyManually){
+            if (notifyManually) {
                 notifyUser("You're cool.", "paperize is up to date");
             }
             windowSendUpdateAvailability(false);
@@ -71,16 +73,49 @@ let checkForUpdates = (notifyManually) => {
 let downloadLatestVersion = () => {
     return new Promise((resolve, reject) => {
         let request = require('request');
+        let progress = require('request-progress');
+
         if (process.platform == "win32") {
-            request('http://paperize.co/download/paperize_setup.exe')
-                .pipe(require('fs').createWriteStream(installerFilePath))
-                .on('close', () => {
-                    console.log('done');
-                    resolve(installerFilePath);
+            progress(request('http://paperize.co/download/paperize_setup.exe'), {
+                    // throttle: 2000,                    // Throttle the progress event to 2000ms, defaults to 1000ms
+                    // delay: 1000,                       // Only start to emit after 1000ms delay, defaults to 0ms
+                    // lengthHeader: 'x-transfer-length'  // Length header to use, defaults to content-length
                 })
-                .on('error', (error) => {                   
+                .on('progress', function (state) {
+                    // The state is an object that looks like this:
+                    // {
+                    //     percent: 0.5,               // Overall percent (between 0 to 1)
+                    //     speed: 554732,              // The download speed in bytes/sec
+                    //     size: {
+                    //         total: 90044871,        // The total payload size in bytes
+                    //         transferred: 27610959   // The transferred payload size in bytes
+                    //     },
+                    //     time: {
+                    //         elapsed: 36.235,        // The total elapsed seconds since the start (3 decimals)
+                    //         remaining: 81.403       // The remaining seconds to finish (3 decimals)
+                    //     }
+                    // }
+                    windowSendShowProgress(state);
+                    console.log('progress', state);
+                })
+                .on('error', function (err) {
+                    windowSendHideProgress();
+                    console.log('error @ update download: ' + err)
                     reject();
-                });
+                })
+                .on('end', function () {
+                    var st = {
+                        percent: 1
+                    }
+                    windowSendShowProgress(st);
+                    //to fix
+                    //if i run it without delay it causes Error: spawn EBUSY
+                    setTimeout(() => {
+                        windowSendHideProgress();
+                        resolve(installerFilePath);
+                    }, 4000)
+                })
+                .pipe(require('fs').createWriteStream(installerFilePath));
         } else if (process.platform = "darwin") {
             reject(); //todo
         }
@@ -90,9 +125,8 @@ let downloadLatestVersion = () => {
 
 let updateApp = () => {
     clearTimer();
-    windowSendToggleLoading("UPDATING");
+    //windowSendToggleLoading("Downloading update");
     downloadLatestVersion().then((exeFilePath) => {
-        console.log('hi');
         let child = require('child_process').execFile;
         child(exeFilePath, function (err, data) {
             if (err) {
@@ -100,10 +134,10 @@ let updateApp = () => {
                 return;
             }
         });
-    }).catch(() => {
-        console.log('cannot update');
-        windowSendToggleLoading();
-        notifyUser("Ooops...","Can't update app at the moment. Maybe due to traffic limitations. Try again later!")
+    }).catch((err) => {
+        console.log('cannot update:' + err);
+        // windowSendToggleLoading();
+        notifyUser("Ooops...", "Can't update app at the moment. Maybe due to me not being able to afford a decent server :'(. Try again later or download manually from paperize.co!")
     })
 }
 

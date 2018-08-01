@@ -139,6 +139,14 @@ let windowSendUpdateAvailability = (available) =>{
 let windowSendStartUpdate = () =>{            
     mainWindow.webContents.send('startUpdate')
 }
+let windowSendShowProgress = (state) =>{
+    mainWindow.webContents.send('showProgress',state)
+}
+
+let windowSendHideProgress = () =>{
+    mainWindow.webContents.send('hideProgress')
+}
+
 export {
     closeWindow,
     createWindow,
@@ -152,5 +160,7 @@ export {
     windowSendGalleryItems,
     windowSendGalleryFunctionDone,
     windowSendUpdateAvailability,
-    windowSendStartUpdate
+    windowSendStartUpdate,
+    windowSendShowProgress,
+    windowSendHideProgress
 }

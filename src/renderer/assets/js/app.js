@@ -1,5 +1,49 @@
 var customTypingTimer = null;
 var lastIntervalMs = 180000;
+var bar = new ProgressBar.Line(container, {
+    strokeWidth: 1,
+    easing: 'easeInOut',
+    duration: 1400,
+    color: '#1cb495',
+    trailColor: '#eee',
+    trailWidth: 1,
+    svgStyle: {
+        width: '100%',
+        height: '100%'
+    },
+    text: {
+        style: {
+            color: "white",
+            position: 'absolute',
+            top: '30px',
+            padding: 0,
+            transform: null,            
+        },
+        autoStyleContainer: false
+    },
+    from: {
+        color: '#ED6A5A'
+    },
+    to: {
+        color: '#1cb495'
+    },
+    step: (state, bar) => {                
+        bar.setText(`
+            DOWNLOADING UPDATE ... ${Math.round(bar.value() * 100)} %          
+        `)
+        bar.path.setAttribute('stroke', state.color);
+    }
+});
+
+ipcRenderer.on('showProgress', (event, state) => {
+    console.log(state);
+    showProgress(state);
+})
+
+ipcRenderer.on('hideProgress', () => {
+    hideProgress();
+})
+
 ipcRenderer.on('updateAvailability', (event, available) => {
     if (available) {
         $(".updateNotifIcon").show();
@@ -295,6 +339,22 @@ function toggleLoading(message) {
     $(".loadingHeader").html(message);
     $(".fade").toggle();
     $(".loading").toggle();
+}
+
+function showProgress(state) { 
+    bar.animate(state.percent);
+    if(!$(".fade").is(":visible")){
+        $(".fade").show();
+    }
+    if(!$(".progBar").is(":visible")){
+        $(".progBar").show();
+    }
+}
+
+function hideProgress(state) {
+    $(".fade").hide();
+    $(".progBar").hide();
+    bar.set(0);
 }
 
 function openUrl(url) {

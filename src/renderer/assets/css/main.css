@@ -172,7 +172,7 @@ body {
 	position: absolute;
 	margin: auto;
 	margin-top: 20px;
-	font-family: Arimo;
+	font-family: Arimo, 'Century Gothic';
 }
 
 .shrink {
@@ -248,7 +248,8 @@ body {
 .playback-icon {
 	display: inline;
 }
-.roundedIcon.updateNotifIcon{
+
+.roundedIcon.updateNotifIcon {
 	border: 2px solid #1cb495;
 }
 
@@ -277,7 +278,7 @@ body {
 }
 
 .unsplash-logo span {
-	font-family: Arimo;
+	font-family: Arimo, 'Century Gothic';
 	font-size: 12px;
 	padding-left: 2px;
 	position: relative;
@@ -324,20 +325,22 @@ body {
 	opacity: 0;
 }
 
-.taskbar-main .taskbar {	
+.taskbar-main .taskbar {
 	font-size: 20px;
-	border-radius: 8%;	
+	border-radius: 8%;
 	width: 10%;
 	text-align: right;
-	float:left;
-	height:37px;
+	float: left;
+	height: 37px;
 }
-.taskbar .updatePanel{
-	height:50px;
+
+.taskbar .updatePanel {
+	height: 50px;
 	position: absolute;
 }
+
 .taskbar .icon {
-	display: inline;	
+	display: inline;
 	margin-right: 10px;
 }
 
@@ -349,7 +352,7 @@ body {
 	float: left;
 	width: 30%;
 	height: 100%;
-	font-family: Arimo;
+	font-family: Arimo, 'Century Gothic';
 	font-size: 11px;
 	padding-left: 8px;
 	padding-top: 5px;
@@ -804,6 +807,29 @@ button {
 	z-index: 1;
 }
 
+.align-center {
+	text-align: center;
+}
+
+.progBar {
+	position: absolute;
+    display: none;
+	width: 100%;
+    margin:auto;
+    top: 35%;
+    z-index: 5;
+    text-align: center;
+}
+
+.progBar #container{
+	width:230px;
+	height: 4px;
+	margin: auto;
+}
+
+.progressbar-text{
+	font-family: Arimo,Century Gothic,Arial;
+}
 /* Wrapper */
 
 #wrapper {
@@ -1354,118 +1380,132 @@ body.preload #header h1:after {
 }
 
 .c-modal {
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(43, 43, 43, 0.9);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s 0s, visibility 0s 0.3s;
-  z-index: 4;
+	position: fixed;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	background-color: rgba(43, 43, 43, 0.9);
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s 0s, visibility 0s 0.3s;
+	z-index: 4;
 }
+
 .c-modal.is-visible {
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 0.3s 0s, visibility 0s 0s;
+	opacity: 1;
+	visibility: visible;
+	transition: opacity 0.3s 0s, visibility 0s 0s;
 }
 
 .c-modal-container {
-  position: relative;
-  width: 90%;
-  max-width: 400px;
-  margin: 6em auto;
-  background: #FFF;
-  border-radius: .25em .25em .4em .4em;
-  text-align: center;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  -webkit-transform: translateY(-40px);
-  -moz-transform: translateY(-40px);
-  -ms-transform: translateY(-40px);
-  -o-transform: translateY(-40px);
-  transform: translateY(-40px);  
-  -webkit-backface-visibility: hidden;
-  -webkit-transition-property: -webkit-transform;
-  -moz-transition-property: -moz-transform;
-  transition-property: transform;
-  -webkit-transition-duration: 0.3s;
-  -moz-transition-duration: 0.3s;
-  transition-duration: 0.3s;
+	position: relative;
+	width: 90%;
+	max-width: 400px;
+	margin: 6em auto;
+	background: #FFF;
+	border-radius: .25em .25em .4em .4em;
+	text-align: center;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+	-webkit-transform: translateY(-40px);
+	-moz-transform: translateY(-40px);
+	-ms-transform: translateY(-40px);
+	-o-transform: translateY(-40px);
+	transform: translateY(-40px);
+	-webkit-backface-visibility: hidden;
+	-webkit-transition-property: -webkit-transform;
+	-moz-transition-property: -moz-transform;
+	transition-property: transform;
+	-webkit-transition-duration: 0.3s;
+	-moz-transition-duration: 0.3s;
+	transition-duration: 0.3s;
 }
+
 .c-modal-container p {
-  padding: 2em 1em;
-  color:black;
+	padding: 2em 1em;
+	color: black;
 }
+
 .c-modal-container .c-modal-buttons:after {
-  content: "";
-  display: table;
-  clear: both;
+	content: "";
+	display: table;
+	clear: both;
 }
+
 .c-modal-container .c-modal-buttons li {
-  float: left;
-  width: 50%;
+	float: left;
+	width: 50%;
 }
+
 .c-modal-container .c-modal-buttons a {
-  display: block;
-  height: 60px;
-  line-height: 60px;
-  text-transform: uppercase;
-  color: #FFF;
-  -webkit-transition: background-color 0.2s;
-  -moz-transition: background-color 0.2s;
-  transition: background-color 0.2s;
+	display: block;
+	height: 60px;
+	line-height: 60px;
+	text-transform: uppercase;
+	color: #FFF;
+	-webkit-transition: background-color 0.2s;
+	-moz-transition: background-color 0.2s;
+	transition: background-color 0.2s;
 }
+
 .c-modal-container .c-modal-buttons li:first-child a {
-  background: #fc7169;
-  border-radius: 0 0 0 .25em;
+	background: #fc7169;
+	border-radius: 0 0 0 .25em;
 }
+
 .no-touch .c-modal-container .c-modal-buttons li:first-child a:hover {
-  background-color: #fc8982;
+	background-color: #fc8982;
 }
+
 .c-modal-container .c-modal-buttons li:last-child a {
-  background: #b6bece;
-  border-radius: 0 0 .25em 0;
+	background: #b6bece;
+	border-radius: 0 0 .25em 0;
 }
+
 .no-touch .c-modal-container .c-modal-buttons li:last-child a:hover {
-  background-color: #c5ccd8;
+	background-color: #c5ccd8;
 }
+
 .c-modal-container .c-modal-close {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 30px;
-  height: 30px;
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	width: 30px;
+	height: 30px;
 }
-.c-modal-container .c-modal-close::before, .c-modal-container .c-modal-close::after {
-  content: '';
-  position: absolute;
-  top: 12px;
-  width: 14px;
-  height: 3px;
-  background-color: #8f9cb5;
-}
-.c-modal-container .c-modal-close::before {
-  -webkit-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
-  transform: rotate(45deg);
-  left: 8px;
-}
+
+.c-modal-container .c-modal-close::before,
 .c-modal-container .c-modal-close::after {
-  -webkit-transform: rotate(-45deg);
-  -moz-transform: rotate(-45deg);
-  -ms-transform: rotate(-45deg);
-  -o-transform: rotate(-45deg);
-  transform: rotate(-45deg);
-  right: 8px;
+	content: '';
+	position: absolute;
+	top: 12px;
+	width: 14px;
+	height: 3px;
+	background-color: #8f9cb5;
 }
+
+.c-modal-container .c-modal-close::before {
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	transform: rotate(45deg);
+	left: 8px;
+}
+
+.c-modal-container .c-modal-close::after {
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+	right: 8px;
+}
+
 .is-visible .c-modal-container {
-  -webkit-transform: translateY(0);
-  -moz-transform: translateY(0);
-  -ms-transform: translateY(0);
-  -o-transform: translateY(0);
-  transform: translateY(0);
+	-webkit-transform: translateY(0);
+	-moz-transform: translateY(0);
+	-ms-transform: translateY(0);
+	-o-transform: translateY(0);
+	transform: translateY(0);
 }
- 
