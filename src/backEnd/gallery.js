@@ -1,10 +1,11 @@
 import { getUnsplashImages, downloadAndSave, getApiKey } from './unsplash';
+import { uaSendError, uaUserOppenedGallery } from './analytics';
 
 let axios = require('axios');
 let loadGallery = (count, category) => {
     return new Promise((resolve) => {
-        getUnsplashImages(count, category).then((items) => {
-            console.log(items);
+        getUnsplashImages(count, category).then((items) => {            
+            uaUserOppenedGallery(category);
             resolve(items);
         })
     })
@@ -19,7 +20,8 @@ let downloadGalleryItem = (url, saveDir) => {
             downloadAndSave(imageDownloadUrl, saveDir, false, () => {
                 resolve();
             });
-        }).catch(() => {
+        }).catch((err) => {
+            uaSendError("unable to download gallery item:" + err);
             resolve();
         });
     });

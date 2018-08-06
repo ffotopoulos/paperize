@@ -17,6 +17,7 @@ import { downloadAndSave } from './unsplash';
 import { getPhotoPath } from './files';
 import { setWallpaper } from './wallpaper';
 import { updateApp } from './update';
+import { uaSendError } from './analytics';
 
 let events = () => {
     ipcMain.on('minimize-app', () => {
@@ -37,6 +38,7 @@ let events = () => {
                 saveSettings('interval', 0);
             } 
         }).catch((err) => {
+            uaSendError(err);
             console.log(err);
         });
     })

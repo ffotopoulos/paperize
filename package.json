@@ -1,8 +1,8 @@
 {
   "name": "paperize",
   "productName": "paperize",
-  "version": "1.0.14",
-  "description": "Setting desktop wallpapers automatically",
+  "version": "1.0.15",
+  "description": "Setting desktop wallpapers automatically using awesome images from unsplash.com",
   "main": "src/main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -61,6 +61,7 @@
     "electron-squirrel-startup": "^1.0.0",
     "request": "^2.87.0",
     "request-progress": "^3.0.0",
+    "universal-analytics": "^0.4.17",
     "wallpaper": "^3.0.0"
   },
   "devDependencies": {

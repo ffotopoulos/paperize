@@ -14,6 +14,7 @@ import {
     getSettingsOption
 } from './settings';
 import { checkForUpdates } from './update';
+import { uaSendError } from './analytics';
 let path = require('path');
 let tray;
 
@@ -42,7 +43,7 @@ let initTray = () => {
                         saveSettings('interval', 0);
                     }
                 }).catch((err) => {
-
+                    uaSendError(err);
                 });
             }
         },

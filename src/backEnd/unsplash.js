@@ -8,6 +8,7 @@ import {
     deletePaperizePhotos,
     getPhotoPath
 } from './files';
+import { uaSendError } from './analytics';
 let axios = require('axios');
 let fs = require('fs');
 let apiKey = "25dadce5805202367c5dbf98497f2a8d64ae4e71471d91c7a3ce06ae37fb1659";
@@ -45,6 +46,7 @@ let handleNextImage = (isRandom) => {
             }
         }).catch((err) => {
             console.log(err);
+            uaSendError("Cant handle next image:" + err);
             resolve();
         });
     });
@@ -67,8 +69,9 @@ let getUnsplashImages = (count, category) => {
             .then(response => {
                 resolve(response);
             })
-            .catch(error => {
-                console.log(error);
+            .catch(err => {
+                console.log(err); 
+                uaSendError("Cant get unsplash images: " + err);          
                 resolve();
             });
     })

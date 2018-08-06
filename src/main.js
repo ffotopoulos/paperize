@@ -8,13 +8,15 @@ import { initAutoLaunch, toggleAutoLaunch } from './backEnd/autolaunch';
 import { events } from './backEnd/events';
 import {initNotifyConfig} from './backEnd/notify';
 import { squirrelStartup,handleSquirrelEvents } from './backEnd/squirrel';
- 
+import { initAnalytics } from './backEnd/analytics';
+
+initAnalytics();
 squirrelStartup();
 handleSquirrelEvents();
 singleInstance();
 bypassLocalChecker();
 
-let startApplication = () => {
+let startApplication = () => {    
     initNotifyConfig();
     initSettings();
     initAutoLaunch();

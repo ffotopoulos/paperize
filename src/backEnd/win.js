@@ -5,6 +5,7 @@ import { getPhotoPath, photoExists } from './files';
 import { setTimer, changeWallpaper } from './timer';
 import { getOsWallpaperPath } from './wallpaper';
 import {setUpdateCheckTimer, checkForUpdates} from './update';
+import { uaAppOpenned } from './analytics';
 let path = require('path');
 let url = require('url');
 let mainWindow = null;
@@ -62,8 +63,11 @@ let createWindow = (c) => {
         }
 
         //check for updates
-        checkForUpdates();
+        checkForUpdates();        
         setUpdateCheckTimer();
+
+        //send app openned event to ggl analtcs
+        uaAppOpenned();
     });
 
     // when the window is closed.

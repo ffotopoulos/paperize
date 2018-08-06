@@ -14,6 +14,7 @@ import {
 import {
     clearTimer
 } from './timer';
+import { uaAppUpdated,uaSendError } from './analytics';
 let axios = require('axios');
 let updateCheckTimer = null;
 let installerFilePath = app.getPath('userData') + `\\paperize_setup.exe`;
@@ -27,8 +28,9 @@ let setUpdateCheckTimer = () => {
         updateCheckTimer = setInterval(() => {
             checkForUpdates();
         }, 720000);
-    }).catch(error => {
-        console.log(error);
+    }).catch(err => {
+        uaSendError(err);
+        console.log(err);
     });
 }
 
@@ -38,8 +40,9 @@ let getLatestVersion = () => {
             .then(response => {
                 resolve(response.data);
             })
-            .catch(error => {
-                console.log(error);
+            .catch(err => {
+                console.log(err);
+                uaSendError(err);
                 reject();
             });
     })
@@ -64,7 +67,8 @@ let checkForUpdates = (notifyManually) => {
             }
             windowSendUpdateAvailability(false);
         }
-    }).catch((error) => {
+    }).catch((error) => {        
+        uaSendError("error @ update " + error);
         console.log("error @ update " + error);
         console.log('cant update');
     })
@@ -77,9 +81,7 @@ let downloadLatestVersion = () => {
 
         if (process.platform == "win32") {
             progress(request('http://paperize.co/download/paperize_setup.exe'), {
-                    // throttle: 2000,                    // Throttle the progress event to 2000ms, defaults to 1000ms
-                    // delay: 1000,                       // Only start to emit after 1000ms delay, defaults to 0ms
-                    // lengthHeader: 'x-transfer-length'  // Length header to use, defaults to content-length
+                  
                 })
                 .on('progress', function (state) {
                     // The state is an object that looks like this:
@@ -101,6 +103,7 @@ let downloadLatestVersion = () => {
                 .on('error', function (err) {
                     windowSendHideProgress();
                     console.log('error @ update download: ' + err)
+                    uaSendError('error @ update download: ' + err)
                     reject();
                 })
                 .on('end', function () {
@@ -127,15 +130,18 @@ let updateApp = () => {
     clearTimer();
     //windowSendToggleLoading("Downloading update");
     downloadLatestVersion().then((exeFilePath) => {
+        uaAppUpdated();
         let child = require('child_process').execFile;
         child(exeFilePath, function (err, data) {
             if (err) {
                 console.error(err);
+                uaSendError("cant run update exe " + err);
                 return;
             }
         });
-    }).catch((err) => {
+    }).catch((err) => {        
         console.log('cannot update:' + err);
+        uaSendError('cannot update:' + err);
         // windowSendToggleLoading();
         notifyUser("Ooops...", "Can't update app at the moment. Maybe due to me not being able to afford a decent server :'(. Try again later or download manually from paperize.co!")
     })
