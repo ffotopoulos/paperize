@@ -9,6 +9,7 @@ import { events } from './backEnd/events';
 import {initNotifyConfig} from './backEnd/notify';
 import { squirrelStartup,handleSquirrelEvents } from './backEnd/squirrel';
 import { initAnalytics } from './backEnd/analytics';
+import { initManualChangesLeft } from './backEnd/timer';
 
 initAnalytics();
 squirrelStartup();
@@ -17,6 +18,7 @@ singleInstance();
 bypassLocalChecker();
 
 let startApplication = () => {    
+    initManualChangesLeft();
     initNotifyConfig();
     initSettings();
     initAutoLaunch();
