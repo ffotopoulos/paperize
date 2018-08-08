@@ -6,8 +6,8 @@ let splashWindow = null;
 let createSplashScreenWindow = () => {
     console.log('hihihi')
     splashWindow = new BrowserWindow({
-        width: 750,
-        height: 480,
+        width: 400,
+        height: 300,
         show: false,
         frame: false,
         radii: [5, 5, 5, 5]

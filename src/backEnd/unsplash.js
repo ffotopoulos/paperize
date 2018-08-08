@@ -62,7 +62,7 @@ let getImageAndSetWallpaper = (isRandom) => {
 }
 
 let getUnsplashImages = (count, category) => {
-    return new Promise((resolve) => {
+    return new Promise((resolve,reject) => {
         var url = `https://api.unsplash.com/photos/random?orientation=landscape&query=${category.replace('@@CUSTOM','')}&count=${count}&client_id=${apiKey}`;       
         console.log(url);
         axios.get(url)
@@ -72,7 +72,7 @@ let getUnsplashImages = (count, category) => {
             .catch(err => {
                 console.log(err); 
                 uaSendError("Cant get unsplash images: " + err);          
-                resolve();
+                reject();
             });
     })
 }
