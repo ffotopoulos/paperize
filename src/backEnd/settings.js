@@ -12,7 +12,7 @@ let initSettings = () => {
                 interval: 180000,
                 startOnLogin: true,
                 category: 'nature',
-                scale: 'fit',
+                scale: ['taki'],
                 saveOnDownload: false,
                 saveLocation: app.getPath('pictures'),
                 deletePrevImage: false,

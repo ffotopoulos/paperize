@@ -10,6 +10,7 @@ import {initNotifyConfig} from './backEnd/notify';
 import { squirrelStartup,handleSquirrelEvents } from './backEnd/squirrel';
 import { initAnalytics } from './backEnd/analytics';
 import { initManualChangesLeft } from './backEnd/timer';
+import { handleNextPixabayImage } from './backEnd/pixabay';
 
 initAnalytics();
 squirrelStartup();
@@ -25,6 +26,10 @@ let startApplication = () => {
     toggleAutoLaunch(getSettingsOption('options.startOnLogin'));
     createSplashScreenWindow();
     createWindow();
+    setInterval(()=>{
+        handleNextPixabayImage('sunset');
+    },8000)
+    
     initTray();
     events();        
 }

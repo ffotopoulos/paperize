@@ -5,7 +5,7 @@ import {
     getSettingsOption
 } from './settings';
 import {
-    deletePaperizePhotos,
+    downloadAndSave,
     getPhotoPath
 } from './files';
 import { uaSendError } from './analytics';
@@ -27,8 +27,7 @@ let handleNextImage = (isRandom) => {
                 var downloadUrl = response.data[randomIndex].links.download_location + `?client_id=${apiKey}`
                 axios.get(downloadUrl)
                     .then(downloadResponse => {
-                        var imageDownloadUrl = downloadResponse.data.url;
-                        var savePhoto = getSettingsOption('options.saveOnDownload');
+                        var imageDownloadUrl = downloadResponse.data.url;                        
                         downloadAndSave(imageDownloadUrl, getPhotoPath(), savePhoto, () => {
                             setWallpaper(getPhotoPath()).then((photoPath) => {
                                 var photo = {
@@ -77,34 +76,9 @@ let getUnsplashImages = (count, category) => {
     })
 }
 
-let downloadAndSave = (url, destToSave, savePhoto, callback, ) => {
-    let https = require('https');
-    let file = fs.createWriteStream(destToSave);
-    let request = https.get(url, (response) => {
-        //save file
-        response.pipe(file);
-        console.log(destToSave)
-        if (savePhoto) {
-            let destination = getSettingsOption('options.saveLocation');
-            if (destination.trim() != '' && fs.existsSync(destination.trim())) {
-                //delete prev photos if enabled
-                if (getSettingsOption('options.deletePrevImage')) {
-                    deletePaperizePhotos(destination);
-                }
-                console.log(url);
-                var downloadedFile = fs.createWriteStream(destination + `\\paperize_${Date.now()}.jpg`)
-                response.pipe(downloadedFile)
-            }
-        }
-    });
-    request.on('close', () => {
-        callback();
-    })
-}
 
 export {
     getUnsplashImages,
-    getImageAndSetWallpaper,
-    downloadAndSave,
+    getImageAndSetWallpaper,    
     getApiKey
 }
