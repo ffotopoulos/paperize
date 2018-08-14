@@ -1,4 +1,4 @@
-import { getUnsplashImages, downloadAndSave, getApiKey } from './unsplash';
+import { getUnsplashImages, downloadAndSave, getUnsplashApiKey } from './unsplash';
 import { uaSendError, uaUserOppenedGallery } from './analytics';
 
 let axios = require('axios');
@@ -14,7 +14,7 @@ let loadGallery = (count, category) => {
 
 let downloadGalleryItem = (url, saveDir) => {
     return new Promise((resolve) => {
-        url = url + `?client_id=${getApiKey()}`
+        url = url + `?client_id=${getUnsplashApiKey()}`
         axios.get(url).then(response => {
             var imageDownloadUrl = response.data.url;
             downloadAndSave(imageDownloadUrl, saveDir, false, () => {

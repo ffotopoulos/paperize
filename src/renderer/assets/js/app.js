@@ -17,7 +17,7 @@ var bar = new ProgressBar.Line(container, {
             position: 'absolute',
             top: '30px',
             padding: 0,
-            transform: null,            
+            transform: null,
         },
         autoStyleContainer: false
     },
@@ -27,7 +27,7 @@ var bar = new ProgressBar.Line(container, {
     to: {
         color: '#1cb495'
     },
-    step: (state, bar) => {                
+    step: (state, bar) => {
         bar.setText(`
             DOWNLOADING UPDATE ... ${Math.round(bar.value() * 100)} %          
         `)
@@ -43,6 +43,50 @@ ipcRenderer.on('showProgress', (event, state) => {
 ipcRenderer.on('hideProgress', () => {
     hideProgress();
 })
+
+ipcRenderer.on('initImageSources', (event, sources) => {
+    // <input type="checkbox" value="Apple" />Apple</li>
+    var html = '';
+    sources.forEach(element => {
+        html += `<li><input type='checkbox' class='imageSourceCheckbox' value='${element.name}'/><span>${element.label}</span></li>`
+    });
+    $(".imageSources").append(html);
+    $(".checkDropdown dt a").on('click', function () {
+        $(".checkDropdown dd ul").slideToggle('fast');
+    });
+
+    $(".checkDropdown dd ul li a").on('click', function () {
+        $(".checkDropdown dd ul").hide();
+    });
+    $(document).bind('click', function (e) {
+        var $clicked = $(e.target);
+        if (!$clicked.parents().hasClass("checkDropdown")) $(".checkDropdown dd ul").hide();
+    });
+
+    $('.imageSourceCheckbox').on('change', function () {
+        var title = $(this).next().html() + ",";
+        if ($(this).is(':checked')) {
+            var html = '<span title="' + title + '">' + title + '</span>';
+            $('.multiSel').append(html);
+            $(".hida").hide();
+        } else {
+            if ($('.imageSourceCheckbox:checked').length < 1) {
+                $(this).prop('checked', true);
+                return;
+            }
+            $('span[title="' + title + '"]').remove();
+            var ret = $(".hida");
+            $('.checkDropdown dt a').append(ret);
+        }
+
+        var checkedValues = [];
+        $('.imageSourceCheckbox:checked').each(function () {
+            checkedValues.push($(this).val());
+        })
+        saveSettings('sources', checkedValues);
+    });
+})
+
 
 ipcRenderer.on('updateAvailability', (event, available) => {
     if (available) {
@@ -224,6 +268,9 @@ $("#saveOnDownload").change(function () {
     var val = $(this).is(":checked");
     if (val) {
         $(".saveLocationGroup").show();
+        $('.inner').animate({
+            scrollTop: $('.saveLocationGroup').offset().top
+        }, 1000);
     } else {
         $(".saveLocationGroup").hide();
     }
@@ -277,9 +324,11 @@ $('#interval,#category').change(function () {
 
 $("#customCategoryInput").keyup(function () {
     clearTimeout(customTypingTimer);
+    $(".closeSettings").hide();
     if ($('#customCategoryInput').val()) {
         customTypingTimer = setTimeout(() => {
             saveSettings('category', `@@CUSTOM${$(this).val()}`)
+            $(".closeSettings").show();
         }, 1000);
     }
 })
@@ -287,6 +336,7 @@ $("#customCategoryInput").keyup(function () {
 $(".open-url").click(function () {
     openUrl($(this).attr('data-url'));
 })
+
 
 var toggleWraper = () => {
     $("#minimized").toggle();
@@ -341,12 +391,12 @@ function toggleLoading(message) {
     $(".loading").toggle();
 }
 
-function showProgress(state) { 
+function showProgress(state) {
     bar.animate(state.percent);
-    if(!$(".fade").is(":visible")){
+    if (!$(".fade").is(":visible")) {
         $(".fade").show();
     }
-    if(!$(".progBar").is(":visible")){
+    if (!$(".progBar").is(":visible")) {
         $(".progBar").show();
     }
 }
@@ -373,7 +423,9 @@ function setAppBackground(photo) {
             $(".photoCredit").html('');
             $(".photoCredit").addClass("hidden");
         }
-
+        console.log(photo);
+        $('.api-logo').attr('data-url', photo.apiRefUrl || "");
+        $('.api-logo > img').attr('src', `./../renderer/assets/images/${photo.apiLogoName}`);
         if ($("#gallery-wrapper").is(":visible")) {
             showCheckMark("#galleryCheckmark");
         }
@@ -463,6 +515,20 @@ function loadSettings(settings) {
         $("#deletePrevImage").prop('checked', settings.deletePrevImage);
         $("#clearTimer").prop('checked', settings.clearTimer);
         $("#saveLocationInput").val(settings.saveLocation);
+
+        //image sources
+        //uncheck every checkbox @ first
+        $(".imageSourceCheckbox").each(function () {
+            $(this).prop('checked', false);
+        })
+        //clear previous selection text
+        $(".multiSel").html('');
+
+        settings.sources.forEach(element => {
+            $(".imageSourceCheckbox[value='" + element + "']").prop('checked', true)
+            //fire the change event to append label's text @ selection text
+            $(".imageSourceCheckbox[value='" + element + "']").change();
+        });
         resolve();
     });
 }

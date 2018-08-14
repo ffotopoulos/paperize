@@ -3,14 +3,14 @@ import {
     windowSendWallpaperChanged
 } from './win';
 import {
-    getImageAndSetWallpaper
-} from './unsplash';
-import {
     getSettingsOption
 } from './settings';
 import {
     notifyUser
 } from './notify';
+import {
+    downloadAndSetWallpaper
+} from './imageApisController';
 let tmr = null;
 let hasInternet = true;
 let manualChangesLeft = 10;
@@ -43,7 +43,7 @@ let changeWallpaper = (force, isRandom) => {
         setTimer();
         if (hasInternet) {
             if (force) {
-                manualChangesLeft--;                
+                manualChangesLeft--;
                 if (manualChangesLeft <= 0) {
                     notifyUser("Woaaah! Aren't you a tough person to impress.", "You can change your wallpaper manually only 10 times every 3 minutes :( Try again later!")
                     return;
@@ -51,10 +51,10 @@ let changeWallpaper = (force, isRandom) => {
             }
             if (getSettingsOption('options.interval') >= 60000 || force) {
                 windowSendToggleLoading();
-                getImageAndSetWallpaper(isRandom).then((photo) => {
+                downloadAndSetWallpaper(isRandom).then((photo) => {
                     windowSendToggleLoading();
                     windowSendWallpaperChanged(photo);
-                });
+                })
             } else if (force && manualChangesLeft == 0) {
 
             }

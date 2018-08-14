@@ -1,11 +1,33 @@
-import { app, BrowserWindow } from 'electron';
-import { closeSplashWindow } from './splash';
-import { getAllSettings, getSettingsOption } from './settings';
-import { getPhotoPath, photoExists } from './files';
-import { setTimer, changeWallpaper } from './timer';
-import { getOsWallpaperPath } from './wallpaper';
-import {setUpdateCheckTimer, checkForUpdates} from './update';
-import { uaAppOpenned } from './analytics';
+import {
+    app,
+    BrowserWindow
+} from 'electron';
+import {
+    closeSplashWindow
+} from './splash';
+import {
+    getAllSettings,
+    getSettingsOption,
+    getImageSources
+} from './settings';
+import {
+    getPhotoPath,
+    photoExists
+} from './files';
+import {
+    setTimer,
+    changeWallpaper
+} from './timer';
+import {
+    getOsWallpaperPath
+} from './wallpaper';
+import {
+    setUpdateCheckTimer,
+    checkForUpdates
+} from './update';
+import {
+    uaAppOpenned
+} from './analytics';
 let path = require('path');
 let url = require('url');
 let mainWindow = null;
@@ -29,7 +51,7 @@ let createWindow = (c) => {
         slashes: true
     }))
 
-    mainWindow.webContents.on('did-finish-load', () => {    
+    mainWindow.webContents.on('did-finish-load', () => {
         //initialize playback ui (play pause)
         let ms = getSettingsOption('options.interval')
         windowSendTogglePlayback(ms, ms > 0 ? true : false);
@@ -50,9 +72,12 @@ let createWindow = (c) => {
                 changeWallpaper(true);
             }
         });
-        
+
         //hide splash screen
         closeSplashWindow();
+
+        //append image sources list 
+        initImageSources();
 
         //if auto launch is enabled hide the main window
         var startMinimized = (process.argv || []).indexOf('--hidden') !== -1;
@@ -63,7 +88,7 @@ let createWindow = (c) => {
         }
 
         //check for updates
-        checkForUpdates();        
+        checkForUpdates();
         setUpdateCheckTimer();
 
         //send app openned event to ggl analtcs
@@ -71,7 +96,7 @@ let createWindow = (c) => {
     });
 
     // when the window is closed.
-    mainWindow.on('closed', function() {
+    mainWindow.on('closed', function () {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
@@ -124,7 +149,7 @@ let windowSendToggleLoading = (message) => {
     mainWindow.webContents.send('toggleLoading', message);
 }
 
-let windowSendWallpaperChanged = (photo) => {    
+let windowSendWallpaperChanged = (photo) => {
     mainWindow.webContents.send('wallpaper-changed', photo);
 }
 
@@ -136,19 +161,27 @@ let windowSendGalleryFunctionDone = () => {
     mainWindow.webContents.send('galleryFunctionDone');
 }
 
-let windowSendUpdateAvailability = (available) =>{            
+let windowSendUpdateAvailability = (available) => {
     mainWindow.webContents.send('updateAvailability', available)
 }
 
-let windowSendStartUpdate = () =>{            
+let windowSendStartUpdate = () => {
     mainWindow.webContents.send('startUpdate')
 }
-let windowSendShowProgress = (state) =>{
-    mainWindow.webContents.send('showProgress',state)
+let windowSendShowProgress = (state) => {
+    mainWindow.webContents.send('showProgress', state)
 }
 
-let windowSendHideProgress = () =>{
+let windowSendHideProgress = () => {
     mainWindow.webContents.send('hideProgress')
+}
+
+let windowSendImageSources = () => {
+    mainWindow.webContents.send('getAllImageSources', getImageSources())
+}
+
+let initImageSources = () => {
+    mainWindow.webContents.send('initImageSources', getImageSources())
 }
 
 export {

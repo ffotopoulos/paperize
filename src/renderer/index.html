@@ -25,7 +25,7 @@
         <div class="taskbar">
             <div class="icon">
                 <i class="roundedIcon fa fa-flag shrink updateNotifIcon" title="update available"></i>
-            </div>            
+            </div>
             <div class="icon minimIcon">
                 <i class=" minimize fa fa-times shrink" title="minimize to tray"></i>
             </div>
@@ -38,9 +38,9 @@
         </div>
     </div>
 
-    <div id="unsplash-logo" class="unsplash-logo open-url" data-url="https://unsplash.com">
-        <img src="./assets/images/unsplash_logo.png" class="shrink">
-        <span> unsplash </span>
+    <div class="api-logo open-url" data-url="">
+        <img src="" class="shrink">
+        <span>  </span>
     </div>
 
     <div id="minimized" class="minimised animated fadeInRight">
@@ -110,6 +110,29 @@
                 <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
             </svg>
             <div class="inner">
+                <div class="group">
+                    <span class="label">
+                        get images from
+                    </span>
+                    <dl class="checkDropdown">
+
+                        <dt>
+                            <a href="#">
+                                <span class="hida">Select</span>
+                                <p class="multiSel"></p>
+                            </a>
+                        </dt>
+
+                        <dd>
+                            <div class="mutliSelect">
+                                <ul class="imageSources">
+                                    
+                                </ul>
+                            </div>
+                        </dd>                        
+                    </dl>
+                </div>
+
                 <div class="group">
                     <span class="label">
                         change every
@@ -236,7 +259,7 @@
     <div class="fade"></div>
     <div class="progBar">
         <div id="container">
-            
+
         </div>
     </div>
     <div class="offline">
@@ -263,17 +286,22 @@
         <div class="align-center loadingHeader">SERVING...</div>
     </div>
     <div class="c-modal" role="alert">
-            <div class="c-modal-container">
-                <p>A new awesome update is available!
-                    <br>
-                     Do you want to install it?</p>
-                <ul class="c-modal-buttons">
-                    <li><a href="#0" class="installUpdate">Yes</a></li>
-                    <li><a href="#0" onclick="document.querySelector('.c-modal').classList.remove('is-visible')">No</a></li>
-                </ul>
-                <a href="#0" class="c-modal-close">Close</a>
-            </div> <!-- c-modal-container -->
-        </div> <!-- c-modal -->
+        <div class="c-modal-container">
+            <p>A new awesome update is available!
+                <br> Do you want to install it?</p>
+            <ul class="c-modal-buttons">
+                <li>
+                    <a href="#0" class="installUpdate">Yes</a>
+                </li>
+                <li>
+                    <a href="#0" onclick="document.querySelector('.c-modal').classList.remove('is-visible')">No</a>
+                </li>
+            </ul>
+            <a href="#0" class="c-modal-close">Close</a>
+        </div>
+        <!-- c-modal-container -->
+    </div>
+    <!-- c-modal -->
 </body>
 <!-- Insert this line above script imports  -->
 <script>

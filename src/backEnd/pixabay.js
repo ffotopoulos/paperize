@@ -2,7 +2,7 @@ import {
     uaSendError
 } from './analytics';
 let axios = require('axios');
-let lastPixaBayResponse = {
+let lastResponse = {
     lastIndex: 0,
     category: 'random',
     data: null
@@ -12,21 +12,28 @@ let getPixabayApiKey = () => {
     return apiKey;
 }
 
-let handleNextPixabayImage = (category, count, isRandom = false) => {
+let getNextPixabayPhoto = (category) => {
     return new Promise((resolve, reject) => {
         var imageUrl = '';
-        if (lastPixaBayResponse.category != category) {
+        //check whether category changed from previous request
+        //to save api calls
+        if (lastResponse.category != category || lastResponse.data == null) {
             getPixaBayImages(category)
                 .then((response) => {
-                    lastPixaBayResponse = {
+                    //cache the new response as the latest
+                    lastResponse = {
                         category: category.trim(),
                         lastIndex: Math.floor(Math.random() * response.data.hits.length),
                         data: response.data.hits
                     }
-                    imageUrl = lastPixaBayResponse.data[lastPixaBayResponse.lastIndex].imageURL;
-                    console.log(imageUrl)
-                    console.log(lastPixaBayResponse.lastIndex + ' and category ' + lastPixaBayResponse.category)
-                    resolve(imageUrl);
+                    var userName = lastResponse.data[lastResponse.lastIndex].user || '';
+                    var userId = lastResponse.data[lastResponse.lastIndex].user_id || '';
+                    var photo = {
+                        photoUrl: lastResponse.data[lastResponse.lastIndex].imageURL,
+                        userUrl: `https://pixabay.com/en/users/${userName}-${userId}`,
+                        userName: userName
+                    }
+                    resolve(photo);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -35,15 +42,20 @@ let handleNextPixabayImage = (category, count, isRandom = false) => {
                 })
         } else {
             console.log('category already exists in prev response');
-            var randomIndex = lastPixaBayResponse.lastIndex
-            while (randomIndex == lastPixaBayResponse.lastIndex) {
-                randomIndex = Math.floor(Math.random() * lastPixaBayResponse.data.length);
+            var randomIndex = lastResponse.lastIndex
+            while (randomIndex == lastResponse.lastIndex) {
+                randomIndex = Math.floor(Math.random() * lastResponse.data.length);
             }
             console.log('new index: ' + randomIndex)
-            lastPixaBayResponse.lastIndex = randomIndex;
-            imageUrl = lastPixaBayResponse.data[randomIndex].imageURL;            
-            console.log(imageUrl)
-            resolve(imageUrl)
+            lastResponse.lastIndex = randomIndex;
+            var userName = lastResponse.data[lastResponse.lastIndex].user || '';
+            var userId = lastResponse.data[lastResponse.lastIndex].user_id || '';
+            var photo = {
+                photoUrl: lastResponse.data[lastResponse.lastIndex].imageURL,
+                userUrl: `https://pixabay.com/en/users/${userName}-${userId}`,
+                userName: userName
+            }
+            resolve(photo);
         }
     })
 
@@ -69,5 +81,5 @@ let getPixaBayImages = (category) => {
 export {
     getPixabayApiKey,
     getPixaBayImages,
-    handleNextPixabayImage
+    getNextPixabayPhoto
 }

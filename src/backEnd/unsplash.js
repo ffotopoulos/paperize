@@ -8,69 +8,105 @@ import {
     downloadAndSave,
     getPhotoPath
 } from './files';
-import { uaSendError } from './analytics';
+import {
+    uaSendError
+} from './analytics';
 let axios = require('axios');
+let lastResponse = {
+    lastIndex: 0,
+    category: 'random',
+    data: null
+}
 let fs = require('fs');
 let apiKey = "25dadce5805202367c5dbf98497f2a8d64ae4e71471d91c7a3ce06ae37fb1659";
 
-let getApiKey = () => {
+let getUnsplashApiKey = () => {
     return apiKey;
 }
 
-let handleNextImage = (isRandom) => {
-    isRandom = isRandom || false;
-    return new Promise((resolve) => {
-        var category = !isRandom ? getSettingsOption('options.category') : 'random';
-        getUnsplashImages(30, category).then((response) => {
-            if (response) {
-                var randomIndex = Math.floor(Math.random() * response.data.length); 
-                var downloadUrl = response.data[randomIndex].links.download_location + `?client_id=${apiKey}`
-                axios.get(downloadUrl)
-                    .then(downloadResponse => {
-                        var imageDownloadUrl = downloadResponse.data.url;                        
-                        downloadAndSave(imageDownloadUrl, getPhotoPath(), savePhoto, () => {
-                            setWallpaper(getPhotoPath()).then((photoPath) => {
-                                var photo = {
-                                    photoPath: photoPath,
-                                    userUrl: response.data[randomIndex].user.links.html,
-                                    userName: response.data[randomIndex].user.name
-                                }
-                                resolve(photo);
-                            })
-                        });
-                    })
+let getNextUnsplashPhoto = (category) => {
+    return new Promise((resolve, reject) => {
+        var imageUrl = '';
+        //check whether category changed from previous request
+        //to save api calls
+        if (lastResponse.category != category || lastResponse.data == null) {
+            getUnsplashImages(category)
+                .then((response) => {
+                    //cache the new response as the latest
+                    var randomIndex = Math.floor(Math.random() * response.data.results.length);                    
+                    var downloadUrl = response.data.results[randomIndex].links.download_location + `?client_id=${apiKey}`
+                    axios.get(downloadUrl)
+                        .then(downloadResponse => {
+                            var imageDownloadUrl = downloadResponse.data.url;
+                            lastResponse = {
+                                category: category.trim(),
+                                lastIndex: randomIndex,
+                                data: response.data.results
+                            }
+                            var userName = lastResponse.data[lastResponse.lastIndex].user.username || '';
+                            var userUrl = lastResponse.data[lastResponse.lastIndex].user.links.html || '';
+                            var photo = {
+                                photoUrl: imageDownloadUrl,
+                                userUrl: userUrl,
+                                userName: userName
+                            }
+                            resolve(photo);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            uaSendError("Cant get pixabay images: " + err);
+                            reject();
+                        })
 
-            } else {
-                resolve();
+                })
+                .catch((err) => {
+                    console.log(err);
+                    uaSendError("Cant get pixabay images: " + err);
+                    reject();
+                })
+        } else {
+            console.log('category already exists in prev response');
+            var randomIndex = lastResponse.lastIndex
+            while (randomIndex == lastResponse.lastIndex) {
+                randomIndex = Math.floor(Math.random() * lastResponse.data.length);
             }
-        }).catch((err) => {
-            console.log(err);
-            uaSendError("Cant handle next image:" + err);
-            resolve();
-        });
-    });
-}
-
-let getImageAndSetWallpaper = (isRandom) => {
-    isRandom = isRandom || false;
-    return new Promise((resolve) => {
-        handleNextImage(isRandom).then((photoPath) => {
-            resolve(photoPath);
-        })
+            console.log('new index: ' + randomIndex)
+            var downloadUrl = lastResponse.data[randomIndex].links.download_location + `?client_id=${apiKey}`
+            axios.get(downloadUrl)
+                .then(downloadResponse => {
+                    var imageDownloadUrl = downloadResponse.data.url;
+                    lastResponse.lastIndex = randomIndex;
+                    var userName = lastResponse.data[lastResponse.lastIndex].user.username || '';
+                    var userUrl = lastResponse.data[lastResponse.lastIndex].user.links.html || '';
+                    var photo = {
+                        photoUrl: imageDownloadUrl,
+                        userUrl: userUrl,
+                        userName: userName
+                    }
+                    resolve(photo);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    uaSendError("Cant get pixabay images: " + err);
+                    reject();
+                })
+        }
     })
+
 }
 
-let getUnsplashImages = (count, category) => {
-    return new Promise((resolve,reject) => {
-        var url = `https://api.unsplash.com/photos/random?orientation=landscape&query=${category.replace('@@CUSTOM','')}&count=${count}&client_id=${apiKey}`;       
+
+let getUnsplashImages = (category) => {
+    return new Promise((resolve, reject) => {
+        var url = `https://api.unsplash.com/search/photos?page=1&query=${category}&client_id=${apiKey}&per_page=650`
         console.log(url);
         axios.get(url)
             .then(response => {
                 resolve(response);
             })
             .catch(err => {
-                console.log(err); 
-                uaSendError("Cant get unsplash images: " + err);          
+                console.log(err);
+                uaSendError("Cant get unsplash images: " + err);
                 reject();
             });
     })
@@ -79,6 +115,6 @@ let getUnsplashImages = (count, category) => {
 
 export {
     getUnsplashImages,
-    getImageAndSetWallpaper,    
-    getApiKey
+    getUnsplashApiKey,
+    getNextUnsplashPhoto
 }

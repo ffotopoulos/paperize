@@ -15,7 +15,7 @@ let getPhotoPath = () => {
     return photoPath;
 }
 
-let downloadAndSave = (url, destToSave, savePhoto, callback, ) => {
+let downloadAndSave = (url, destToSave, callback, ) => {
     let https = require('https');
     let file = fs.createWriteStream(destToSave);
     let request = https.get(url, (response) => {
