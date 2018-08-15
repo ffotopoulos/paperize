@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="./assets/css/animations.css" />
     <link rel="stylesheet" href="./assets/css/fontawesome-all.min.css" />
     <link rel="stylesheet" href="./assets/css/spinKit.css" />
+    <link rel="stylesheet" href="./assets/css/multiple-select.css" />
 </head>
 
 <body class="preload">
@@ -114,23 +115,9 @@
                     <span class="label">
                         get images from
                     </span>
-                    <dl class="checkDropdown">
+                    <select id="sources" multiple="multiple" class="dropdown">
 
-                        <dt>
-                            <a href="#">
-                                <span class="hida">Select</span>
-                                <p class="multiSel"></p>
-                            </a>
-                        </dt>
-
-                        <dd>
-                            <div class="mutliSelect">
-                                <ul class="imageSources">
-                                    
-                                </ul>
-                            </div>
-                        </dd>                        
-                    </dl>
+                    </select>
                 </div>
 
                 <div class="group">
@@ -138,7 +125,7 @@
                         change every
                     </span>
                     <select id="interval" class="dropdown">
-                        <option value="0" selected>Dont change</option>
+                        <option value="0" selected>Don't change</option>
                         <option value="60000">1 minute</option>
                         <option value="180000">3 minutes</option>
                         <option value="300000">5 minutes</option>
@@ -312,6 +299,7 @@
 </script>
 <script src="./assets/js/jquery.min.js"></script>
 <script src="./assets/js/progressbar.min.js"></script>
+<script src="./assets/js/multiple-select.js"></script>
 <script src="./assets/js/app.js"></script>
 <!-- Insert this line after script imports -->
 <script>

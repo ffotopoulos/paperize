@@ -13,8 +13,7 @@ import { toggleAutoLaunch } from './autolaunch';
 import { changeWallpaper, setOnlineStatus } from './timer';
 import { saveSettings, getSettingsOption } from './settings';
 import { loadGallery, downloadGalleryItem } from './gallery';
-import { downloadAndSave } from './unsplash';
-import { getPhotoPath } from './files';
+import { getPhotoPath,downloadAndSave } from './files';
 import { setWallpaper } from './wallpaper';
 import { updateApp } from './update';
 import { uaSendError } from './analytics';
@@ -43,18 +42,17 @@ let events = () => {
         });
     })
 
-    ipcMain.on('getGalleryItems', (event, arg) => {
+    ipcMain.on('getGalleryItems', async (event, arg) => {
         windowSendToggleLoading();
-        loadGallery(arg.count, arg.category).then((items) => {
-            windowSendToggleLoading();
-            windowSendGalleryItems(items)
-        });
+        var items = await loadGallery(arg.count, arg.category);        
+        windowSendToggleLoading();
+        windowSendGalleryItems(items)
     })
 
     ipcMain.on('setGalleryItemAsBackground', (event, arg) => {
         var photoPath = getPhotoPath();
         windowSendToggleLoading();
-        downloadAndSave(arg.url, photoPath, getSettingsOption('options.saveOnDownload'), () => {
+        downloadAndSave(arg.url, photoPath, () => {
             setWallpaper(getPhotoPath()).then(() => {
                 var photo = {
                     photoPath: photoPath,
@@ -66,6 +64,9 @@ let events = () => {
                 if(getSettingsOption("options.clearTimer")){
                     saveSettings('interval', 0);
                 } 
+            })
+            .catch((err)=>{
+                windowSendToggleLoading();
             })
         });
     })

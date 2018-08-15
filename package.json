@@ -2,7 +2,7 @@
   "name": "paperize",
   "productName": "paperize",
   "version": "1.0.16",
-  "description": "Setting desktop wallpapers automatically using awesome images from unsplash.com",
+  "description": "Setting desktop wallpapers automatically using awesome images from awesome websites!",
   "main": "src/main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -37,8 +37,8 @@
       },
       "electronWinstallerConfig": {
         "name": "paperize",
-        "iconUrl": "file:///E:/Documents/ElectronJS/paperize/src/backEnd/icons/app-icon.ico",
-        "setupIcon": "E:/Documents/ElectronJS/paperize/src/backEnd/icons/app-icon.ico"
+        "iconUrl": "file:///E:/Electronjs/paperize/src/backEnd/icons/app-icon.ico",
+        "setupIcon": "E://Electronjs/paperize/src/backEnd/icons/app-icon.ico"
       },
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},

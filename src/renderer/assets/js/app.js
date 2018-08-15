@@ -48,43 +48,32 @@ ipcRenderer.on('initImageSources', (event, sources) => {
     // <input type="checkbox" value="Apple" />Apple</li>
     var html = '';
     sources.forEach(element => {
-        html += `<li><input type='checkbox' class='imageSourceCheckbox' value='${element.name}'/><span>${element.label}</span></li>`
+        html += `<option value='${element.name}'>${element.label}</option>`
+        // html += `<li><input type='checkbox' class='imageSourceCheckbox' value='${element.name}'/><span>${element.label}</span></li>`
     });
-    $(".imageSources").append(html);
-    $(".checkDropdown dt a").on('click', function () {
-        $(".checkDropdown dd ul").slideToggle('fast');
-    });
-
-    $(".checkDropdown dd ul li a").on('click', function () {
-        $(".checkDropdown dd ul").hide();
-    });
-    $(document).bind('click', function (e) {
-        var $clicked = $(e.target);
-        if (!$clicked.parents().hasClass("checkDropdown")) $(".checkDropdown dd ul").hide();
-    });
-
-    $('.imageSourceCheckbox').on('change', function () {
-        var title = $(this).next().html() + ",";
-        if ($(this).is(':checked')) {
-            var html = '<span title="' + title + '">' + title + '</span>';
-            $('.multiSel').append(html);
-            $(".hida").hide();
-        } else {
-            if ($('.imageSourceCheckbox:checked').length < 1) {
-                $(this).prop('checked', true);
-                return;
+    $("#sources").append(html);
+    $("#sources").multipleSelect({
+        selectAll: false,
+        allSelected: false,
+        countSelected: false,
+        onClick: function (view) {
+            var checkedValues = $("#sources").multipleSelect('getSelects');            
+            if (checkedValues.length < 1) {
+                console.log(view)                
+                $("#sources").multipleSelect('checkAll');             
             }
-            $('span[title="' + title + '"]').remove();
-            var ret = $(".hida");
-            $('.checkDropdown dt a').append(ret);
+            saveSettings('sources', $("#sources").multipleSelect('getSelects'));
         }
-
-        var checkedValues = [];
-        $('.imageSourceCheckbox:checked').each(function () {
-            checkedValues.push($(this).val());
-        })
-        saveSettings('sources', checkedValues);
-    });
+    })
+    setTimeout(()=>{
+        
+        sources.forEach(element => {
+            $(`input[data-name=selectItem][value='${element.name}']`).after(`<img src='./../renderer/assets/images/${element.logoPath.split(/(\\|\/)/g).pop()}' style='max-width:81px;vertical-align:middle'>`)            
+            // html += `<li><input type='checkbox' class='imageSourceCheckbox' value='${element.name}'/><span>${element.label}</span></li>`
+        });
+        $(".ms-drop li label span").hide(); 
+    },1000)
+    
 })
 
 
@@ -458,19 +447,21 @@ function loadGallery(items) {
         $("#galleryCheckmark").html('');
         $(".gallery-container").html('');
         var html = '';
+        console.log(items)
         if (items) {
-            for (var i = 0; i < items.data.length; i++) {
+            for (var i = 0; i < items.length; i++) {
                 if (i == 0 || i == 3 || i == 6 || i == 9) {
                     html += `<div class="row">`;
                 }
                 html += `<div class="gallery-column animated fadeIn shrink">  
                                 <div class="gallery-imageContainer">                          
-                                    <img  src="${items.data[i].urls.thumb}">
+                                    <img class='galleryImage' src="${items[i].smallPhotoUrl}">
                                     <div class="img-hoverControls">
-                                        <i class="fa fa-download downloadGalleryItem grow" data-imgId="${items.data[i].id}" title="download"></i>
-                                        <i class="fa fa-image setGalleryItemDesktop grow" data-imgId="${items.data[i].id}" data-url="${items.data[i].urls.full}" data-userUrl="${items.data[i].user.links.html}" data-userName="${items.data[i].user.name}" title="set as wallpaper"></i>
-                                        <input id="saveDirGallery_${items.data[i].id}" class="saveDirGallery" data-imgId="${items.data[i].id}" data-url="${items.data[i].links.download_location}" type="file" webkitdirectory style="display:none" />
-                                        <p>by <br> <a class="openUrl grow"  onclick="openUrl('${items.data[i].user.links.html}')">${items.data[i].user.name}</a></p>
+                                        <i class="fa fa-download downloadGalleryItem grow" data-imgId="${items[i].photoId}" title="download"></i>
+                                        <i class="fa fa-image setGalleryItemDesktop grow" data-imgId="${items[i].photoId}" data-url="${items[i].photoUrl}" data-userUrl="${items[i].userUrl}" data-userName="${items[i].userName}" title="set as wallpaper"></i>
+                                        <input id="saveDirGallery_${items[i].photoId}" class="saveDirGallery" data-imgId="${items[i].photoId}" data-url="${items[i].photoUrl}" type="file" webkitdirectory style="display:none" />
+                                        <p>by <a class="openUrl"  onclick="openUrl('${items[i].userUrl}')">${items[i].userName}</a></p>
+                                        <img src='./../renderer/assets/images/${items[i].apiLogoPath.split(/(\\|\/)/g).pop()}' style='max-width:81px;position:relative;display:block;margin:auto;top:-20%'>
                                     </div> 
                                 </div>                                                 
                         </div>`
@@ -518,16 +509,10 @@ function loadSettings(settings) {
 
         //image sources
         //uncheck every checkbox @ first
-        $(".imageSourceCheckbox").each(function () {
-            $(this).prop('checked', false);
-        })
-        //clear previous selection text
-        $(".multiSel").html('');
+        $("#sources").multipleSelect('uncheckAll');                
 
         settings.sources.forEach(element => {
-            $(".imageSourceCheckbox[value='" + element + "']").prop('checked', true)
-            //fire the change event to append label's text @ selection text
-            $(".imageSourceCheckbox[value='" + element + "']").change();
+            $("input[data-name=selectItem][value='" + element + "']").click();
         });
         resolve();
     });

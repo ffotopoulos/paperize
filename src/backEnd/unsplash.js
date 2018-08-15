@@ -46,9 +46,11 @@ let getNextUnsplashPhoto = (category) => {
                             var userName = lastResponse.data[lastResponse.lastIndex].user.username || '';
                             var userUrl = lastResponse.data[lastResponse.lastIndex].user.links.html || '';
                             var photo = {
+                                photoId: lastResponse.data[lastResponse.lastIndex].id,
                                 photoUrl: imageDownloadUrl,
                                 userUrl: userUrl,
-                                userName: userName
+                                userName: userName,
+                                smallPhotoUrl:lastResponse.data[lastResponse.lastIndex].urls.thumb
                             }
                             resolve(photo);
                         })
@@ -79,9 +81,11 @@ let getNextUnsplashPhoto = (category) => {
                     var userName = lastResponse.data[lastResponse.lastIndex].user.username || '';
                     var userUrl = lastResponse.data[lastResponse.lastIndex].user.links.html || '';
                     var photo = {
+                        photoId: lastResponse.data[lastResponse.lastIndex].id,
                         photoUrl: imageDownloadUrl,
                         userUrl: userUrl,
-                        userName: userName
+                        userName: userName,
+                        smallPhotoUrl:lastResponse.data[lastResponse.lastIndex].urls.thumb
                     }
                     resolve(photo);
                 })

@@ -94,5 +94,6 @@ let downloadAndSetWallpaper = (isRandom = false) => {
 }
 
 export {
-    downloadAndSetWallpaper
+    downloadAndSetWallpaper,    
+    getNextPhoto
 }

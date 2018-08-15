@@ -15,14 +15,14 @@ let getPhotoPath = () => {
     return photoPath;
 }
 
-let downloadAndSave = (url, destToSave, callback, ) => {
+let downloadAndSave = (url, destToSave, callback, savePhoto) => {
     let https = require('https');
     let file = fs.createWriteStream(destToSave);
     let request = https.get(url, (response) => {
         //save file
         response.pipe(file);
         console.log(destToSave)
-        var savePhoto = getSettingsOption('options.saveOnDownload');
+        savePhoto = savePhoto || getSettingsOption('options.saveOnDownload');
         if (savePhoto) {            
             let destination = getSettingsOption('options.saveLocation');
             if (destination.trim() != '' && fs.existsSync(destination.trim())) {

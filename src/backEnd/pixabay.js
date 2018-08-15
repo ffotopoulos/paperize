@@ -16,7 +16,7 @@ let getNextPixabayPhoto = (category) => {
     return new Promise((resolve, reject) => {
         var imageUrl = '';
         //check whether category changed from previous request
-        //to save api calls
+        //to save api calls        
         if (lastResponse.category != category || lastResponse.data == null) {
             getPixaBayImages(category)
                 .then((response) => {
@@ -29,9 +29,11 @@ let getNextPixabayPhoto = (category) => {
                     var userName = lastResponse.data[lastResponse.lastIndex].user || '';
                     var userId = lastResponse.data[lastResponse.lastIndex].user_id || '';
                     var photo = {
+                        photoId: lastResponse.data[lastResponse.lastIndex].id,
                         photoUrl: lastResponse.data[lastResponse.lastIndex].imageURL,
                         userUrl: `https://pixabay.com/en/users/${userName}-${userId}`,
-                        userName: userName
+                        userName: userName,
+                        smallPhotoUrl:lastResponse.data[lastResponse.lastIndex].previewURL
                     }
                     resolve(photo);
                 })
@@ -51,9 +53,11 @@ let getNextPixabayPhoto = (category) => {
             var userName = lastResponse.data[lastResponse.lastIndex].user || '';
             var userId = lastResponse.data[lastResponse.lastIndex].user_id || '';
             var photo = {
+                photoId: lastResponse.data[lastResponse.lastIndex].id,
                 photoUrl: lastResponse.data[lastResponse.lastIndex].imageURL,
                 userUrl: `https://pixabay.com/en/users/${userName}-${userId}`,
-                userName: userName
+                userName: userName,
+                smallPhotoUrl:lastResponse.data[lastResponse.lastIndex].previewURL
             }
             resolve(photo);
         }

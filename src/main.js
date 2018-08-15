@@ -1,6 +1,5 @@
 import { app } from 'electron'
 import { bypassLocalChecker } from './backEnd/files';
-import { createSplashScreenWindow } from './backEnd/splash';
 import { createWindow, singleInstance } from './backEnd/win';
 import { initSettings, getSettingsOption } from './backEnd/settings';
 import { initTray } from './backEnd/tray';
@@ -10,7 +9,7 @@ import {initNotifyConfig} from './backEnd/notify';
 import { squirrelStartup,handleSquirrelEvents } from './backEnd/squirrel';
 import { initAnalytics } from './backEnd/analytics';
 import { initManualChangesLeft } from './backEnd/timer';
-import { downloadAndSetWallpaper } from './backEnd/imageApisController';
+import { loadGallery } from './backEnd/gallery';
 
 initAnalytics();
 squirrelStartup();
@@ -23,8 +22,7 @@ let startApplication = () => {
     initNotifyConfig();
     initSettings();
     initAutoLaunch();
-    toggleAutoLaunch(getSettingsOption('options.startOnLogin'));
-    createSplashScreenWindow();
+    toggleAutoLaunch(getSettingsOption('options.startOnLogin'));   
     createWindow();    
     initTray();     
     events();        

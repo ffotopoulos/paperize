@@ -11,13 +11,14 @@ import {
 import {
     downloadAndSetWallpaper
 } from './imageApisController';
+import { uaSendError } from './analytics';
 let tmr = null;
 let hasInternet = true;
-let manualChangesLeft = 10;
+let manualChangesLeft = 20;
 let manualChangesResetter;
 let initManualChangesLeft = () => {
     manualChangesResetter = setInterval(() => {
-        manualChangesLeft = 10;
+        manualChangesLeft = 20;
     }, 180000)
 }
 
@@ -45,15 +46,21 @@ let changeWallpaper = (force, isRandom) => {
             if (force) {
                 manualChangesLeft--;
                 if (manualChangesLeft <= 0) {
-                    notifyUser("Woaaah! Aren't you a tough person to impress.", "You can change your wallpaper manually only 10 times every 3 minutes :( Try again later!")
+                    notifyUser("Woaaah! Aren't you a tough person to impress.", "You can change your wallpaper manually only 20 times every 3 minutes :( Try again later!")
                     return;
                 }
             }
             if (getSettingsOption('options.interval') >= 60000 || force) {
                 windowSendToggleLoading();
-                downloadAndSetWallpaper(isRandom).then((photo) => {
+                downloadAndSetWallpaper(isRandom)
+                .then((photo) => {
                     windowSendToggleLoading();
                     windowSendWallpaperChanged(photo);
+                })
+                .catch((err)=>{
+                    uaSendError(err);
+                    console.log(err);
+                    windowSendToggleLoading();            
                 })
             } else if (force && manualChangesLeft == 0) {
 
