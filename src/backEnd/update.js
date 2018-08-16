@@ -9,7 +9,8 @@ import {
     windowSendToggleLoading,
     windowSendStartUpdate,
     windowSendShowProgress,
-    windowSendHideProgress
+    windowSendHideProgress,
+    showWindow
 } from './win';
 import {
     clearTimer
@@ -57,6 +58,7 @@ let checkForUpdates = (notifyManually) => {
             windowSendUpdateAvailability(true);
             if (firstTime || notifyManually) {
                 firstTime = false;
+                showWindow();
                 notifyUser("Update available!", data.msg, () => {
                     windowSendStartUpdate();
                 })

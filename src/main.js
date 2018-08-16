@@ -9,7 +9,6 @@ import {initNotifyConfig} from './backEnd/notify';
 import { squirrelStartup,handleSquirrelEvents } from './backEnd/squirrel';
 import { initAnalytics } from './backEnd/analytics';
 import { initManualChangesLeft } from './backEnd/timer';
-import { loadGallery } from './backEnd/gallery';
 
 initAnalytics();
 squirrelStartup();

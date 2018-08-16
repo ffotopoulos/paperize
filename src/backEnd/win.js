@@ -118,6 +118,10 @@ let toggleWindow = () => {
     mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
 }
 
+let showWindow = ()=>{
+    mainWindow.show();
+}
+
 let singleInstance = () => {
     let quit = app.makeSingleInstance(() => {
         if (windowCreated()) {
@@ -176,10 +180,6 @@ let windowSendHideProgress = () => {
     mainWindow.webContents.send('hideProgress')
 }
 
-let windowSendImageSources = () => {
-    mainWindow.webContents.send('getAllImageSources', getImageSources())
-}
-
 let initImageSources = () => {
     mainWindow.webContents.send('initImageSources', getImageSources())
 }
@@ -199,5 +199,6 @@ export {
     windowSendUpdateAvailability,
     windowSendStartUpdate,
     windowSendShowProgress,
-    windowSendHideProgress
+    windowSendHideProgress,
+    showWindow
 }
