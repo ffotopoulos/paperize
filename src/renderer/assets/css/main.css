@@ -1174,16 +1174,16 @@ body.preload #header h1:after {
 	padding: 0.2em;
 	display: none;
 	z-index: 4;
-	margin-top: 0.2em;
-	margin-left: 60px;
-	margin-right: 60px;
+	margin-top: 0;
+	margin-left: 100px;
+	margin-right: 100px;
 	border-radius: 10px;
 	min-height: 551.38px;
 }
 
 #settings .inner {
 	text-align: center;
-	height: 502px;
+	height: 509px;
 	position: relative;
 	display: block;
 	overflow: auto;
@@ -1208,7 +1208,7 @@ body.preload #header h1:after {
 	display: block;
 	position: absolute;
 	top: -10px;
-	right: 54px;
+	right: 90px;
 	width: 4rem;
 	height: 4rem;
 	cursor: pointer;

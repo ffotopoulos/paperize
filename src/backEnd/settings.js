@@ -1,7 +1,9 @@
 import {
     app
 } from 'electron'
+import { ENETUNREACH } from 'constants';
 let settings = require('electron-settings');
+
 
 let imageSources = [{
         name: 'pixabay',
@@ -14,8 +16,16 @@ let imageSources = [{
         label: 'Unsplash',
         logoPath: '../renderer/assets/images/unsplash_logo.png',
         refUrl: 'https://unsplash.com'
+    },
+    {
+        name: 'localLibrary',
+        label: 'Local Library',
+        logoPath: '../renderer/assets/images/localLibrary_icon.png',
+        refUrl: 'localLibrary'
     }
 ]
+
+let defaultSettings;
 
 let getImageSources = () => {
     return imageSources;
@@ -23,24 +33,23 @@ let getImageSources = () => {
 
 let initSettings = () => {
     return new Promise((resolve) => {
-        if (!settings.has('options') || !settings.has('options.interval') ||
-            !settings.has('options.startOnLogin') || !settings.has('options.category') ||
-            !settings.has('options.scale') || !settings.has('options.saveOnDownload') ||
-            !settings.has('options.saveLocation') || !settings.has('options.deletePrevImage') ||
-            !settings.has('options.clearTimer') || !settings.has('options.sources')) {
-            settings.deleteAll();
-            settings.set('options', {
-                interval: 180000,
-                startOnLogin: true,
-                category: 'nature',
-                scale: 'fit',
-                saveOnDownload: false,
-                saveLocation: app.getPath('pictures'),
-                deletePrevImage: false,
-                clearTimer: true,
-                sources: imageSources.map(x => x.name)
-            });
-        }
+        defaultSettings = {
+            interval: 180000,
+            startOnLogin: true,
+            category: 'nature',
+            scale: 'strech',
+            saveOnDownload: false,
+            saveLocation: app.getPath('desktop'),
+            deletePrevImage: false,
+            clearTimer: true,
+            sources: imageSources.filter(x => x.name != 'localLibrary').map(x => x.name),
+            localLibraryLocation: ''
+        }       
+        for(var option in defaultSettings){
+            if(!settings.has(`options.${option}`)){
+                settings.set(`options.${option}`,defaultSettings[option])
+            }
+        }        
         resolve();
     })
 }

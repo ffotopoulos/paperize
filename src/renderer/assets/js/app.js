@@ -67,6 +67,27 @@ ipcRenderer.on('initImageSources', (event, sources) => {
     })
     setTimeout(()=>{
         
+        $(`input[data-name=selectItem][value='localLibrary'`).change(function(){
+            if($(this).is(":checked")){
+                $(".localLibraryLocationGroup").show();
+            }
+            else{
+                $(".localLibraryLocationGroup").hide();
+            }
+        })
+
+        $("#localLibraryLocationInput").click(function () {
+            $("#localLibraryLocation").click();
+        })
+        
+        $("#localLibraryLocation").change(function () {
+            var p = document.getElementById('localLibraryLocation').files[0].path
+            $("#localLibraryLocationInput").val(p);
+            if (p.trim() != '') {
+                saveSettings('localLibraryLocation', p);
+            }
+        })
+
         sources.forEach(element => {
             $(`input[data-name=selectItem][value='${element.name}']`).after(`<img src='./../renderer/assets/images/${element.logoPath.split(/(\\|\/)/g).pop()}' style='max-width:81px;vertical-align:middle'>`)            
             // html += `<li><input type='checkbox' class='imageSourceCheckbox' value='${element.name}'/><span>${element.label}</span></li>`
@@ -212,7 +233,7 @@ $("#customGalleryCategoryInput").keypress(function (ev) {
 
 $(".gallery").click(() => {
     if ($("#header").is(":visible")) {
-        hideHeader();
+        hideHeader();        
     }
     if ($("#settings").is(":visible")) {
         $("#settings").hide();
@@ -444,34 +465,39 @@ function showCheckMark(divId) {
 
 function loadGallery(items) {
     return new Promise((resolve) => {
-        $("#galleryCheckmark").html('');
-        $(".gallery-container").html('');
-        var html = '';
-        console.log(items)
-        if (items) {
-            for (var i = 0; i < items.length; i++) {
-                if (i == 0 || i == 3 || i == 6 || i == 9) {
-                    html += `<div class="row">`;
-                }
-                html += `<div class="gallery-column animated fadeIn shrink">  
-                                <div class="gallery-imageContainer">                          
-                                    <img class='galleryImage' src="${items[i].smallPhotoUrl}">
-                                    <div class="img-hoverControls">
-                                        <i class="fa fa-download downloadGalleryItem grow" data-imgId="${items[i].photoId}" title="download"></i>
-                                        <i class="fa fa-image setGalleryItemDesktop grow" data-imgId="${items[i].photoId}" data-url="${items[i].photoUrl}" data-userUrl="${items[i].userUrl}" data-userName="${items[i].userName}" title="set as wallpaper"></i>
-                                        <input id="saveDirGallery_${items[i].photoId}" class="saveDirGallery" data-imgId="${items[i].photoId}" data-url="${items[i].photoUrl}" type="file" webkitdirectory style="display:none" />
-                                        <p>by <a class="openUrl"  onclick="openUrl('${items[i].userUrl}')">${items[i].userName}</a></p>
-                                        <img src='./../renderer/assets/images/${items[i].apiLogoPath.split(/(\\|\/)/g).pop()}' style='max-width:81px;position:relative;display:block;margin:auto;top:-20%'>
-                                    </div> 
-                                </div>                                                 
-                        </div>`
-                if (i == 2 || i == 5 || i == 8) {
-                    html += `</div>`;
+        if(!items || items.length<=0){
+            showHeader();
+        }
+        else{
+            $("#galleryCheckmark").html('');
+            $(".gallery-container").html('');
+            var html = '';
+            console.log(items)
+            if (items) {
+                for (var i = 0; i < items.length; i++) {
+                    if (i == 0 || i == 3 || i == 6 || i == 9) {
+                        html += `<div class="row">`;
+                    }
+                    html += `<div class="gallery-column animated fadeIn shrink">  
+                                    <div class="gallery-imageContainer">                          
+                                        <img class='galleryImage' src="${items[i].smallPhotoUrl}">
+                                        <div class="img-hoverControls">
+                                            <i class="fa fa-download downloadGalleryItem grow" data-imgId="${items[i].photoId}" title="download"></i>
+                                            <i class="fa fa-image setGalleryItemDesktop grow" data-imgId="${items[i].photoId}" data-url="${items[i].photoUrl}" data-userUrl="${items[i].userUrl}" data-userName="${items[i].userName}" title="set as wallpaper"></i>
+                                            <input id="saveDirGallery_${items[i].photoId}" class="saveDirGallery" data-imgId="${items[i].photoId}" data-url="${items[i].photoUrl}" type="file" webkitdirectory style="display:none" />
+                                            <p>by <a class="openUrl"  onclick="openUrl('${items[i].userUrl}')">${items[i].userName}</a></p>
+                                            <img src='./../renderer/assets/images/${items[i].apiLogoPath.split(/(\\|\/)/g).pop()}' style='max-width:81px;position:relative;display:block;margin:auto;top:-20%'>
+                                        </div> 
+                                    </div>                                                 
+                            </div>`
+                    if (i == 2 || i == 5 || i == 8) {
+                        html += `</div>`;
+                    }
                 }
             }
-        }
-        $(".gallery-container").html(html);
-        resolve();
+            $(".gallery-container").html(html);
+            resolve();
+        }        
     })
 
 }
@@ -506,7 +532,7 @@ function loadSettings(settings) {
         $("#deletePrevImage").prop('checked', settings.deletePrevImage);
         $("#clearTimer").prop('checked', settings.clearTimer);
         $("#saveLocationInput").val(settings.saveLocation);
-
+        $("#localLibraryLocationInput").val(settings.localLibraryLocation)
         //image sources
         //uncheck every checkbox @ first
         $("#sources").multipleSelect('uncheckAll');                

@@ -1,10 +1,16 @@
-import { app } from 'electron';
-import {addBypassChecker} from 'electron-compile';
-import { getSettingsOption } from './settings';
+import {
+    app
+} from 'electron';
+import {
+    addBypassChecker
+} from 'electron-compile';
+import {
+    getSettingsOption
+} from './settings';
 let appUsersPath = app.getPath('userData');
 let photoPath = appUsersPath + '\\photo.jpg';
 let fs = require('fs');
-
+let fsExtra = require('fs-extra');
 let bypassLocalChecker = () => {
     addBypassChecker((filePath) => {
         return filePath.indexOf(app.getAppPath()) === -1 && (/.jpg/.test(filePath) || /.ms/.test(filePath) || /.png/.test(filePath));
@@ -20,20 +26,32 @@ let downloadAndSave = (url, destToSave, callback, savePhoto) => {
     let file = fs.createWriteStream(destToSave);
     let request = https.get(url, (response) => {
         //save file
-        response.pipe(file);
-        console.log(destToSave)
-        savePhoto = savePhoto || getSettingsOption('options.saveOnDownload');
-        if (savePhoto) {            
-            let destination = getSettingsOption('options.saveLocation');
-            if (destination.trim() != '' && fs.existsSync(destination.trim())) {
-                //delete prev photos if enabled
-                if (getSettingsOption('options.deletePrevImage')) {
-                    deletePaperizePhotos(destination);
-                }                
-                var downloadedFile = fs.createWriteStream(destination + `\\paperize_${Date.now()}.jpg`)
-                response.pipe(downloadedFile)
+        var res = response.pipe(file);
+        res.on('finish',()=>{
+            savePhoto = savePhoto || getSettingsOption('options.saveOnDownload');
+            if (savePhoto) {
+                let destination = getSettingsOption('options.saveLocation');
+                if (destination.trim() != '') {
+                    fsExtra.ensureDir(destination)
+                        .then(() => {
+                            //delete prev photos if enabled
+                            if (getSettingsOption('options.deletePrevImage')) {
+                                deletePaperizePhotos(destination);
+                            }
+                            fs.copyFile(destToSave, destination + `\\paperize_${Date.now()}.jpg`, (err) => {
+                                if (err) {
+                                    console.log(nextPhoto);
+                                    uaSendError(err)
+                                    return;
+                                }
+                            });
+                        })
+                        .catch(err => {
+                            return;
+                        })
+                }
             }
-        }
+        })                
     });
     request.on('close', () => {
         callback();

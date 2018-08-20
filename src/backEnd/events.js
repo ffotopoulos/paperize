@@ -44,9 +44,10 @@ let events = () => {
 
     ipcMain.on('getGalleryItems', async (event, arg) => {
         windowSendToggleLoading();
-        var items = await loadGallery(arg.count, arg.category);        
+        var items  = []        
+        items = await loadGallery(arg.count, arg.category)
         windowSendToggleLoading();
-        windowSendGalleryItems(items)
+        windowSendGalleryItems(items)                            
     })
 
     ipcMain.on('setGalleryItemAsBackground', (event, arg) => {

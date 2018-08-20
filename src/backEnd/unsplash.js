@@ -102,7 +102,7 @@ let getNextUnsplashPhoto = (category) => {
 
 let getUnsplashImages = (category) => {
     return new Promise((resolve, reject) => {
-        var url = `https://api.unsplash.com/search/photos?page=1&query=${category}&client_id=${apiKey}&per_page=650`
+        var url = `https://api.unsplash.com/search/photos?page=1&query=${category}&client_id=${apiKey}&per_page=700?orientation=landscape`
         console.log(url);
         axios.get(url)
             .then(response => {

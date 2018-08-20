@@ -15,7 +15,12 @@ import {
 import {
     setWallpaper
 } from "./wallpaper";
-import { getNextUnsplashPhoto } from "./unsplash";
+import {
+    getNextUnsplashPhoto
+} from "./unsplash";
+import {
+    getNextLocalLibraryPhoto
+} from "./localLibrary";
 
 let selectSource = () => {
     var selectedSources = getSettingsOption('options.sources');
@@ -24,13 +29,19 @@ let selectSource = () => {
     return randomSource;
 }
 
-let getNextPhoto = (category) => {
+let getNextPhoto = (category, isGallery = false) => {
     return new Promise((resolve, reject) => {
         var source = selectSource();
+        if (isGallery) {
+            while (source == 'localLibrary') {
+                source = selectSource();
+            }
+        }
         switch (source) {
             case 'pixabay':
                 getNextPixabayPhoto(category)
                     .then((photo) => {
+                        photo.apiName = source;
                         photo.apiLabel = getImageSources().find(x => x.name == source).label;
                         photo.apiLogoPath = getImageSources().find(x => x.name == source).logoPath;
                         photo.apiRefUrl = getImageSources().find(x => x.name == source).refUrl;
@@ -39,11 +50,13 @@ let getNextPhoto = (category) => {
                     .catch((err) => {
                         console.log(err);
                         uaSendError(err);
+                        reject();
                     })
                 break;
             case 'unsplash':
-                    getNextUnsplashPhoto(category)
-                    .then((photo)=>{
+                getNextUnsplashPhoto(category)
+                    .then((photo) => {
+                        photo.apiName = source;
                         photo.apiLabel = getImageSources().find(x => x.name == source).label;
                         photo.apiLogoPath = getImageSources().find(x => x.name == source).logoPath;
                         photo.apiRefUrl = getImageSources().find(x => x.name == source).refUrl;
@@ -52,8 +65,21 @@ let getNextPhoto = (category) => {
                     .catch((err) => {
                         console.log(err);
                         uaSendError(err);
+                        reject();
                     })
                 break;
+            case 'localLibrary':
+                getNextLocalLibraryPhoto()
+                    .then((photo) => {
+                        photo.apiName = source;
+                        photo.apiLogoPath = getImageSources().find(x => x.name == source).logoPath;
+                        photo.apiRefUrl = getSettingsOption('options.localLibraryLocation');
+                        resolve(photo);
+                    }).catch((err) => {
+                        console.log(err);
+                        uaSendError(err);
+                        reject();
+                    })
         }
     })
 }
@@ -63,26 +89,55 @@ let downloadAndSetWallpaper = (isRandom = false) => {
         var category = !isRandom ? getSettingsOption('options.category').replace('@@CUSTOM', '') : 'random';
         getNextPhoto(category)
             .then((nextPhoto) => {
-                downloadAndSave(nextPhoto.photoUrl, getPhotoPath(), () => {
-                    setWallpaper(getPhotoPath())
-                        .then((photoPath) => {
+                if (nextPhoto.apiName != 'localLibrary') {
+                    downloadAndSave(nextPhoto.photoUrl, getPhotoPath(), () => {
+                        setWallpaper(getPhotoPath())
+                            .then((photoPath) => {
+                                console.log(nextPhoto);
+                                var photo = {
+                                    photoPath: photoPath,
+                                    userUrl: nextPhoto.userUrl,
+                                    userName: nextPhoto.userName,
+                                    apiLabel: nextPhoto.apiLabel,
+                                    apiLogoName: require('path').basename(nextPhoto.apiLogoPath),
+                                    apiRefUrl: nextPhoto.apiRefUrl
+                                }
+                                resolve(photo);
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                                uaSendError(err);
+                                reject();
+                            })
+                    })
+                } else {
+                    require('fs').copyFile(nextPhoto.photoUrl, getPhotoPath(), (err) => {
+                        if (err) {
                             console.log(nextPhoto);
-                            var photo = {
-                                photoPath: photoPath,
-                                userUrl: nextPhoto.userUrl,
-                                userName: nextPhoto.userName,
-                                apiLabel: nextPhoto.apiLabel,
-                                apiLogoName:require('path').basename(nextPhoto.apiLogoPath),
-                                apiRefUrl: nextPhoto.apiRefUrl
-                            }
-                            resolve(photo);
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                            uaSendError(err);
+                            uaSendError(err)
                             reject();
-                        })
-                })
+                        }
+                        setWallpaper(getPhotoPath())
+                            .then((photoPath) => {
+                                console.log(nextPhoto);
+                                var photo = {
+                                    photoPath: photoPath,
+                                    userUrl: '',
+                                    userName: 'LocalLibrary',
+                                    apiLabel: nextPhoto.apiLabel,
+                                    apiLogoName: require('path').basename(nextPhoto.apiLogoPath),
+                                    apiRefUrl: nextPhoto.apiRefUrl
+                                }
+                                resolve(photo);
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                                uaSendError(err);
+                                reject();
+                            })
+                    });
+                }
+
             })
             .catch((err) => {
                 console.log(err);
@@ -94,6 +149,6 @@ let downloadAndSetWallpaper = (isRandom = false) => {
 }
 
 export {
-    downloadAndSetWallpaper,    
+    downloadAndSetWallpaper,
     getNextPhoto
 }
