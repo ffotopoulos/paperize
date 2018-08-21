@@ -14,12 +14,11 @@ import {
 import {
     notifyUser
 } from './notify';
-let axios = require('axios');
 
 let loadGallery = async (count, category) => {
     var photos = []
     if (getSettingsOption('options.sources').length == 1 && getSettingsOption('options.sources')[0] == 'localLibrary') {
-        notifyUser('Hey you', 'Please select an online source first instead of just your local library!')
+        notifyUser('Hey you! ', 'Please select an online source first instead of just your local library!')
         return photos;
     } else {
         for (var i = 0; i < count; i++) {
@@ -29,6 +28,7 @@ let loadGallery = async (count, category) => {
                     if (d) {
                         i--;
                     } else {
+                        photo.apiLogoName = require('path').basename(photo.apiLogoPath);
                         photos.push(photo);
                     }
 
@@ -37,14 +37,12 @@ let loadGallery = async (count, category) => {
                     uaSendError('cant loadgalerry ' + err);
                     console.log(err);
                     reject();
-                })
-
+                })                
         }
         return photos;
     }
 
 }
-
 
 let downloadGalleryItem = (url, saveDir) => {
     return new Promise((resolve) => {

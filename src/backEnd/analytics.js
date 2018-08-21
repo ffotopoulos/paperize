@@ -23,7 +23,7 @@ let uaAppUninstalled = () => {
 }
 
 let uaSendError = (err) => {
-    user.event("Error", err + " . " + hostname).send();
+    user.exception(err + " . " + hostname).send();
 }
 
 let uaUserChangedWallpaper = () => {

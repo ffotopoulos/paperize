@@ -1,11 +1,12 @@
 import { uaSendError, uaUserChangedWallpaper } from './analytics';
+import { getSettingsOption } from './settings';
 
 let wallpaper = require('wallpaper');
 
 let setWallpaper = (photoPath) => {
     return new Promise((resolve) => {
         wallpaper.set(photoPath, {
-                scale: 'stretch'
+                scale: getSettingsOption('options.scale')
             })
             .then(() => {
                 uaUserChangedWallpaper();

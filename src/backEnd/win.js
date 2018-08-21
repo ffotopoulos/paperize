@@ -67,8 +67,7 @@ let createWindow = (c) => {
                 }
                 windowSendWallpaperChanged(photo);
                 setTimer();
-            } else {
-                console.log('wallpaper != this.photoPath');
+            } else {                
                 changeWallpaper(true);
             }
         });

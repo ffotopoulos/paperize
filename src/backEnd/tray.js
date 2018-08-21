@@ -53,13 +53,17 @@ let initTray = () => {
             label: 'about',
             submenu: [
                 {
+                    label: 'developer',
+                    click() {require('electron').shell.openExternal('https://www.linkedin.com/in/fotis-fotopoulos-7b225a134')}
+                },
+                {
                     label: 'v' + app.getVersion() + ' check for updates',
                     click() {
                         checkForUpdates(true);
                     }                 
                 },
                 {
-                    label:'buy me a beer here :)',
+                    label:'buy me a coffee here <3',
                     click () { require('electron').shell.openExternal('https://paypal.me/ffsp') }      
                 }
             ]

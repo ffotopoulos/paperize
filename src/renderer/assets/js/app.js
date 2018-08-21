@@ -57,21 +57,20 @@ ipcRenderer.on('initImageSources', (event, sources) => {
         allSelected: false,
         countSelected: false,
         onClick: function (view) {
-            var checkedValues = $("#sources").multipleSelect('getSelects');            
+            var checkedValues = $("#sources").multipleSelect('getSelects');
             if (checkedValues.length < 1) {
-                console.log(view)                
-                $("#sources").multipleSelect('checkAll');             
+                console.log(view)
+                $("#sources").multipleSelect('checkAll');
             }
             saveSettings('sources', $("#sources").multipleSelect('getSelects'));
         }
     })
-    setTimeout(()=>{
-        
-        $(`input[data-name=selectItem][value='localLibrary'`).change(function(){
-            if($(this).is(":checked")){
+    setTimeout(() => {
+
+        $(`input[data-name=selectItem][value='localLibrary'`).change(function () {
+            if ($(this).is(":checked")) {
                 $(".localLibraryLocationGroup").show();
-            }
-            else{
+            } else {
                 $(".localLibraryLocationGroup").hide();
             }
         })
@@ -79,7 +78,7 @@ ipcRenderer.on('initImageSources', (event, sources) => {
         $("#localLibraryLocationInput").click(function () {
             $("#localLibraryLocation").click();
         })
-        
+
         $("#localLibraryLocation").change(function () {
             var p = document.getElementById('localLibraryLocation').files[0].path
             $("#localLibraryLocationInput").val(p);
@@ -89,12 +88,12 @@ ipcRenderer.on('initImageSources', (event, sources) => {
         })
 
         sources.forEach(element => {
-            $(`input[data-name=selectItem][value='${element.name}']`).after(`<img src='./../renderer/assets/images/${element.logoPath.split(/(\\|\/)/g).pop()}' style='max-width:81px;vertical-align:middle'>`)            
+            $(`input[data-name=selectItem][value='${element.name}']`).after(`<img src='./../renderer/assets/images/${element.logoPath.split(/(\\|\/)/g).pop()}' style='max-width:81px;vertical-align:middle'>`)
             // html += `<li><input type='checkbox' class='imageSourceCheckbox' value='${element.name}'/><span>${element.label}</span></li>`
         });
-        $(".ms-drop li label span").hide(); 
-    },1000)
-    
+        $(".ms-drop li label span").hide();
+    }, 1000)
+
 })
 
 
@@ -166,10 +165,14 @@ ipcRenderer.on('loadGallery', (evt, items) => {
             var url = $(this).attr('data-url');
             var userName = $(this).attr('data-userName');
             var userUrl = $(this).attr('data-userUrl');
+            var apiLogoName = $(this).attr('data-apiLogoName');
+            var apiRefUrl = $(this).attr('data-apiRefUrl');
             ipcRenderer.send('setGalleryItemAsBackground', {
                 url: url,
                 userName: userName,
-                userUrl: userUrl
+                userUrl: userUrl,
+                apiLogoName: apiLogoName,
+                apiRefUrl:apiRefUrl
             });
         })
         $("#gallery-wrapper").show();
@@ -186,10 +189,19 @@ $('.c-modal').on('click', function (event) {
         $(this).removeClass('is-visible');
     }
 });
-//close update popup when clicking the esc keyboard button
+
 $(document).keyup(function (event) {
+    //close update popup when clicking the esc keyboard button
     if (event.which == '27') {
         $('.c-modal').removeClass('is-visible');
+    }
+    //arrow right
+    else if(event.which=='39'){
+        ipcRenderer.send('next');
+    }
+    //space
+    else if(event.which=='32'){
+        playbackToggle();
     }
 });
 $(".updateNotifIcon").click(() => {
@@ -233,7 +245,7 @@ $("#customGalleryCategoryInput").keypress(function (ev) {
 
 $(".gallery").click(() => {
     if ($("#header").is(":visible")) {
-        hideHeader();        
+        hideHeader();
     }
     if ($("#settings").is(":visible")) {
         $("#settings").hide();
@@ -299,16 +311,9 @@ $("#saveDirectory").change(function () {
 })
 
 $(".playback-toggle").click(function () {
-    var ms = 0;
-    if ($(this).hasClass("fa-play")) {
-        ms = lastIntervalMs;
-    }
-    saveSettings('interval', ms).then(() => {
-        if ($("#settings").is(":visible")) {
-            getSettings();
-        }
-    });
+    playbackToggle();
 })
+
 
 $('#interval,#category').change(function () {
     var val = $(this).val();
@@ -354,6 +359,18 @@ var toggleWraper = () => {
     $("#bg").toggleClass("bg");
     $("#settings").hide();
     $("#gallery-wrapper").hide();
+}
+
+function playbackToggle() {
+    var ms = 0;
+    if ($(".playback-toggle").hasClass("fa-play")) {
+        ms = lastIntervalMs;
+    }
+    saveSettings('interval', ms).then(() => {
+        if ($("#settings").is(":visible")) {
+            getSettings();
+        }
+    });
 }
 
 function updateApp() {
@@ -465,10 +482,9 @@ function showCheckMark(divId) {
 
 function loadGallery(items) {
     return new Promise((resolve) => {
-        if(!items || items.length<=0){
+        if (!items || items.length <= 0) {
             showHeader();
-        }
-        else{
+        } else {
             $("#galleryCheckmark").html('');
             $(".gallery-container").html('');
             var html = '';
@@ -483,7 +499,7 @@ function loadGallery(items) {
                                         <img class='galleryImage' src="${items[i].smallPhotoUrl}">
                                         <div class="img-hoverControls">
                                             <i class="fa fa-download downloadGalleryItem grow" data-imgId="${items[i].photoId}" title="download"></i>
-                                            <i class="fa fa-image setGalleryItemDesktop grow" data-imgId="${items[i].photoId}" data-url="${items[i].photoUrl}" data-userUrl="${items[i].userUrl}" data-userName="${items[i].userName}" title="set as wallpaper"></i>
+                                            <i class="fa fa-image setGalleryItemDesktop grow" data-apiRefUrl="${items[i].apiRefUrl}" data-apiLogoName="${items[i].apiLogoName}" data-imgId="${items[i].photoId}" data-url="${items[i].photoUrl}" data-userUrl="${items[i].userUrl}" data-userName="${items[i].userName}" title="set as wallpaper"></i>
                                             <input id="saveDirGallery_${items[i].photoId}" class="saveDirGallery" data-imgId="${items[i].photoId}" data-url="${items[i].photoUrl}" type="file" webkitdirectory style="display:none" />
                                             <p>by <a class="openUrl"  onclick="openUrl('${items[i].userUrl}')">${items[i].userName}</a></p>
                                             <img src='./../renderer/assets/images/${items[i].apiLogoPath.split(/(\\|\/)/g).pop()}' style='max-width:81px;position:relative;display:block;margin:auto;top:-20%'>
@@ -497,7 +513,7 @@ function loadGallery(items) {
             }
             $(".gallery-container").html(html);
             resolve();
-        }        
+        }
     })
 
 }
@@ -535,7 +551,7 @@ function loadSettings(settings) {
         $("#localLibraryLocationInput").val(settings.localLibraryLocation)
         //image sources
         //uncheck every checkbox @ first
-        $("#sources").multipleSelect('uncheckAll');                
+        $("#sources").multipleSelect('uncheckAll');
 
         settings.sources.forEach(element => {
             $("input[data-name=selectItem][value='" + element + "']").click();

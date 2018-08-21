@@ -23,12 +23,7 @@ let handleSquirrelEvents = () => {
     var squirrelCommand = process.argv[1];
     switch (squirrelCommand) {
         case '--squirrel-install':            
-        case '--squirrel-updated':
-            var exe = getInstallerFilePath();
-            if (fs.existsSync(exe)) {
-                fs.unlinkSync(exe);
-            }
-            //uaAppUpdated()
+        case '--squirrel-updated':                    
             app.quit();
             return true;
         case '--squirrel-uninstall':

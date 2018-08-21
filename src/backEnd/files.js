@@ -11,6 +11,7 @@ let appUsersPath = app.getPath('userData');
 let photoPath = appUsersPath + '\\photo.jpg';
 let fs = require('fs');
 let fsExtra = require('fs-extra');
+
 let bypassLocalChecker = () => {
     addBypassChecker((filePath) => {
         return filePath.indexOf(app.getAppPath()) === -1 && (/.jpg/.test(filePath) || /.ms/.test(filePath) || /.png/.test(filePath));
@@ -27,7 +28,7 @@ let downloadAndSave = (url, destToSave, callback, savePhoto) => {
     let request = https.get(url, (response) => {
         //save file
         var res = response.pipe(file);
-        res.on('finish',()=>{
+        res.on('finish', () => {
             savePhoto = savePhoto || getSettingsOption('options.saveOnDownload');
             if (savePhoto) {
                 let destination = getSettingsOption('options.saveLocation');
@@ -51,7 +52,7 @@ let downloadAndSave = (url, destToSave, callback, savePhoto) => {
                         })
                 }
             }
-        })                
+        })
     });
     request.on('close', () => {
         callback();

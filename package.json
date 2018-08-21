@@ -1,7 +1,7 @@
 {
   "name": "paperize",
   "productName": "paperize",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "Setting desktop wallpapers automatically using awesome images from awesome websites!",
   "main": "src/main.js",
   "scripts": {

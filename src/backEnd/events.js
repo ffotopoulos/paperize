@@ -59,6 +59,8 @@ let events = () => {
                     photoPath: photoPath,
                     userName: arg.userName,
                     userUrl: arg.userUrl,
+                    apiLogoName: arg.apiLogoName,
+                    apiRefUrl: arg.apiRefUrl
                 }
                 windowSendToggleLoading();
                 windowSendWallpaperChanged(photo);

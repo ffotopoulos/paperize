@@ -34,7 +34,7 @@
     </div>
 
     <div id="playback">
-        <div class="playback-icon ">
+        <div class="playback-icon " title="automatic wallpaper change on/off (space)">
             <i class="fa fa-pause roundedIcon playback-toggle shrink"></i>
         </div>
     </div>
@@ -50,7 +50,7 @@
         </div>
 
         <div class="minim-icon ">
-            <i class="fa fa-arrow-right  next shrink" title="next"></i>
+            <i class="fa fa-arrow-right  next shrink" title="next (right arrow ->)"></i>
         </div>
         <div class="minim-icon ">
             <i class="fa fa-random  randomize shrink" title="randomize"></i>
@@ -167,7 +167,7 @@
                     <input type="text" id="customCategoryInput" style="width:400px;margin:auto;text-align: center;display:none" placeholder="type your category">
                 </div>
 
-                <div class="group" title="Enabling this option will stop the automatic wallpaper change when you change desktop wallpaper using randomize or gallery">
+                <div class="group" title="Enabling this option will stop the automatic wallpaper change when you use randomize or gallery to change your desktop wallpaper">
                     <span class="label">
                         randomize and gallery stop the timer
                     </span>
@@ -201,7 +201,7 @@
                         <input class="fileInput" type="text" id="saveLocationInput">
                         <input id="saveDirectory" type="file" webkitdirectory style="display:none" />
                         <span style="display:block;text-transform: lowercase;font-size:12.2px">
-                            delete previous images (images whose name starting with paperize_)
+                            delete previous images (images whose name starts with paperize_)
                             <input type="checkbox" class="settingsCheckbox" id="deletePrevImage">
                         </span>
                     </span>
@@ -214,9 +214,8 @@
 
         <div id="gallery-wrapper" class="animated fadeIn">
             <div class="panel">
-                <select id="galleryCategory">
-                    <option value="random" selected>Random</option>
-                    <option value="landscapes">Landcapes</option>
+                <select id="galleryCategory">                    
+                    <option value="landscapes" selected>Landcapes</option>
                     <option value="abstract">Abstract</option>
                     <option value="nature">Nature</option>
                     <option value="people">People</option>
