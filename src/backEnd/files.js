@@ -23,40 +23,54 @@ let getPhotoPath = () => {
 }
 
 let downloadAndSave = (url, destToSave, callback, savePhoto) => {
-    let https = require('https');
-    let file = fs.createWriteStream(destToSave);
-    let request = https.get(url, (response) => {
-        //save file
-        var res = response.pipe(file);
-        res.on('finish', () => {
-            savePhoto = savePhoto || getSettingsOption('options.saveOnDownload');
-            if (savePhoto) {
-                let destination = getSettingsOption('options.saveLocation');
-                if (destination.trim() != '') {
-                    fsExtra.ensureDir(destination)
-                        .then(() => {
-                            //delete prev photos if enabled
-                            if (getSettingsOption('options.deletePrevImage')) {
-                                deletePaperizePhotos(destination);
-                            }
-                            fs.copyFile(destToSave, destination + `\\paperize_${Date.now()}.jpg`, (err) => {
-                                if (err) {
-                                    console.log(nextPhoto);
-                                    uaSendError(err)
-                                    return;
+    try {
+        let https = require('https');
+        let file = fs.createWriteStream(destToSave);
+        let request = https.get(url, (response) => {
+            //save file
+            var res = response.pipe(file);
+            res.on('error', (err) => {
+                console.log('error');
+                uaSendError('cant download next image ' + err);
+                return;
+            })
+            res.on('finish', () => {
+                callback();
+                savePhoto = savePhoto || getSettingsOption('options.saveOnDownload');
+                if (savePhoto) {
+                    let destination = getSettingsOption('options.saveLocation');
+                    if (destination.trim() != '') {
+                        fsExtra.ensureDir(destination)
+                            .then(() => {
+                                //delete prev photos if enabled
+                                if (getSettingsOption('options.deletePrevImage')) {
+                                    deletePaperizePhotos(destination);
                                 }
-                            });
-                        })
-                        .catch(err => {
-                            return;
-                        })
+                                fs.copyFile(destToSave, destination + `\\paperize_${Date.now()}.jpg`, (err) => {
+                                    if (err) {
+                                        console.log(nextPhoto);
+                                        uaSendError(err)
+                                        return;
+                                    }
+                                });
+                            })
+                            .catch(err => {
+                                return;
+                            })
+                    }
                 }
-            }
-        })
-    });
-    request.on('close', () => {
-        callback();
-    })
+            })
+        });
+        request.on('error', (err) => {
+            console.log('error');
+            uaSendError('cant download next image ' + err);
+            return;
+        });
+    } catch (err) {
+        console.log('error');
+        uaSendError('cant download next image ' + err);
+        return;
+    }
 }
 
 let deletePaperizePhotos = (destination) => {

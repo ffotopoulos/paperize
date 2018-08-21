@@ -92,8 +92,7 @@ let downloadAndSetWallpaper = (isRandom = false) => {
                 if (nextPhoto.apiName != 'localLibrary') {
                     downloadAndSave(nextPhoto.photoUrl, getPhotoPath(), () => {
                         setWallpaper(getPhotoPath())
-                            .then((photoPath) => {
-                                console.log(nextPhoto);
+                            .then((photoPath) => {                                
                                 var photo = {
                                     photoPath: photoPath,
                                     userUrl: nextPhoto.userUrl,
@@ -118,8 +117,7 @@ let downloadAndSetWallpaper = (isRandom = false) => {
                             reject();
                         }
                         setWallpaper(getPhotoPath())
-                            .then((photoPath) => {
-                                console.log(nextPhoto);
+                            .then((photoPath) => {                                
                                 var photo = {
                                     photoPath: photoPath,
                                     userUrl: '',

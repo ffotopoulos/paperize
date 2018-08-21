@@ -1,8 +1,8 @@
 {
   "name": "paperize",
   "productName": "paperize",
-  "version": "1.0.20",
-  "description": "Setting desktop wallpapers automatically using awesome images from awesome websites!",
+  "version": "1.0.21",
+  "description": "Setting desktop wallpapers automatically using beautiful images from awesome websites!",
   "main": "src/main.js",
   "scripts": {
     "start": "electron-forge start",
