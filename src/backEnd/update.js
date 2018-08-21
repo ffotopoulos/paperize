@@ -15,7 +15,10 @@ import {
 import {
     clearTimer
 } from './timer';
-import { uaAppUpdated,uaSendError } from './analytics';
+import {
+    uaAppUpdated,
+    uaSendError
+} from './analytics';
 let axios = require('axios');
 let updateCheckTimer = null;
 let installerFilePath = app.getPath('userData') + `\\paperize_setup.exe`;
@@ -58,7 +61,6 @@ let checkForUpdates = (notifyManually) => {
             windowSendUpdateAvailability(true);
             if (firstTime || notifyManually) {
                 firstTime = false;
-                showWindow();
                 notifyUser("Update available!", data.msg, () => {
                     windowSendStartUpdate();
                 })
@@ -69,7 +71,7 @@ let checkForUpdates = (notifyManually) => {
             }
             windowSendUpdateAvailability(false);
         }
-    }).catch((error) => {        
+    }).catch((error) => {
         uaSendError("error @ update " + error);
         console.log("error @ update " + error);
         console.log('cant update');
@@ -82,45 +84,54 @@ let downloadLatestVersion = () => {
         let progress = require('request-progress');
 
         if (process.platform == "win32") {
-            progress(request('http://paperize.co/download/paperize_setup.exe'), {
-                  
+            getLatestVersion()
+                .then((version) => {
+                    progress(request(`http://paperize.co/download/paperize_setup_${version.version}.exe`), {
+
+                        })
+                        .on('progress', function (state) {
+                            // The state is an object that looks like this:
+                            // {
+                            //     percent: 0.5,               // Overall percent (between 0 to 1)
+                            //     speed: 554732,              // The download speed in bytes/sec
+                            //     size: {
+                            //         total: 90044871,        // The total payload size in bytes
+                            //         transferred: 27610959   // The transferred payload size in bytes
+                            //     },
+                            //     time: {
+                            //         elapsed: 36.235,        // The total elapsed seconds since the start (3 decimals)
+                            //         remaining: 81.403       // The remaining seconds to finish (3 decimals)
+                            //     }
+                            // }
+                            windowSendShowProgress(state);
+                            console.log('progress', state);
+                        })
+                        .on('error', function (err) {
+                            windowSendHideProgress();
+                            console.log('error @ update download: ' + err)
+                            uaSendError('error @ update download: ' + err)
+                            reject();
+                        })
+                        .on('end', function () {
+                            var st = {
+                                percent: 1
+                            }
+                            windowSendShowProgress(st);
+                            //to fix
+                            //if i run it without delay it causes Error: spawn EBUSY
+                            setTimeout(() => {
+                                windowSendHideProgress();
+                                resolve(installerFilePath);
+                            }, 4000)
+                        })
+                        .pipe(require('fs').createWriteStream(installerFilePath));
                 })
-                .on('progress', function (state) {
-                    // The state is an object that looks like this:
-                    // {
-                    //     percent: 0.5,               // Overall percent (between 0 to 1)
-                    //     speed: 554732,              // The download speed in bytes/sec
-                    //     size: {
-                    //         total: 90044871,        // The total payload size in bytes
-                    //         transferred: 27610959   // The transferred payload size in bytes
-                    //     },
-                    //     time: {
-                    //         elapsed: 36.235,        // The total elapsed seconds since the start (3 decimals)
-                    //         remaining: 81.403       // The remaining seconds to finish (3 decimals)
-                    //     }
-                    // }
-                    windowSendShowProgress(state);
-                    console.log('progress', state);
-                })
-                .on('error', function (err) {
+                .catch(err => {
                     windowSendHideProgress();
                     console.log('error @ update download: ' + err)
                     uaSendError('error @ update download: ' + err)
                     reject();
                 })
-                .on('end', function () {
-                    var st = {
-                        percent: 1
-                    }
-                    windowSendShowProgress(st);
-                    //to fix
-                    //if i run it without delay it causes Error: spawn EBUSY
-                    setTimeout(() => {
-                        windowSendHideProgress();
-                        resolve(installerFilePath);
-                    }, 4000)
-                })
-                .pipe(require('fs').createWriteStream(installerFilePath));
         } else if (process.platform = "darwin") {
             reject(); //todo
         }
@@ -141,11 +152,14 @@ let updateApp = () => {
                 return;
             }
         });
-    }).catch((err) => {        
+    }).catch((err) => {
         console.log('cannot update:' + err);
         uaSendError('cannot update:' + err);
         // windowSendToggleLoading();
-        notifyUser("Ooops...", "Can't update app at the moment. Maybe due to me not being able to afford a decent server :'(. Try again later or download manually from paperize.co!")
+        notifyUser("Ooops...", "Can't update app at the moment. Maybe due to me not being able to afford a decent server :'(. Try again later or click on this bubble to download manually from http://paperize.co!",
+            () => {
+                require('electron').shell.openExternal('http://paperize.co')
+            })
     })
 }
 
