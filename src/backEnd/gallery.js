@@ -22,22 +22,15 @@ let loadGallery = async (count, category) => {
         return photos;
     } else {
         for (var i = 0; i < count; i++) {
-            await getNextPhoto(category,true)
+            await getNextPhoto(category, true)
                 .then((photo) => {
-                    var d = photos.find(x => x.photoId == photo.photoId);
-                    if (d) {
-                        i--;
-                    } else {
-                        photo.apiLogoName = require('path').basename(photo.apiLogoPath);
-                        photos.push(photo);
-                    }
-
+                    photo.apiLogoName = require('path').basename(photo.apiLogoPath);
+                    photos.push(photo);
                 })
                 .catch((err) => {
                     uaSendError('cant loadgalerry ' + err);
-                    console.log(err);
-                    reject();
-                })                
+                    console.log(err);                    
+                })
         }
         return photos;
     }

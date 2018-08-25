@@ -37,8 +37,8 @@
       },
       "electronWinstallerConfig": {
         "name": "paperize",
-        "iconUrl": "file:///E:/Documents/Electronjs/paperize/src/backEnd/icons/app-icon.ico",
-        "setupIcon": "E://Documents/Electronjs/paperize/src/backEnd/icons/app-icon.ico"
+        "iconUrl": "file:///E:/Electronjs/paperize/src/backEnd/icons/app-icon.ico",
+        "setupIcon": "E://Electronjs/paperize/src/backEnd/icons/app-icon.ico"
       },
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
