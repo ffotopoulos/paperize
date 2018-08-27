@@ -81,53 +81,23 @@ let checkForUpdates = (notifyManually) => {
 let downloadLatestVersion = () => {
     return new Promise((resolve, reject) => {
         let request = require('request');
-        let progress = require('request-progress');
-
         if (process.platform == "win32") {
             getLatestVersion()
-                .then((version) => {
-                    progress(request(`http://paperize.co/download/paperize_setup_${version.version}.exe`), {
-
-                        })
-                        .on('progress', function (state) {
-                            // The state is an object that looks like this:
-                            // {
-                            //     percent: 0.5,               // Overall percent (between 0 to 1)
-                            //     speed: 554732,              // The download speed in bytes/sec
-                            //     size: {
-                            //         total: 90044871,        // The total payload size in bytes
-                            //         transferred: 27610959   // The transferred payload size in bytes
-                            //     },
-                            //     time: {
-                            //         elapsed: 36.235,        // The total elapsed seconds since the start (3 decimals)
-                            //         remaining: 81.403       // The remaining seconds to finish (3 decimals)
-                            //     }
-                            // }
-                            windowSendShowProgress(state);
-                            console.log('progress', state);
-                        })
-                        .on('error', function (err) {
-                            windowSendHideProgress();
-                            console.log('error @ update download: ' + err)
-                            uaSendError('error @ update download: ' + err)
-                            reject();
-                        })
-                        .on('end', function () {
-                            var st = {
-                                percent: 1
-                            }
-                            windowSendShowProgress(st);
-                            //to fix
-                            //if i run it without delay it causes Error: spawn EBUSY
-                            setTimeout(() => {
-                                windowSendHideProgress();
-                                resolve(installerFilePath);
-                            }, 4000)
-                        })
-                        .pipe(require('fs').createWriteStream(installerFilePath));
+                .then((version) => {                    
+                    request(`http://paperize.co/download/paperize_setup_${version.version}.exe`)
+                    .pipe(require('fs').createWriteStream(installerFilePath))
+                    .on('close', () => {
+                        console.log('done');
+                        resolve(installerFilePath);                        
+                    })
+                    .on('error', function (err) {                        
+                        console.log('error @ update download: ' + err)
+                        uaSendError('error @ update download: ' + err)
+                        reject();
+                    });
+                    
                 })
-                .catch(err => {
-                    windowSendHideProgress();
+                .catch(err => {                    
                     console.log('error @ update download: ' + err)
                     uaSendError('error @ update download: ' + err)
                     reject();
@@ -141,24 +111,24 @@ let downloadLatestVersion = () => {
 
 let updateApp = () => {
     clearTimer();
-    //windowSendToggleLoading("Downloading update");
+    windowSendToggleLoading("DOWNLOADING UPDATE");
     downloadLatestVersion().then((exeFilePath) => {
-        uaAppUpdated();
+        windowSendToggleLoading();
         let child = require('child_process').execFile;
         child(exeFilePath, function (err, data) {
             if (err) {
                 console.error(err);
-                uaSendError("cant run update exe " + err);
+                uaSendError("cant run update exe " + err);               
                 return;
             }
         });
     }).catch((err) => {
         console.log('cannot update:' + err);
         uaSendError('cannot update:' + err);
-        // windowSendToggleLoading();
+        windowSendToggleLoading();
         notifyUser("Ooops...", "Can't update app at the moment. Maybe due to me not being able to afford a decent server :'(. Try again later or click on this bubble to download manually from http://paperize.co!",
             () => {
-                require('electron').shell.openExternal('http://paperize.co')
+                require('electron').shell.openExternal('http://paperize.co/#download')
             })
     })
 }
