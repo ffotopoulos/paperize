@@ -10,6 +10,7 @@ import { squirrelStartup,handleSquirrelEvents } from './backEnd/squirrel';
 import { initAnalytics } from './backEnd/analytics';
 import { initManualChangesLeft } from './backEnd/timer';
 
+
 initAnalytics();
 squirrelStartup();
 handleSquirrelEvents();
@@ -24,7 +25,7 @@ let startApplication = () => {
     toggleAutoLaunch(getSettingsOption('options.startOnLogin'));   
     createWindow();    
     initTray();     
-    events();        
+    events();           
 }
 
 let quitApplication = () => {

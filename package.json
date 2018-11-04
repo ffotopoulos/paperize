@@ -1,7 +1,7 @@
 {
   "name": "paperize",
   "productName": "paperize",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "description": "Setting desktop wallpapers automatically using beautiful images from awesome websites!",
   "main": "src/main.js",
   "scripts": {
@@ -60,6 +60,7 @@
     "electron-settings": "^3.2.0",
     "electron-squirrel-startup": "^1.0.0",
     "fs-extra": "^7.0.0",
+    "pexels-api-wrapper": "^1.1.1",
     "request": "^2.87.0",
     "request-progress": "^3.0.0",
     "universal-analytics": "^0.4.17",

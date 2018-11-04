@@ -1,4 +1,6 @@
-import { ipcMain } from 'electron';
+import {
+    ipcMain
+} from 'electron';
 import {
     toggleWindow,
     closeWindow,
@@ -9,14 +11,35 @@ import {
     windowSendWallpaperChanged,
     windowSendGalleryFunctionDone
 } from './win';
-import { toggleAutoLaunch } from './autolaunch';
-import { changeWallpaper, setOnlineStatus } from './timer';
-import { saveSettings, getSettingsOption } from './settings';
-import { loadGallery, downloadGalleryItem } from './gallery';
-import { getPhotoPath,downloadAndSave } from './files';
-import { setWallpaper } from './wallpaper';
-import { updateApp } from './update';
-import { uaSendError } from './analytics';
+import {
+    toggleAutoLaunch
+} from './autolaunch';
+import {
+    changeWallpaper,
+    setOnlineStatus
+} from './timer';
+import {
+    saveSettings,
+    getSettingsOption
+} from './settings';
+import {
+    loadGallery,
+    downloadGalleryItem
+} from './gallery';
+import {
+    getPhotoPath,
+    downloadAndSave,
+    copyFile
+} from './files';
+import {
+    setWallpaper
+} from './wallpaper';
+import {
+    updateApp
+} from './update';
+import {
+    uaSendError
+} from './analytics';
 
 let events = () => {
     ipcMain.on('minimize-app', () => {
@@ -33,9 +56,9 @@ let events = () => {
 
     ipcMain.on('randomize', () => {
         changeWallpaper(true, true).then(() => {
-            if(getSettingsOption("options.clearTimer")){
+            if (getSettingsOption("options.clearTimer")) {
                 saveSettings('interval', 0);
-            } 
+            }
         }).catch((err) => {
             uaSendError(err);
             console.log(err);
@@ -44,15 +67,15 @@ let events = () => {
 
     ipcMain.on('getGalleryItems', async (event, arg) => {
         windowSendToggleLoading();
-        var items  = []        
-        try{
+        var items = []
+        try {
             items = await loadGallery(arg.count, arg.category)
             windowSendToggleLoading();
-            windowSendGalleryItems(items)  
-        }catch(err){
+            windowSendGalleryItems(items)
+        } catch (err) {
             windowSendToggleLoading();
         }
-                                  
+
     })
 
     ipcMain.on('setGalleryItemAsBackground', (event, arg) => {
@@ -60,22 +83,22 @@ let events = () => {
         windowSendToggleLoading();
         downloadAndSave(arg.url, photoPath, () => {
             setWallpaper(getPhotoPath()).then(() => {
-                var photo = {
-                    photoPath: photoPath,
-                    userName: arg.userName,
-                    userUrl: arg.userUrl,
-                    apiLogoName: arg.apiLogoName,
-                    apiRefUrl: arg.apiRefUrl
-                }
-                windowSendToggleLoading();
-                windowSendWallpaperChanged(photo);
-                if(getSettingsOption("options.clearTimer")){
-                    saveSettings('interval', 0);
-                } 
-            })
-            .catch((err)=>{
-                windowSendToggleLoading();
-            })
+                    var photo = {
+                        photoPath: photoPath,
+                        userName: arg.userName,
+                        userUrl: arg.userUrl,
+                        apiLogoName: arg.apiLogoName,
+                        apiRefUrl: arg.apiRefUrl
+                    }
+                    windowSendToggleLoading();
+                    windowSendWallpaperChanged(photo);
+                    if (getSettingsOption("options.clearTimer")) {
+                        saveSettings('interval', 0);
+                    }
+                })
+                .catch((err) => {
+                    windowSendToggleLoading();
+                })
         });
     })
     ipcMain.on('downloadGalleryItem', (event, arg) => {
@@ -85,6 +108,17 @@ let events = () => {
             windowSendToggleLoading();
         });
     })
+
+    ipcMain.on('downloadCurrentWallpaper', (event, arg) => {
+        windowSendToggleLoading();
+        copyFile(getPhotoPath(), arg, function () {
+            setTimeout(()=>{
+                windowSendToggleLoading();
+            },2000)
+            
+        })
+    })
+
 
     ipcMain.on('loadSettings', (event, arg) => {
         windowSendSettings();
@@ -104,7 +138,7 @@ let events = () => {
         setOnlineStatus(isOnline);
     })
 
-    ipcMain.on('updateApp',()=>{
+    ipcMain.on('updateApp', () => {
         updateApp();
     })
 

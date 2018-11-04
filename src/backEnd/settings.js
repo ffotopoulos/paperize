@@ -20,6 +20,12 @@ let imageSources = [{
         refUrl: 'https://unsplash.com'
     },
     {
+        name: 'pexels',
+        label: 'Pexels',
+        logoPath:'../renderer/assets/images/pexels_logo.png',
+        refUrl: 'https://www.pexels.com/'
+    },
+    {
         name: 'localLibrary',
         label: 'Local Library',
         logoPath: '../renderer/assets/images/localLibrary_icon.png',

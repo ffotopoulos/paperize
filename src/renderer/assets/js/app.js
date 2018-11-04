@@ -465,11 +465,15 @@ function openUrl(url) {
 
 function setAppBackground(photo) {
     return new Promise((resolve) => {
+
+
         //avoid showing the previous cached image        
         $("#bgPicture").attr("src", photo.photoPath + "?" + Date.now());
-
+        console.log("hi " + photo)
         if (photo.userName && photo.userName != '') {
-            $(".photoCredit").html(`photo by: <a onclick="openUrl('${photo.userUrl}')" class="openUrl" style="padding-left:3px;vertical-align:0"> ${photo.userName} </a>`);
+            $(".photoCredit").html(`photo by: <a onclick="openUrl('${photo.userUrl}')" class="openUrl" style="padding-left:3px;vertical-align:0"> ${photo.userName} </a>
+            <i title="save image" id="downloadCurrentWallpaperIcon" class="fa roundedIcon shrink fa-download" style="margin-left: 5px;font-size: 11px;
+"></i><input id="downloadCurrentWallpaper" class="downloadCurrentWallpaper" type="file" webkitdirectory="" style="display:none">`);
             $(".photoCredit").removeClass("hidden");
         } else {
             $(".photoCredit").html('');
@@ -481,9 +485,21 @@ function setAppBackground(photo) {
         if ($("#gallery-wrapper").is(":visible")) {
             showCheckMark("#galleryCheckmark");
         }
+        $("#downloadCurrentWallpaperIcon").unbind('click');
+        $("#downloadCurrentWallpaperIcon").click(function () {
+            $("#downloadCurrentWallpaper").click();
+        })
+
+        $("#downloadCurrentWallpaper").unbind('change')
+        $("#downloadCurrentWallpaper").change(function(){          
+            var p = document.getElementById("downloadCurrentWallpaper").files[0].path + `\\photo_${Date.now()}.jpg`
+            console.log(p)
+            if (p.trim() != '') {
+                ipcRenderer.send("downloadCurrentWallpaper",p);
+            }
+        })
         resolve();
     })
-
 }
 
 function saveSettings(opt, val) {
@@ -569,9 +585,9 @@ function refreshCustomCategories() {
         $(`#category option[value=${$(this).attr('data-which').replace("@@CUSTOM","\\@\\@CUSTOM")}`).remove();
         $('#category').multipleSelect('refresh');
         refreshCustomCategories();
-        if (checkedValues.length <= 1) {           
-            $("#category").multipleSelect('checkAll');
-        }       
+        if (checkedValues.length <= 1) {
+            $("input[data-name=selectItem][value='" + "landscapes" + "']").click();
+        }
         saveSettings('category', $("#category").multipleSelect('getSelects'));
     })
 }
