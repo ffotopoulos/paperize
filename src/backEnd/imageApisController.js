@@ -29,6 +29,13 @@ let selectSource = () => {
     return randomSource;
 }
 
+let selectCategory = ()=>{
+    var selectedCategories = getSettingsOption('options.category');
+    var randomCategory = selectedCategories[Math.floor(Math.random() * selectedCategories.length)];
+    console.log('random category: ' + randomCategory)
+    return randomCategory;
+} 
+
 let getNextPhoto = (category, isGallery = false) => {
     return new Promise((resolve, reject) => {
         var source = selectSource();
@@ -86,7 +93,9 @@ let getNextPhoto = (category, isGallery = false) => {
 
 let downloadAndSetWallpaper = (isRandom = false) => {
     return new Promise((resolve, reject) => {
-        var category = !isRandom ? getSettingsOption('options.category').replace('@@CUSTOM', '') : 'random';
+       // var category = !isRandom ? getSettingsOption('options.category').replace('@@CUSTOM', '') : 'random';
+       var category = !isRandom ? selectCategory().replace('@@CUSTOM', '') : 'random';
+       console.log('lol ok cat is ' + category);
         getNextPhoto(category)
             .then((nextPhoto) => {
                 if (nextPhoto.apiName != 'localLibrary') {

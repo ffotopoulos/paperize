@@ -8,7 +8,8 @@ import {
 import {
     getAllSettings,
     getSettingsOption,
-    getImageSources
+    getImageSources,
+    getCategories
 } from './settings';
 import {
     getPhotoPath,
@@ -77,6 +78,9 @@ let createWindow = (c) => {
 
         //append image sources list 
         initImageSources();
+        
+        //append Categories
+        initCategories();
 
         //if auto launch is enabled hide the main window
         var startMinimized = (process.argv || []).indexOf('--hidden') !== -1;
@@ -181,6 +185,10 @@ let windowSendHideProgress = () => {
 
 let initImageSources = () => {
     mainWindow.webContents.send('initImageSources', getImageSources())
+}
+
+let initCategories = ()=>{
+    mainWindow.webContents.send('initCategories',getCategories());
 }
 
 export {

@@ -44,6 +44,28 @@ ipcRenderer.on('hideProgress', () => {
     hideProgress();
 })
 
+ipcRenderer.on('initCategories', (event, categories) => {
+    var html = '';
+    categories.forEach(element => {
+        html += `<option value='${element.name}'>${element.label}</option>`
+        // html += `<li><input type='checkbox' class='imageSourceCheckbox' value='${element.name}'/><span>${element.label}</span></li>`
+    });
+    $("#category").append(html);
+    $("#category").multipleSelect({
+        selectAll: false,
+        allSelected: false,
+        countSelected: false,
+        onClick: function (view) {
+            var checkedValues = $("#category").multipleSelect('getSelects');
+            if (checkedValues.length < 1) {
+                console.log(view)
+                $("#category").multipleSelect('checkAll');
+            }
+            saveSettings('category', $("#category").multipleSelect('getSelects'));
+        }
+    })
+})
+
 ipcRenderer.on('initImageSources', (event, sources) => {
     // <input type="checkbox" value="Apple" />Apple</li>
     var html = '';
@@ -91,7 +113,7 @@ ipcRenderer.on('initImageSources', (event, sources) => {
             $(`input[data-name=selectItem][value='${element.name}']`).after(`<img src='./../renderer/assets/images/${element.logoPath.split(/(\\|\/)/g).pop()}' style='max-width:81px;vertical-align:middle'>`)
             // html += `<li><input type='checkbox' class='imageSourceCheckbox' value='${element.name}'/><span>${element.label}</span></li>`
         });
-        $(".ms-drop li label span").hide();
+        $("#sources").next().find(".ms-drop li label span").hide();
     }, 1000)
 
 })
@@ -172,7 +194,7 @@ ipcRenderer.on('loadGallery', (evt, items) => {
                 userName: userName,
                 userUrl: userUrl,
                 apiLogoName: apiLogoName,
-                apiRefUrl:apiRefUrl
+                apiRefUrl: apiRefUrl
             });
         })
         $("#gallery-wrapper").show();
@@ -196,11 +218,11 @@ $(document).keyup(function (event) {
         $('.c-modal').removeClass('is-visible');
     }
     //arrow right
-    else if(event.which=='39'){
+    else if (event.which == '39') {
         ipcRenderer.send('next');
     }
     //space
-    else if(event.which=='32'){
+    else if (event.which == '32') {
         playbackToggle();
     }
 });
@@ -315,37 +337,40 @@ $(".playback-toggle").click(function () {
 })
 
 
-$('#interval,#category').change(function () {
+$('#interval').change(function () {
     var val = $(this).val();
     var opt = $(this).attr('id');
 
     if (opt == "interval" && val != 0)
         lastIntervalMs = val;
 
-    if (opt == "category") {
-        if (val == "custom") {
-            $("#customCategoryInput").show();
-            $("#customCategoryInput").focus();
-        } else {
-            $("#customCategoryInput").hide();
-            $("#customCategoryInput").val('');
-        }
-    }
+    // if (opt == "category") {
+    //     if (val == "custom") {
+    //         $("#customCategoryInput").show();
+    //         $("#customCategoryInput").focus();
+    //     } else {
+    //         $("#customCategoryInput").hide();
+    //         $("#customCategoryInput").val('');
+    //     }
+    // }
     if (val != "custom") {
         saveSettings(opt, val);
     }
 
 })
 
-$("#customCategoryInput").keyup(function () {
-    clearTimeout(customTypingTimer);
-    $(".closeSettings").hide();
-    if ($('#customCategoryInput').val()) {
-        customTypingTimer = setTimeout(() => {
-            saveSettings('category', `@@CUSTOM${$(this).val()}`)
-            $(".closeSettings").show();
-        }, 1000);
+$(".addCustomCategory").click(function () {
+    var value = $('#customCategoryInput').val();
+    if (value.trim() != "" && value.length > 2 && !$("#category").next().find(".ms-drop ul li label").find(`input[value=${"\\@\\@CUSTOM"+value.toLowerCase()}]`).length > 0) {
+        var customCategoryInput = `@@CUSTOM${$('#customCategoryInput').val().toLocaleLowerCase()}`
+        var html = `<option value='${customCategoryInput}'>${$('#customCategoryInput').val()}</option>`
+        $("#category").append(html);
+        $('#category').multipleSelect('refresh');
+
+        $(`input[data-name=selectItem][value=${"\\@\\@CUSTOM"+value.toLowerCase()}]`).click();
+        refreshCustomCategories();
     }
+    $('#customCategoryInput').val('')
 })
 
 $(".open-url").click(function () {
@@ -530,17 +555,39 @@ function getSettings() {
     ipcRenderer.send('loadSettings')
 }
 
+function refreshCustomCategories() {
+    $(".removeCustomCategory").unbind('click');
+    $(".removeCustomCategory").each(function () {
+        $(this).remove();
+    })
+    $("#category").next().find(".ms-drop ul li label").find('input[value*="\\@\\@CUSTOM"]').each(function () {
+        $(this).parent().after(`<span><i title="remove from list" class="fa fa-minus roundedIcon removeCustomCategory shrink" data-which="${$(this).val()}" style="font-size:9px;color:#d05656;background:white;margin-left:10px"></i></span>`)
+    })
+    $(".removeCustomCategory").click(function () {
+        console.log($(this).attr('data-which'));
+        var checkedValues = $("#category").multipleSelect('getSelects');
+        $(`#category option[value=${$(this).attr('data-which').replace("@@CUSTOM","\\@\\@CUSTOM")}`).remove();
+        $('#category').multipleSelect('refresh');
+        refreshCustomCategories();
+        if (checkedValues.length <= 1) {           
+            $("#category").multipleSelect('checkAll');
+        }       
+        saveSettings('category', $("#category").multipleSelect('getSelects'));
+    })
+}
+
 function loadSettings(settings) {
     return new Promise(resolve => {
         $("#interval").val(settings.interval);
-        if (settings.category.includes("@@CUSTOM")) {
-            $("#category").val('custom');
-            $("#customCategoryInput").val(settings.category.replace('@@CUSTOM', ''));
-            $("#customCategoryInput").show();
-        } else {
-            $("#category").val(settings.category);
-            $("#customCategoryInput").hide();
-        }
+        console.log(settings)
+        // if (settings.category.includes("@@CUSTOM")) {
+        //     $("#category").val('custom');
+        //     $("#customCategoryInput").val(settings.category.replace('@@CUSTOM', ''));
+        //     $("#customCategoryInput").show();
+        // } else {
+        //     $("#category").val(settings.category);
+        //     $("#customCategoryInput").hide();
+        // }
 
         $("#startOnLogin").prop('checked', settings.startOnLogin);
         $("#saveOnDownload").prop('checked', settings.saveOnDownload);
@@ -552,7 +599,33 @@ function loadSettings(settings) {
         //image sources
         //uncheck every checkbox @ first
         $("#sources").multipleSelect('uncheckAll');
+        $("#category").multipleSelect('uncheckAll');
 
+        var items = 0;
+        settings.category.forEach((element, i, array) => {
+
+            if (element.includes('@@CUSTOM')) {
+                if (!$("#category").next().find(".ms-drop ul li label").find(`input[value=${element.replace("@@CUSTOM","\\@\\@CUSTOM")}]`).length > 0) {
+                    var html = `<option value='${element}'>${element.replace('@@CUSTOM','')}</option>`
+                    $("#category").append(html);
+                    $('#category').multipleSelect('refresh');
+                }
+            }
+            $("input[data-name=selectItem][value='" + element + "']").click();
+            items++;
+            if (items == array.length) {
+                refreshCustomCategories();
+                console.log('yo');
+            }
+
+        })
+
+        // $(".removeCustomCategory").click(function () {
+        //     console.log($(this).attr('data-which'));
+        //     $(`#category option[value=${$(this).attr('data-which').replace("@@CUSTOM","\\@\\@CUSTOM")}`).remove();
+        //     $('#category').multipleSelect('refresh');
+        //     saveSettings('category', $("#category").multipleSelect('getSelects'));
+        // })
         settings.sources.forEach(element => {
             $("input[data-name=selectItem][value='" + element + "']").click();
         });

@@ -7,6 +7,7 @@ import {
 import {
     getSettingsOption
 } from './settings';
+import { uaSendError } from './analytics';
 let appUsersPath = app.getPath('userData');
 let photoPath = appUsersPath + '\\photo.jpg';
 let fs = require('fs');

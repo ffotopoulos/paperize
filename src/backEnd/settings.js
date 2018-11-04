@@ -1,7 +1,9 @@
 import {
     app
 } from 'electron'
-import { ENETUNREACH } from 'constants';
+import {
+    ENETUNREACH
+} from 'constants';
 let settings = require('electron-settings');
 
 
@@ -25,10 +27,57 @@ let imageSources = [{
     }
 ]
 
+let categories = [{
+        name: 'random',
+        label: 'Random'
+    },
+    {
+        name: 'landscapes',
+        label: 'Landscapes'
+    },
+    {
+        name: 'abstract',
+        label: 'Abstract'
+    },
+    {
+        name: 'nature',
+        label: 'Nature'
+    },
+    {
+        name: 'people',
+        label: 'People'
+    },
+    {
+        name: 'supercars',
+        label: 'Super Cars'
+    },
+    {
+        name: 'art',
+        label: 'Art'
+    },
+    {
+        name: 'animals',
+        label: 'Animals'
+    },
+    {
+        name: 'food',
+        label: 'Food'
+    },
+    {
+        name: 'technology',
+        label: 'Technology'
+    },
+]
+
+
 let defaultSettings;
 
 let getImageSources = () => {
     return imageSources;
+}
+
+let getCategories = () => {
+    return categories;
 }
 
 let initSettings = () => {
@@ -36,7 +85,7 @@ let initSettings = () => {
         defaultSettings = {
             interval: 180000,
             startOnLogin: true,
-            category: 'nature',
+            category: categories.filter(x => x.name == 'landscapes').map(x => x.name),
             scale: 'strech',
             saveOnDownload: false,
             saveLocation: app.getPath('desktop'),
@@ -44,12 +93,13 @@ let initSettings = () => {
             clearTimer: true,
             sources: imageSources.filter(x => x.name != 'localLibrary').map(x => x.name),
             localLibraryLocation: ''
-        }       
-        for(var option in defaultSettings){
-            if(!settings.has(`options.${option}`)){
-                settings.set(`options.${option}`,defaultSettings[option])
+        }
+        var category = settings.get('options.category');
+        for (var option in defaultSettings) {                       
+            if (!settings.has(`options.${option}`) || (option =='category' &&  typeof(category) == "string")  ) {                
+                settings.set(`options.${option}`, defaultSettings[option])
             }
-        }        
+        }
         resolve();
     })
 }
@@ -83,5 +133,6 @@ export {
     saveSettings,
     getSettingsOption,
     getAllSettings,
-    getImageSources
+    getImageSources,
+    getCategories
 }

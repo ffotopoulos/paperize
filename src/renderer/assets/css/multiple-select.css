@@ -144,7 +144,7 @@
 
 .ms-drop ul > li {
     list-style: none;
-    display: list-item;
+    display: table;
     background-image: none;
     position: static;
     padding-top:5px;
@@ -174,7 +174,7 @@
 
 .ms-drop ul > li label {
     font-weight: normal;
-    display: block;
+    display: inline;
     white-space: nowrap;
 }
 
