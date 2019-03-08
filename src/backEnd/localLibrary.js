@@ -23,7 +23,7 @@ let getNextLocalLibraryPhoto = () => {
                 fs.readdir(localLibaryLocation, (err, dir) => {
                     for (var i = 0, path; path = dir[i]; i++) {
                         if (require('path').extname(path) == ".jpg" || require('path').extname(path) == ".jpeg" ||
-                            require('path').extname('path') == ".png") {
+                            require('path').extname(path) == ".png") {
                             localPhotos.push(localLibaryLocation + '\\' + path)
                         }
                     }
