@@ -441,6 +441,11 @@ function toggleLoading(message) {
     $(".loadingHeader").html(message);
     $(".fade").toggle();
     $(".loading").toggle();
+    if ($(".photoCredit").css('visibility') == 'visible') {
+        $(".photoCredit").css('visibility', 'hidden')
+    } else {
+        $(".photoCredit").css('visibility', 'visible')
+    }    
 }
 
 function showProgress(state) {
@@ -491,11 +496,11 @@ function setAppBackground(photo) {
         })
 
         $("#downloadCurrentWallpaper").unbind('change')
-        $("#downloadCurrentWallpaper").change(function(){          
+        $("#downloadCurrentWallpaper").change(function () {
             var p = document.getElementById("downloadCurrentWallpaper").files[0].path + `\\photo_${Date.now()}.jpg`
             console.log(p)
             if (p.trim() != '') {
-                ipcRenderer.send("downloadCurrentWallpaper",p);
+                ipcRenderer.send("downloadCurrentWallpaper", p);
             }
         })
         resolve();
