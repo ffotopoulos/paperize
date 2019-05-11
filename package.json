@@ -1,7 +1,7 @@
 {
   "name": "paperize",
   "productName": "paperize",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "description": "Setting desktop wallpapers automatically using beautiful images from awesome websites!",
   "main": "src/main.js",
   "scripts": {
@@ -9,11 +9,33 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint src --color"
+    "lint": "eslint src --color",
+    "dist": "electron-builder --ia32  --w"
   },
+  "repository": "https://bitbucket.org/ffotopoulos/paperize/src/master",
+  "homepage": "http://paperize.co",
+  "email": "fotisfot94@gmail.com",
   "keywords": [],
   "author": "Fotis Fotopoulos SF",
   "license": "MIT",
+  "build": {
+    "appId": "com.ffotopoulos.paperize",
+    "squirrelWindows": {
+      "iconUrl": "file:///E:/Electronjs/paperize/src/backEnd/icons/app-icon.ico",
+      "loadingGif":"resources/install-spinner.gif"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "icon": "src/backEnd/icons/app-icon.ico"
+    },
+    "win": {
+      "target": "squirrel",
+      "icon": "src/backEnd/icons/app-icon.ico",
+      "asar": true
+    }
+  },
   "config": {
     "forge": {
       "make_targets": {
@@ -55,14 +77,13 @@
   "dependencies": {
     "auto-launch": "^5.0.5",
     "axios": "^0.18.0",
-    "electron-compile": "^6.4.3",
+    "electron-compile": "^6.4.1",
     "electron-notify": "^0.1.0",
     "electron-settings": "^3.2.0",
     "electron-squirrel-startup": "^1.0.0",
     "fs-extra": "^7.0.0",
     "pexels-api-wrapper": "^1.1.1",
     "request": "^2.87.0",
-    "request-progress": "^3.0.0",
     "universal-analytics": "^0.4.17",
     "wallpaper": "^3.0.0"
   },
@@ -72,6 +93,8 @@
     "babel-preset-react": "^6.24.1",
     "electron-forge": "^5.2.2",
     "electron-prebuilt-compile": "2.0.3",
+    "electron-builder": "^20.39.0",
+    "electron-builder-squirrel-windows": "^20.39.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.13.0",

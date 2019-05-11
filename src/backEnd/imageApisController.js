@@ -39,12 +39,13 @@ let selectCategory = () => {
 
 let getNextPhoto = (category, isGallery = false) => {
     return new Promise((resolve, reject) => {
-        var source = selectSource();
+        var source = category != 'random' ? selectSource() : 'unsplash';
         if (isGallery) {
             while (source == 'localLibrary') {
                 source = selectSource();
             }
         }
+        
         switch (source) {
             case 'pixabay':
                 getNextPixabayPhoto(category)
