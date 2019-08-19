@@ -104,7 +104,7 @@ let createWindow = (c) => {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         mainWindow = null
-    })
+    })    
 }
 
 let closeWindow = () => {
@@ -119,6 +119,10 @@ let windowCreated = () => {
 
 let toggleWindow = () => {
     mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+}
+
+let toggleTheaterMode = ()=>{
+    mainWindow.setFullScreen(!mainWindow.isFullScreen());
 }
 
 let showWindow = ()=>{
@@ -195,6 +199,7 @@ export {
     closeWindow,
     createWindow,
     toggleWindow,
+    toggleTheaterMode,
     singleInstance,
     windowSendTogglePlayback,
     windowSendSettingsSaved,

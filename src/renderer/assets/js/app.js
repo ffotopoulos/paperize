@@ -238,6 +238,18 @@ $(".minimize").click(() => {
     ipcRenderer.send('minimize-app');
 })
 
+$(".toggleTheater").click(() => {
+    var electron = require('electron');
+    var window = electron.remote.getCurrentWindow();     
+    //ipcRenderer.send('toggleTheater');
+    window.setFullScreen(!window.isFullScreen());
+    if ($("#header").is(":visible") && window.isFullScreen()) {
+        $("#minimized").toggle();
+        $("#header").hide();
+        $("#bg").toggleClass("bg");
+    }
+})
+
 $(".exit").click(() => {
     ipcRenderer.send('exit-app');
 })
@@ -445,7 +457,7 @@ function toggleLoading(message) {
         $(".photoCredit").css('visibility', 'hidden')
     } else {
         $(".photoCredit").css('visibility', 'visible')
-    }    
+    }
 }
 
 function showProgress(state) {

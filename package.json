@@ -1,7 +1,7 @@
 {
   "name": "paperize",
   "productName": "paperize",
-  "version": "1.0.28",
+  "version": "1.0.29",
   "description": "Setting desktop wallpapers automatically using beautiful images from awesome websites!",
   "main": "src/main.js",
   "scripts": {
@@ -21,7 +21,7 @@
   "build": {
     "appId": "com.ffotopoulos.paperize",
     "squirrelWindows": {
-      "iconUrl": "file:///E:/Electronjs/paperize/src/backEnd/icons/app-icon.ico",
+      "iconUrl": "file:///E:/Electronjs/paperize/src/backEnd/icons/app-icon.png",
       "loadingGif":"resources/install-spinner.gif"
     },
     "linux": {

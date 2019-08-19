@@ -319,7 +319,7 @@ body {
 
 .taskbar-drag {
 	height: 100%;
-	width: 60%;
+	width: 57%;
 	float: left;
 	-webkit-app-region: drag;
 	opacity: 0;
@@ -328,7 +328,7 @@ body {
 .taskbar-main .taskbar {
 	font-size: 20px;
 	border-radius: 8%;
-	width: 10%;
+	width: 12%;
 	text-align: right;
 	float: left;
 	height: 37px;
@@ -826,7 +826,7 @@ button {
 
 #wrapper {
 	align-items: center;
-	position: relative;
+	position: absolute;
 	width: 100%;
 	z-index: 3;
 	height: 100%;
@@ -861,7 +861,14 @@ body.preload #header h1:after {
 	background-image: radial-gradient(rgba(0, 0, 0, 0.25) 25%, transparent 55%);
 	max-width: 100%;
 	text-align: center;
-	margin-top: 7.57em;
+	height: 59%;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;    
 }
 
 #header>* {
@@ -1014,15 +1021,24 @@ body.preload #header h1:after {
 
 #gallery-wrapper {
 	background-color: rgba(0, 0, 0, 0.45);
-	padding-top: 2em;
-	display: none;
+    padding-top: 2em;
 	z-index: 4;
-	margin-top: 2em;
-	margin-left: 8px;
-	margin-right: 8px;
-	position: relative;
-	box-sizing: border-box;
-	/* border-radius: 2px; */
+	display: none;
+    /* margin-top: 2em; */
+    /* margin-left: 8px; */
+    /* margin-right: 8px; */
+    /* position: relative; */
+    box-sizing: border-box;
+    border-radius: 2px;
+    width: 788px;
+    right: 0;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    top: 50;
+    top: 45%;
+    transform: translateY(-50%);
+    left: 0;
 }
 
 #gallery-wrapper .panel {
@@ -1076,19 +1092,12 @@ body.preload #header h1:after {
 }
 
 .img-hoverControls {
-	position: absolute;
-	text-align: center;
-	padding-left: 1em;
-	padding-right: 1em;
-	width: 100%;
-	top: 50%;
-	left: 48.8%;
-	opacity: 0;
-	transform: translate(-50%, -50%);
-	transition: all 0.3s ease-in-out 0s;
-	width: 219px;
-	height: 123px;
-	padding-top: 20px;
+	text-align: center;    
+    opacity: 0;
+    width: 219px;
+    height: 123px;
+    padding-top: 20px;
+    margin-top: -123px;
 }
 
 .img-hoverControls i {
@@ -1174,11 +1183,17 @@ body.preload #header h1:after {
 	padding: 0.2em;
 	display: none;
 	z-index: 4;
-	margin-top: 0;
-	margin-left: 100px;
-	margin-right: 100px;
 	border-radius: 10px;
 	min-height: 551.38px;
+	width: 600px;
+	right: 0;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    top: 50;
+    top: 45%;
+    transform: translateY(-50%);
+    left: 0;
 }
 
 #settings .inner {
@@ -1208,7 +1223,7 @@ body.preload #header h1:after {
 	display: block;
 	position: absolute;
 	top: -10px;
-	right: 90px;
+	left: 90%;
 	width: 4rem;
 	height: 4rem;
 	cursor: pointer;

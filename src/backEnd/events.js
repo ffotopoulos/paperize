@@ -3,6 +3,7 @@ import {
 } from 'electron';
 import {
     toggleWindow,
+    toggleTheaterMode,
     closeWindow,
     windowSendToggleLoading,
     windowSendSettings,
@@ -44,6 +45,10 @@ import {
 let events = () => {
     ipcMain.on('minimize-app', () => {
         toggleWindow();
+    });
+
+    ipcMain.on('toggleTheater', () => {
+        toggleTheaterMode();
     });
 
     ipcMain.on('exit-app', () => {
