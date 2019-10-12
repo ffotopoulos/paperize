@@ -6,16 +6,17 @@ let initNotifyConfig = ()=>{
     notify = require('electron-notify');
     notify.setConfig({
         appIcon: require('path').join(__dirname, 'icons/app-icon.ico'),
-        displayTime: 6500,
-        height:120,
-        width:390
+        displayTime: 7800,
+        height:150,
+        width:420
     });
 }
-let notifyUser = (title, text, callback) => {
+let notifyUser = (title, text, callback,image=null) => {    
     notify.notify({
         title: title,
         text: text,
         onClickFunc: callback,
+        image: image
     });
 }
 

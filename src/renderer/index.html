@@ -44,7 +44,7 @@
 
     <div class="api-logo open-url" data-url="">
         <img src="" class="shrink">
-        <span>  </span>
+        <span> </span>
     </div>
 
     <div id="minimized" class="minimised animated fadeInRight">
@@ -124,7 +124,7 @@
                     <span class="label localLibraryLocationGroup animated fadeInLeft" style="display:none">
                         <span style="display:block">Library path:</span>
                         <input class="fileInput" type="text" id="localLibraryLocationInput">
-                        <input id="localLibraryLocation" type="file" webkitdirectory style="display:none" />                       
+                        <input id="localLibraryLocation" type="file" webkitdirectory style="display:none" />
                     </span>
                 </div>
 
@@ -151,38 +151,31 @@
 
                 <div class="group">
                     <span class="label">
-                       Category
+                        Category
                     </span>
                     <select id="category" multiple="multiple" class="dropdown">
 
                     </select>
-                    <input type="text" id="customCategoryInput" style="width:365px;margin-top:10px;text-align: center;display:inline;" placeholder="add your custom category to the list">
+                    <input type="text" id="customCategoryInput"
+                        style="width:365px;margin-top:10px;text-align: center;display:inline;"
+                        placeholder="add your custom category to the list">
                     <div class="playback-icon " style="margin-top:-5px;margin-left:5px">
                         <i class="fa fa-plus roundedIcon addCustomCategory shrink"></i>
                     </div>
                 </div>
 
-                <!-- <div class="group">
+                <div class="group" title="">
                     <span class="label">
-                        Category
-                    </span>                    
-                    <select id="category" class="dropdown">
-                        <option value="random" selected>Random</option>
-                        <option value="landscapes">Landcapes</option>
-                        <option value="abstract">Abstract</option>
-                        <option value="nature">Nature</option>
-                        <option value="people">People</option>
-                        <option value="supercars">Super Cars</option>
-                        <option value="art">Art</option>
-                        <option value="animals">Animals</option>
-                        <option value="food">Food</option>
-                        <option value="technology">Technology</option>
-                        <option value="custom">Custom</option>
-                    </select>
-                
-                </div> -->
+                        show a dad joke on start
+                    </span>
+                    <div class="onoffswitch">
+                        <input type="checkbox" class="onoffswitch-checkbox settingsCheckbox" id="showDadJoke" checked>
+                        <label class="onoffswitch-label" for="showDadJoke"></label>
+                    </div>
+                </div>
 
-                <div class="group" title="Enabling this option will stop the automatic wallpaper change when you use randomize or gallery to change your desktop wallpaper">
+                <div class="group"
+                    title="Enabling this option will stop the automatic wallpaper change when you use randomize or gallery to change your desktop wallpaper">
                     <span class="label">
                         randomize and gallery stop the timer
                     </span>
@@ -192,7 +185,10 @@
                     </div>
                 </div>
 
-                <div class="group" title="Enabling this option will allow paperize to start as soon as you log in to Windows">
+
+
+                <div class="group"
+                    title="Enabling this option will allow paperize to start as soon as you log in to Windows">
                     <span class="label">
                         start paperize with windows
                     </span>
@@ -203,7 +199,8 @@
                 </div>
 
 
-                <div class="group" title="Enabling this option will download and save the wallpaper image to your desired location">
+                <div class="group"
+                    title="Enabling this option will download and save the wallpaper image to your desired location">
                     <span class="label">
                         Save downloaded image
                     </span>
@@ -222,14 +219,13 @@
                     </span>
 
                 </div>
-
             </div>
 
         </div>
 
         <div id="gallery-wrapper" class="animated fadeIn">
             <div class="panel">
-                <select id="galleryCategory">                    
+                <select id="galleryCategory">
                     <option value="landscapes" selected>Landcapes</option>
                     <option value="abstract">Abstract</option>
                     <option value="nature">Nature</option>
@@ -241,7 +237,8 @@
                     <option value="technology">Technology</option>
                     <option value="custom">Custom</option>
                 </select>
-                <input type="text" id="customGalleryCategoryInput" class="animated fadeIn" style="display:none" placeholder="type your category">
+                <input type="text" id="customGalleryCategoryInput" class="animated fadeIn" style="display:none"
+                    placeholder="type your category">
 
                 <span style="padding-left:10px;position: relative;top:-2px">
                     <i class="roundedIcon fa fa-search gallery"> </i>

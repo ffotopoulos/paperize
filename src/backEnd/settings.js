@@ -98,7 +98,8 @@ let initSettings = () => {
             deletePrevImage: false,
             clearTimer: true,
             sources: imageSources.filter(x => x.name != 'localLibrary').map(x => x.name),
-            localLibraryLocation: ''
+            localLibraryLocation: '',
+            showDadJoke:true
         }
         var category = settings.get('options.category');
         for (var option in defaultSettings) {                       

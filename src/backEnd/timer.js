@@ -18,7 +18,7 @@ let manualChangesLeft = 13;
 let manualChangesResetter;
 let initManualChangesLeft = () => {
     manualChangesResetter = setInterval(() => {
-        manualChangesLeft = 13;
+        manualChangesLeft = 10;
     }, 180000)
 }
 
@@ -46,7 +46,7 @@ let changeWallpaper = (force, isRandom) => {
             if (force) {
                 manualChangesLeft--;
                 if (manualChangesLeft <= 0) {
-                    notifyUser("Woaaah! Aren't you a tough person to impress.", "You can change your wallpaper manually only 13 times every 3 minutes :( Try again later!")
+                    notifyUser(`Woaaah! Aren't you a tough person to impress.", "You can change your wallpaper manually only ${manualChangesLeft} times every 3 minutes :( Try again later!`)
                     return;
                 }
             }

@@ -13,8 +13,12 @@ import {
     saveSettings,
     getSettingsOption
 } from './settings';
-import { checkForUpdates } from './update';
-import { uaSendError } from './analytics';
+import {
+    checkForUpdates
+} from './update';
+import {
+    uaSendError
+} from './analytics';
 let path = require('path');
 let tray;
 
@@ -49,24 +53,35 @@ let initTray = () => {
         },
         {
             role: 'help',
-            icon:path.join(__dirname, './icons/about.png'),
+            icon: path.join(__dirname, './icons/about.png'),
             label: 'about',
-            submenu: [
-                {
-                    label: 'developer',
-                    click() {require('electron').shell.openExternal('https://www.linkedin.com/in/fotis-fotopoulos-7b225a134')}
-                },
-                {
+            submenu: [{
                     label: 'v' + app.getVersion() + ' check for updates',
                     click() {
                         checkForUpdates(true);
-                    }                 
+                    }
                 },
                 {
-                    label:'buy me a coffee here <3',
-                    click () { require('electron').shell.openExternal('https://paypal.me/ffsp') }      
+                    label: 'developer',
+                    click() {
+                        require('electron').shell.openExternal('https://www.linkedin.com/in/fotis-fotopoulos-7b225a134')
+                    }
+                },
+
+                {
+                    label: 'my unsplash profile',
+                    click() {
+                        require('electron').shell.openExternal('https://unsplash.com/@ffstop')
+                    }
                 }
             ]
+        },
+        {
+            label: 'buy me a coffee here ^_^',
+            icon: path.join(__dirname, './icons/love.png'),
+            click() {
+                require('electron').shell.openExternal('https://paypal.me/ffsp')
+            }
         },
         {
             label: 'separator',

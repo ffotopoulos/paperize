@@ -629,6 +629,7 @@ function loadSettings(settings) {
         $("#clearTimer").prop('checked', settings.clearTimer);
         $("#saveLocationInput").val(settings.saveLocation);
         $("#localLibraryLocationInput").val(settings.localLibraryLocation)
+        $("#showDadJoke").prop('checked',settings.showDadJoke)
         //image sources
         //uncheck every checkbox @ first
         $("#sources").multipleSelect('uncheckAll');

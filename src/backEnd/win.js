@@ -27,8 +27,11 @@ import {
     checkForUpdates
 } from './update';
 import {
-    uaAppOpenned
+    uaUserStillActive
 } from './analytics';
+import {
+    showDadJoke
+} from './dailyJoke';
 let path = require('path');
 let url = require('url');
 let mainWindow = null;
@@ -68,7 +71,7 @@ let createWindow = (c) => {
                 }
                 windowSendWallpaperChanged(photo);
                 setTimer();
-            } else {                
+            } else {
                 changeWallpaper(true);
             }
         });
@@ -78,7 +81,7 @@ let createWindow = (c) => {
 
         //append image sources list 
         initImageSources();
-        
+
         //append Categories
         initCategories();
 
@@ -94,8 +97,10 @@ let createWindow = (c) => {
         checkForUpdates();
         setUpdateCheckTimer();
 
-        //send app openned event to ggl analtcs
-        uaAppOpenned();
+        
+        uaUserStillActive();
+        if (getSettingsOption("options.showDadJoke"))
+            showDadJoke();
     });
 
     // when the window is closed.
@@ -104,7 +109,7 @@ let createWindow = (c) => {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         mainWindow = null
-    })    
+    })
 }
 
 let closeWindow = () => {
@@ -121,11 +126,11 @@ let toggleWindow = () => {
     mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
 }
 
-let toggleTheaterMode = ()=>{
+let toggleTheaterMode = () => {
     mainWindow.setFullScreen(!mainWindow.isFullScreen());
 }
 
-let showWindow = ()=>{
+let showWindow = () => {
     mainWindow.show();
 }
 
@@ -191,8 +196,8 @@ let initImageSources = () => {
     mainWindow.webContents.send('initImageSources', getImageSources())
 }
 
-let initCategories = ()=>{
-    mainWindow.webContents.send('initCategories',getCategories());
+let initCategories = () => {
+    mainWindow.webContents.send('initCategories', getCategories());
 }
 
 export {

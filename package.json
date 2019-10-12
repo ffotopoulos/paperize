@@ -1,7 +1,7 @@
 {
   "name": "paperize",
   "productName": "paperize",
-  "version": "1.0.29",
+  "version": "1.0.30",
   "description": "Setting desktop wallpapers automatically using beautiful images from awesome websites!",
   "main": "src/main.js",
   "scripts": {
@@ -32,7 +32,7 @@
     },
     "win": {
       "target": "squirrel",
-      "icon": "src/backEnd/icons/app-icon.ico",
+      "icon": "src/backEnd/icons/app-icon.png",
       "asar": true
     }
   },
@@ -54,7 +54,7 @@
         "packageManager": "npm",
         "arch": "ia32",
         "platform": "win32",
-        "icon": "src/backEnd/icons/app-icon.ico",
+        "icon": "src/backEnd/icons/app-icon.png",
         "asar": true
       },
       "electronWinstallerConfig": {
