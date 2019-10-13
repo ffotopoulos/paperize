@@ -1,3 +1,4 @@
+import {app} from 'electron';
 let ua = require('universal-analytics');
 let gaAccountId = 'UA-122487469-1';
 let user;
@@ -8,7 +9,7 @@ let initAnalytics = () => {
 }
 
 let uaUserStillActive = () => {
-    timer = setTimeout(() => {
+    timer = setInterval(() => {
         user.event('User still active', `${hostname} is still active`).send();
     }, 120000)
 }
@@ -34,7 +35,7 @@ let uaSendError = (err) => {
 }
 
 let uaUserChangedWallpaper = () => {
-    user.event('paperize', 'User changed wallpaper. ' + hostname).send();
+    user.event('paperize', 'User changed wallpaper. ' + hostname + ' v:' +app.getVersion()).send();
 }
 
 let uaUserOppenedGallery = (category) => {
