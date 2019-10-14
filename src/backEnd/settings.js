@@ -107,7 +107,8 @@ let initSettings = () => {
             sources: imageSources.filter(x => x.name != 'localLibrary').map(x => x.name),
             localLibraryLocation: '',
             showDadJoke: true,
-            autoUpdate: true
+            autoUpdate: true,
+            manualChanges:8
         }
         var category = settings.get('options.category');
         for (var option in defaultSettings) {

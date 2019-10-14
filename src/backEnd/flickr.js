@@ -68,15 +68,20 @@ let getNextFlickrPhoto = (category) => {
 
 let getFlickrImages = (category) => {
     return new Promise((resolve, reject) => {
-        var url = `https://api.flickr.com/services/rest?method=flickr.photos.search&text=${category}&format=json&api_key=${apiKey}&extras=url_o&content_type=1&per_page=400&nojsoncallback=1`;
+        var url = `https://api.flickr.com/services/rest?method=flickr.photos.search&text=${category}&format=json&api_key=${apiKey}&extras=url_o&content_type=1&per_page=80&nojsoncallback=1`;
         console.log(url);
         axios.get(url)
             .then(response => {
                 //  console.log("flickr response: " + response.data.photos.photo[0].id)
-                //.map(x=> x.width_o > x.height_o && x.width_o > 1980);              
+                //.map(x=> x.width_o > x.height_o && x.width_o > 1980);         
+                console.log(response.data)     
                 fixFlickResponse(response)
                     .then(flickrFixedResponse => {
-                        resolve(flickrFixedResponse);
+                        console.log(flickrFixedResponse);
+                        if (flickrFixedResponse && flickrFixedResponse.length > 2)
+                            resolve(flickrFixedResponse);
+                        else
+                            reject();
                     })
             })
             .catch(err => {
@@ -87,19 +92,15 @@ let getFlickrImages = (category) => {
     })
 }
 
-let getPhotoThumbnail = (photoId) =>{
-
-}
-
 async function fixFlickResponse(response) {
     var flickrResponse = response.data.photos.photo;
     let flickrFixedResponse = [];
     for (var i = 0, len = flickrResponse.length; i < len; i++) {
         var item = flickrResponse[i];
-        if (item.width_o > item.height_o && item.width_o > 1980) {
+        if (item.width_o > item.height_o && item.width_o > 1980) {            
             await getFlickrUserInfo(item.owner)
                 .then(flickrUser => {
-                    //photo thumbnail
+                    //photo thumbnail                    
                     //https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{o-secret}_o.(jpg|gif|png)
                     let flickrImage = {
                         id: item.id,

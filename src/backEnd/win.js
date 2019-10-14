@@ -32,7 +32,6 @@ import {
 import {
     showDadJoke
 } from './dailyJoke';
-import { getFlickrImages, getNextFlickrPhoto } from './flickr';
 let path = require('path');
 let url = require('url');
 let mainWindow = null;

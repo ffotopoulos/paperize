@@ -50,7 +50,7 @@ let getNextPhoto = (category, isGallery = false) => {
     return new Promise((resolve, reject) => {
         var source = category != 'random' ? selectSource() : 'unsplash';
         if (isGallery) {
-            while (source == 'localLibrary') {
+            while (source == 'localLibrary' || source =='flickr') {
                 source = selectSource();
             }
         }

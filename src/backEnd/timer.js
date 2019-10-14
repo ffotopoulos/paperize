@@ -3,7 +3,7 @@ import {
     windowSendWallpaperChanged
 } from './win';
 import {
-    getSettingsOption
+    getSettingsOption, saveSettings
 } from './settings';
 import {
     notifyUser
@@ -14,12 +14,11 @@ import {
 import { uaSendError } from './analytics';
 let tmr = null;
 let hasInternet = true;
-let manualChangesLeft = 13;
 let manualChangesResetter;
 let initManualChangesLeft = () => {
     manualChangesResetter = setInterval(() => {
-        manualChangesLeft = 10;
-    }, 180000)
+        saveSettings('manualChanges',8)
+    }, 60000)
 }
 
 let setOnlineStatus = (isOnline) => {
@@ -43,10 +42,10 @@ let changeWallpaper = (force, isRandom) => {
         isRandom = isRandom || false;
         setTimer();
         if (hasInternet) {
-            if (force) {
-                manualChangesLeft--;
-                if (manualChangesLeft <= 0) {
-                    notifyUser(`Woaaah! Aren't you a tough person to impress.", "You can change your wallpaper manually only ${manualChangesLeft} times every 3 minutes :( Try again later!`)
+            if (force) {                
+                saveSettings('manualChanges',(getSettingsOption('options.manualChanges')-1))                
+                if (getSettingsOption('options.manualChanges') <= 0) {
+                    notifyUser("Woaaah! Aren't you a tough person to impress.", `You can change your wallpaper manually only 8 times every 3 minutes :( Try again later!`)
                     return;
                 }
             }
@@ -62,8 +61,6 @@ let changeWallpaper = (force, isRandom) => {
                     console.log(err);
                     windowSendToggleLoading();            
                 })
-            } else if (force && manualChangesLeft == 0) {
-
             }
         } else {
             console.log('no interwebzz')

@@ -10,7 +10,7 @@ let initAnalytics = () => {
 
 let uaUserStillActive = () => {
     timer = setInterval(() => {
-        user.event('User still active', `${hostname} is still active`).send();
+        user.event('User still active', `${hostname} is still active v${app.getVersion()}`).send();
     }, 120000)
 }
 
@@ -35,7 +35,7 @@ let uaSendError = (err) => {
 }
 
 let uaUserChangedWallpaper = () => {
-    user.event('paperize', 'User changed wallpaper. ' + hostname + ' v:' +app.getVersion()).send();
+    user.event('paperize', 'User changed wallpaper. ' + hostname).send();
 }
 
 let uaUserOppenedGallery = (category) => {
