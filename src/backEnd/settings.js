@@ -22,15 +22,22 @@ let imageSources = [{
     {
         name: 'pexels',
         label: 'Pexels',
-        logoPath:'../renderer/assets/images/pexels_logo.png',
+        logoPath: '../renderer/assets/images/pexels_logo.png',
         refUrl: 'https://www.pexels.com/'
+    },
+    {
+        name: 'flickr',
+        label: 'Flickr',
+        logoPath: '../renderer/assets/images/flickr_logo.png',
+        refUrl: 'https://flickr.com'
     },
     {
         name: 'localLibrary',
         label: 'Local Library',
         logoPath: '../renderer/assets/images/localLibrary_icon.png',
         refUrl: 'localLibrary'
-    }
+    },
+
 ]
 
 let categories = [{
@@ -99,12 +106,12 @@ let initSettings = () => {
             clearTimer: true,
             sources: imageSources.filter(x => x.name != 'localLibrary').map(x => x.name),
             localLibraryLocation: '',
-            showDadJoke:true,
-            autoUpdate:true
+            showDadJoke: true,
+            autoUpdate: true
         }
         var category = settings.get('options.category');
-        for (var option in defaultSettings) {                       
-            if (!settings.has(`options.${option}`) || (option =='category' &&  typeof(category) == "string")  ) {                
+        for (var option in defaultSettings) {
+            if (!settings.has(`options.${option}`) || (option == 'category' && typeof (category) == "string")) {
                 settings.set(`options.${option}`, defaultSettings[option])
             }
         }

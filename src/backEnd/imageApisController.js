@@ -22,6 +22,7 @@ import {
     getNextLocalLibraryPhoto
 } from "./localLibrary";
 import { getNextPexelsPhoto } from "./pexels";
+import { getNextFlickrPhoto } from "./flickr";
 
 let selectSource = () => {
     var selectedSources = getSettingsOption('options.sources');
@@ -37,6 +38,14 @@ let selectCategory = () => {
     return randomCategory;
 }
 
+let isPhotoLandscapeOrientation = (width,height)=>{
+    if (width > height) {
+        return true;
+    }else{
+        return false;
+    }    
+}
+
 let getNextPhoto = (category, isGallery = false) => {
     return new Promise((resolve, reject) => {
         var source = category != 'random' ? selectSource() : 'unsplash';
@@ -47,6 +56,21 @@ let getNextPhoto = (category, isGallery = false) => {
         }
         
         switch (source) {
+            case 'flickr':
+                getNextFlickrPhoto(category)
+                    .then((photo)=>{
+                        photo.apiName = source;
+                        photo.apiLabel = getImageSources().find(x => x.name == source).label;
+                        photo.apiLogoPath = getImageSources().find(x => x.name == source).logoPath;
+                        photo.apiRefUrl = getImageSources().find(x => x.name == source).refUrl;
+                        resolve(photo);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        uaSendError(err);
+                        reject();
+                    })
+                break;
             case 'pixabay':
                 getNextPixabayPhoto(category)
                     .then((photo) => {
@@ -173,5 +197,6 @@ let downloadAndSetWallpaper = (isRandom = false) => {
 
 export {
     downloadAndSetWallpaper,
-    getNextPhoto
+    getNextPhoto,
+    isPhotoLandscapeOrientation
 }

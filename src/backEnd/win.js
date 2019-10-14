@@ -32,6 +32,7 @@ import {
 import {
     showDadJoke
 } from './dailyJoke';
+import { getFlickrImages, getNextFlickrPhoto } from './flickr';
 let path = require('path');
 let url = require('url');
 let mainWindow = null;
@@ -96,7 +97,6 @@ let createWindow = (c) => {
         //check for updates
         checkForUpdates();
         setUpdateCheckTimer();
-
         
         uaUserStillActive();
         if (getSettingsOption("options.showDadJoke"))
