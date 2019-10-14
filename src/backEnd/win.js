@@ -177,8 +177,8 @@ let windowSendGalleryFunctionDone = () => {
     mainWindow.webContents.send('galleryFunctionDone');
 }
 
-let windowSendUpdateAvailability = (available) => {
-    mainWindow.webContents.send('updateAvailability', available)
+let windowSendUpdateAvailability = (available,showPopUp=true) => {
+    mainWindow.webContents.send('updateAvailability', available,showPopUp)
 }
 
 let windowSendStartUpdate = () => {

@@ -119,9 +119,11 @@ ipcRenderer.on('initImageSources', (event, sources) => {
 })
 
 
-ipcRenderer.on('updateAvailability', (event, available) => {
+ipcRenderer.on('updateAvailability', (event, available, showPopUp) => {
     if (available) {
         $(".updateNotifIcon").show();
+        if (showPopUp)
+            $(".updateNotifIcon").click();
     } else {
         $(".updateNotifIcon").hide();
     }
@@ -240,7 +242,7 @@ $(".minimize").click(() => {
 
 $(".toggleTheater").click(() => {
     var electron = require('electron');
-    var window = electron.remote.getCurrentWindow();     
+    var window = electron.remote.getCurrentWindow();
     //ipcRenderer.send('toggleTheater');
     window.setFullScreen(!window.isFullScreen());
     if ($("#header").is(":visible") && window.isFullScreen()) {
@@ -628,8 +630,9 @@ function loadSettings(settings) {
         $("#deletePrevImage").prop('checked', settings.deletePrevImage);
         $("#clearTimer").prop('checked', settings.clearTimer);
         $("#saveLocationInput").val(settings.saveLocation);
-        $("#localLibraryLocationInput").val(settings.localLibraryLocation)
-        $("#showDadJoke").prop('checked',settings.showDadJoke)
+        $("#localLibraryLocationInput").val(settings.localLibraryLocation);
+        $("#showDadJoke").prop('checked', settings.showDadJoke);
+        $("#autoUpdate").prop('checked', settings.autoUpdate);
         //image sources
         //uncheck every checkbox @ first
         $("#sources").multipleSelect('uncheckAll');

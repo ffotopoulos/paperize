@@ -19,6 +19,7 @@ import {
     uaAppUpdated,
     uaSendError
 } from './analytics';
+import { getSettingsOption } from './settings';
 let axios = require('axios');
 let updateCheckTimer = null;
 let installerFilePath = app.getPath('userData') + `\\paperize_setup.exe`;
@@ -57,14 +58,21 @@ let checkForUpdates = (notifyManually) => {
     notifyManually = notifyManually || false
     getLatestVersion().then((data) => {
         console.log(`Latest version: ${data.version}`)
-        if (data.version != app.getVersion()) {
-            windowSendUpdateAvailability(true);
-            if (firstTime || notifyManually) {
-                firstTime = false;
-                notifyUser("Update available!", data.msg, () => {
-                    windowSendStartUpdate();
-                })
-            }
+        if (data.version != app.getVersion()) {   
+            var autoUpdate = getSettingsOption("options.autoUpdate") ;
+            windowSendUpdateAvailability(true,!autoUpdate)
+            if(autoUpdate){
+                notifyUser(`New update v${app.getVersion()}! `, "Latest update is being installed in the background. </br> Changes: " + data.msg);
+                updateApp();
+            }           
+            else{
+                if (firstTime || notifyManually) {
+                    firstTime = false;
+                    notifyUser("Update available!", data.msg, () => {
+                        windowSendStartUpdate();
+                    })
+                }
+            }           
         } else {
             if (notifyManually) {
                 notifyUser("You're cool.", "paperize is up to date");

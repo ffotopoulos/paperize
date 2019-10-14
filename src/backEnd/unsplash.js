@@ -56,14 +56,14 @@ let getNextUnsplashPhoto = (category) => {
                         })
                         .catch((err) => {
                             console.log(err);
-                            uaSendError("Cant get pixabay images: " + err);
+                            uaSendError("Cant get unnsplash images: " + err);
                             reject();
                         })
 
                 })
                 .catch((err) => {
                     console.log(err);
-                    uaSendError("Cant get pixabay images: " + err);
+                    uaSendError("Cant get unnsplash images: " + err);
                     reject();
                 })
         } else {
@@ -91,7 +91,7 @@ let getNextUnsplashPhoto = (category) => {
                 })
                 .catch((err) => {
                     console.log(err);
-                    uaSendError("Cant get pixabay images: " + err);
+                    uaSendError("Cant get unnsplash images: " + err);
                     reject();
                 })
         }
