@@ -53,8 +53,7 @@ let getNextPhoto = (category, isGallery = false) => {
             while (source == 'localLibrary' || source =='flickr') {
                 source = selectSource();
             }
-        }
-        
+        }        
         switch (source) {
             case 'flickr':
                 getNextFlickrPhoto(category)
@@ -132,10 +131,9 @@ let getNextPhoto = (category, isGallery = false) => {
 }
 
 let downloadAndSetWallpaper = (isRandom = false) => {
-    return new Promise((resolve, reject) => {
-        // var category = !isRandom ? getSettingsOption('options.category').replace('@@CUSTOM', '') : 'random';
+    return new Promise((resolve, reject) => {        
         var category = !isRandom ? selectCategory().replace('@@CUSTOM', '') : 'random';
-        console.log('lol ok cat is ' + category);
+        console.log('category: ' + category);
         getNextPhoto(category)
             .then((nextPhoto) => {
                 if (nextPhoto.apiName != 'localLibrary') {

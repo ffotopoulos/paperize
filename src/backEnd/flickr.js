@@ -40,7 +40,7 @@ let getNextFlickrPhoto = (category) => {
                 })
                 .catch((err) => {
                     console.log(err);
-                    uaSendError("Cant get pixabay images: " + err);
+                    uaSendError("Cant get flickr images: " + err);
                     reject();
                 })
         } else {
@@ -72,12 +72,8 @@ let getFlickrImages = (category) => {
         console.log(url);
         axios.get(url)
             .then(response => {
-                //  console.log("flickr response: " + response.data.photos.photo[0].id)
-                //.map(x=> x.width_o > x.height_o && x.width_o > 1980);         
-                console.log(response.data)     
                 fixFlickResponse(response)
-                    .then(flickrFixedResponse => {
-                        console.log(flickrFixedResponse);
+                    .then(flickrFixedResponse => {                        
                         if (flickrFixedResponse && flickrFixedResponse.length > 2)
                             resolve(flickrFixedResponse);
                         else
@@ -95,29 +91,27 @@ let getFlickrImages = (category) => {
 async function fixFlickResponse(response) {
     var flickrResponse = response.data.photos.photo;
     let flickrFixedResponse = [];
-    for (var i = 0, len = flickrResponse.length; i < len; i++) {
-        var item = flickrResponse[i];
-        if (item.width_o > item.height_o && item.width_o > 1980) {            
-            await getFlickrUserInfo(item.owner)
-                .then(flickrUser => {
-                    //photo thumbnail                    
-                    //https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{o-secret}_o.(jpg|gif|png)
-                    let flickrImage = {
-                        id: item.id,
-                        user_id: item.owner,
-                        user: flickrUser.username._content,
-                        userUrl: flickrUser.profileurl._content,
-                        imageURL: item.url_o,
-                        smallPhotoUrl: `https://farm${item.farm}.staticflickr.com/${item.server}/${item.id}_${item.secret}_t.jpg`
-                    }
-                    flickrFixedResponse.push(flickrImage);
-                })
-                .catch(err => {
-                    console.log(err);
-                    reject();
-                })
+    try {        
+        for (var i = 0, len = flickrResponse.length; i < len; i++) {
+            var item = flickrResponse[i];
+            if (item.width_o > item.height_o && item.width_o > 1980) {
+                let flickrUser = await getFlickrUserInfo(item.owner)
+                let flickrImage = {
+                    id: item.id,
+                    user_id: item.owner,
+                    user: flickrUser.username._content,
+                    userUrl: flickrUser.profileurl._content,
+                    imageURL: item.url_o,
+                    smallPhotoUrl: `https://farm${item.farm}.staticflickr.com/${item.server}/${item.id}_${item.secret}_t.jpg`
+                }
+                flickrFixedResponse.push(flickrImage);
+            }
         }
+    } catch (err) {
+        console.log(err);
+        throw new Error("cant fix flickr response");
     }
+
     return flickrFixedResponse;
 }
 

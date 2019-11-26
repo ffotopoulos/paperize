@@ -12,9 +12,9 @@ let getNextLocalLibraryPhoto = () => {
     return new Promise((resolve, reject) => {
         var localLibaryLocation = getSettingsOption('options.localLibraryLocation');
         var localPhotos = []
-        console.log('haha ' + localLibaryLocation)
+        console.log('local library : ' + localLibaryLocation)
         if(!localLibaryLocation || localLibaryLocation.trim()==""){
-            notifyUser("Hey you!", "Your local library path does not exist. Are you trying to make me crash? :'( Go back to settings and change it please!")
+            notifyUser("Hey you!", "Your local library path does not exist. Are you trying to make me crash? :'( Open the settings menu and change it please!")
             reject();
         }
         else{

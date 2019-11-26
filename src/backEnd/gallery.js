@@ -17,8 +17,12 @@ import {
 
 let loadGallery = async (count, category) => {
     var photos = []
-    if (getSettingsOption('options.sources').length == 1 && getSettingsOption('options.sources')[0] == 'localLibrary') {
-        notifyUser('Hey you! ', 'Please select an online source first instead of just your local library!')
+    var sources = getSettingsOption('options.sources');
+    if (sources.length == 1 && (sources[0] == 'localLibrary' || sources[0] == 'flickr')) {
+        notifyUser('Hey you! ', 'Please select an online source other than Flickr and Local Library!');
+        return photos;
+    } else if (sources.length == 2 && (sources.indexOf('flickr') > -1 && sources.indexOf('localLibrary') > -1)) {
+        notifyUser('Hey you! ', 'Please select an online source other than Flickr and Local Library!');
         return photos;
     } else {
         for (var i = 0; i < count; i++) {
@@ -29,7 +33,7 @@ let loadGallery = async (count, category) => {
                 })
                 .catch((err) => {
                     uaSendError('cant loadgalerry ' + err);
-                    console.log(err);                    
+                    console.log(err);
                 })
         }
         return photos;

@@ -41,7 +41,7 @@ let setUpdateCheckTimer = () => {
 
 let getLatestVersion = () => {
     return new Promise((resolve, reject) => {
-        axios.get("http://paperize.co/version.php")
+        axios.get("https://paperize.co/version.php")
             .then(response => {
                 resolve(response.data);
             })
@@ -134,7 +134,7 @@ let updateApp = () => {
         console.log('cannot update:' + err);
         uaSendError('cannot update:' + err);
         windowSendToggleLoading();
-        notifyUser("Ooops...", "Can't update app at the moment. Maybe due to me not being able to afford a decent server :'(. Try again later or click on this bubble to download manually from http://paperize.co!",
+        notifyUser("Ooops...", "Can't update app at the moment. Maybe due to me not being able to afford a decent server :'(. Try again later or click on this bubble to download manually from paperize.co!",
             () => {
                 require('electron').shell.openExternal('http://paperize.co/#download')
             })

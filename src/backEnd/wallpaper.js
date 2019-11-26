@@ -8,8 +8,7 @@ let setWallpaper = (photoPath) => {
         wallpaper.set(photoPath, {
                 scale: getSettingsOption('options.scale')
             })
-            .then(() => {
-                uaUserChangedWallpaper();
+            .then(() => {                
                 resolve(photoPath);
             })
             .catch(error => {
