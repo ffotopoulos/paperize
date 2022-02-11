@@ -1,7 +1,7 @@
 # paperize
 
-A minimal windows automatic wallpaper change app!
-
+A minimal windows automatic wallpaper change app!<br>
+https://paperize.co<br><br>
 <img src="https://www.paperize.co/images/app.jpg" width=500/>
 <br>
 <img src="https://www.paperize.co/images/settings.jpg" width=350/>
