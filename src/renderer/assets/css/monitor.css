@@ -1,0 +1,108 @@
+
+.monitor {
+  position: absolute;
+  left: 300px;
+  width: 250px;
+  height: 160px;
+  background-color: #444;
+  border-radius: 10px;
+  border: none;
+}
+
+.screen {
+  position: absolute;
+  top: 9px; left: 10px;
+  width: 230px;
+  height: 140px;
+  background-color: #EEE;
+  border-radius: 10px;
+  border: 1px solid #999;
+}
+
+.stand {
+  position: absolute;
+  top: 160px; left: 110px;
+  width: 30px;
+  height: 20px;
+  background-color: #444;
+}
+
+.base {
+  position: absolute;
+  top: 20px; left: -20px;
+  width: 70px;
+  height: 10px;
+  background-color: #444;
+  border-radius: 2px;
+}
+
+.inner {
+  position: absolute;
+  top: 10px; left: 10px;
+  width: 230px;
+  height: 140px;
+  background-color: #FFF;
+/*   border: 3px solid #999; */
+  border-radius: 5px;
+}
+
+.straw {
+  z-index: -1;
+  position: absolute;
+  top: 74px; left: 139px;
+  width: 200px;
+  height: 7px;
+  background-color: #EAE6E5;
+}
+
+.inner {
+  position: absolute;
+  width: 200px;
+  height: 7px;
+  top: 0; left: 0;
+  background-color: #5A3A31;
+  width: 10px;
+  animation: 3s move linear infinite;
+}
+
+.move {
+  opacity: 1;
+    height: 50px;
+    transition: height 2.2s ease-out, transform 1.3s;
+}
+
+ @keyframes move { 
+  100% {width: 200px}
+} 
+
+@keyframes drop {
+  100% { top: 57px; height: 0}
+}
+
+.typed-cursor{
+    opacity: 1;
+    -webkit-animation: blink 0.7s infinite;
+    -moz-animation: blink 0.7s infinite;
+    animation: blink 0.7s infinite;
+}
+@keyframes blink{
+    0% { opacity:1; }
+    50% { opacity:0; }
+    100% { opacity:1; }
+}
+@-webkit-keyframes blink{
+    0% { opacity:1; }
+    50% { opacity:0; }
+    100% { opacity:1; }
+}
+@-moz-keyframes blink{
+    0% { opacity:1; }
+    50% { opacity:0; }
+    100% { opacity:1; }
+}
+
+.element {
+  position: absolute;
+  top:20px; left: 15px;
+  width: 180px;
+}

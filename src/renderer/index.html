@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type='text/javascript'>
+        window.ipcRenderer = require('electron').ipcRenderer;
+    </script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link href="https://fonts.googleapis.com/css?family=Arimo" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/main.css" />
+    <link rel="stylesheet" href="./assets/css/animations.css" />
+    <link rel="stylesheet" href="./assets/css/fontawesome-all.min.css" />
+    <link rel="stylesheet" href="./assets/css/spinKit.css" />
+    <link rel="stylesheet" href="./assets/css/multiple-select.css" />    
+    <link href="./assets/css/context-menu.css" rel="stylesheet">    
+</head>
+
+<body class="preload">
+    <div class="taskbar-main row">
+        <div class="photoCredit hidden">
+            photo by:
+        </div>
+        <div class="taskbar-drag">
+            d
+        </div>
+        <div class="taskbar">
+            <div class="icon">
+                <i class="roundedIcon fa fa-flag shrink updateNotifIcon" title="update available"></i>
+            </div>
+            <div class="icon">
+                <i class="toggleHistory fa fa-history shrink" title="Show history"></i>
+            </div>
+            <div class="icon">
+                <i class="toggleTheater fa fa-film shrink" title="Toggle theater mode"></i>
+            </div>
+            <div class="icon minimIcon">
+                <i class=" minimize fa fa-times shrink" title="minimize to tray"></i>
+            </div>
+        </div>
+    </div>
+    <div id="playback">
+        <div class="playback-icon " title="automatic wallpaper change on/off (space)">
+            <i class="fa fa-pause roundedIcon playback-toggle shrink"></i>
+        </div>
+    </div>
+
+    <div class="api-logo open-url" data-url="">
+        <img src="" class="shrink">
+        <span> </span>
+    </div>
+
+    <div id="minimized" class="minimised animated fadeInRight">
+        <div class="minim-icon ">
+            <i class="fa fa-cog shrink showSettings" id="minimSettings" title="settings"></i>
+        </div>
+
+        <div class="minim-icon ">
+            <i class="fa fa-arrow-right  next shrink" title="next (right arrow ->)"></i>
+        </div>
+        <div class="minim-icon ">
+            <i class="fa fa-random  randomize shrink" title="randomize"></i>
+        </div>
+        <div class="minim-icon ">
+            <i class="fa fa-images  gallery shrink" title="gallery"></i>
+        </div>
+        <!-- <div class="minim-icon">
+            <i class="fa fa-arrow-up toggleWrapper shrink" title="show"></i>
+        </div> -->
+    </div>
+
+    <div id="wrapper">
+        <header id="header" class="animated fadeIn" style="display: none;">
+             
+            <nav class="use-middle">
+                
+                <ul>
+                    <li>
+                        <a href="#settings" class="showSettings" id="btnSettings">
+                            <i class="fa fa-cog" style="padding-right:3.5px;"></i> settings</a>
+                    </li>
+                    <li>
+                        <a href="#next" class="next">
+                            <i class="fa fa-arrow-right " style="padding-right:3.5px;"></i> next</a>
+                    </li>
+                    <li class="is-middle">
+                        <a href="#randomize" class="randomize">
+                            <i class="fa fa-random " style="padding-right:3.5px;"></i> randomize</a>
+                    </li>
+                    <li>
+                        <a class="toggleWrapper" href="javascript:void(0)">
+                            <i class="fa fa-arrow-down" style="padding-right:8.5px;"></i>hide </a>
+                    </li>
+                </ul>
+            </nav>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#gallery" class="gallery" id="gallery">
+                            <i class="fa fa-images" style="padding-right:3.5px;"></i> gallery</a>
+                    </li>
+
+                </ul>
+            </nav>
+        </header>
+
+        <div id="settings" class="animated fadeIn">
+            <div class="close closeSettings"></div>
+            <div id="checkmark">
+
+            </div>
+            <svg style="display:none" class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+                <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+            </svg>
+            <div class="inner">
+                <div class="group">
+                    <span class="label">
+                        get images from
+                    </span>
+                    <select id="sources" multiple="multiple" class="dropdown">
+
+                    </select>
+                    <span class="label localLibraryLocationGroup animated fadeInLeft" style="display:none">
+                        <span style="display:block">Library path:</span>
+                        <input class="fileInput" type="text" id="localLibraryLocationInput">
+                        <input id="localLibraryLocation" type="file" webkitdirectory style="display:none" />
+                    </span>
+                </div>
+
+                <div class="group">
+                    <span class="label">
+                        change wallpaper every
+                    </span>
+                    <select id="interval" class="dropdown">
+                        <option value="0" selected>Don't change</option>
+                        <option value="60000">1 minute</option>
+                        <option value="180000">3 minutes</option>
+                        <option value="300000">5 minutes</option>
+                        <option value="600000">10 minutes</option>
+                        <option value="1200000">20 minutes</option>
+                        <option value="1800000">30 minutes</option>
+                        <option value="3600000">1 hour</option>
+                        <option value="10800000">3 hours</option>
+                        <option value="18000000">5 hours</option>
+                        <option value="25200000">7 hours</option>
+                        <option value="43200000">12 hours</option>
+                        <option value="86400000">1 day</option>
+                    </select>
+                </div>
+
+                <div class="group">
+                    <span class="label">
+                        wallpaper fit
+                    </span>
+                    <select id="wallpaperFit" class="dropdown">
+                        <option value="0" selected>Center</option>
+                        <option value="1">Tile</option>
+                        <option value="2">Stretch</option>
+                        <option value="3">Fit</option>
+                        <option value="4">Fill</option>
+                        <option value="5">Span</option>
+                    </select>
+                </div>
+
+                <div class="group" style="display: none" title="">
+                    <span class="label">
+                        enable multiple monitor category support
+                    </span>
+                    <div class="onoffswitch">
+                        <input type="checkbox" class="onoffswitch-checkbox settingsCheckbox" id="clearTimer" checked>
+                        <label class="onoffswitch-label" for="clearTimer"></label>
+                    </div>
+                </div>
+
+                <div class="group" style="">
+                    <span class="label">
+                        Choose the monitors to set the wallpaper to
+                    </span>
+                    <select id="selectedMonitors" multiple="multiple" class="dropdown">
+                       
+                    </select>
+                </div>
+
+                <div class="group">
+                    <span class="label">
+                        Category
+                    </span>
+                    <select id="category" multiple="multiple" class="dropdown">
+
+                    </select>
+                    <input type="text" id="customCategoryInput"
+                        style="width:365px;margin-top:10px;text-align: center;display:inline;"
+                        placeholder="add your custom category to the list">
+                    <div class="playback-icon " style="margin-top:-5px;margin-left:5px">
+                        <i class="fa fa-plus roundedIcon addCustomCategory shrink"></i>
+                    </div>
+                </div>
+
+                <div class="group"
+                    title="Enabling this option will download and install the latest updates in the background automatically">
+                    <span class="label">
+                        Get latest updates automatically
+                    </span>
+                    <div class="onoffswitch">
+                        <input type="checkbox" class="onoffswitch-checkbox settingsCheckbox" id="autoUpdate" checked>
+                        <label class="onoffswitch-label" for="autoUpdate"></label>
+                    </div>
+                </div>
+
+                <div class="group"
+                    title="Enabling this option will stop the automatic wallpaper change when you use randomize or gallery to change your desktop wallpaper">
+                    <span class="label">
+                        randomize and gallery stop the timer
+                    </span>
+                    <div class="onoffswitch">
+                        <input type="checkbox" class="onoffswitch-checkbox settingsCheckbox" id="clearTimer" checked>
+                        <label class="onoffswitch-label" for="clearTimer"></label>
+                    </div>
+                </div>
+
+
+
+                <div class="group"
+                    title="Enabling this option will allow paperize to start as soon as you log in to Windows">
+                    <span class="label">
+                        start paperize with windows
+                    </span>
+                    <div class="onoffswitch">
+                        <input type="checkbox" class="onoffswitch-checkbox settingsCheckbox" id="startOnLogin" checked>
+                        <label class="onoffswitch-label" for="startOnLogin"></label>
+                    </div>
+                </div>
+
+
+                <div class="group"
+                    title="Enabling this option will download and save the wallpaper image to your desired location">
+                    <span class="label">
+                        Save downloaded image
+                    </span>
+                    <div class="onoffswitch">
+                        <input type="checkbox" class="onoffswitch-checkbox settingsCheckbox" id="saveOnDownload">
+                        <label class="onoffswitch-label" for="saveOnDownload"></label>
+                    </div>
+                    <span class="label saveLocationGroup animated fadeInLeft" style="display:none">
+                        <span style="display:block">Folder path:</span>
+                        <input class="fileInput" type="text" id="saveLocationInput">
+                        <input id="saveDirectory" type="file" webkitdirectory style="display:none" />
+                        <span style="display:block;text-transform: lowercase;font-size:12.2px">
+                            delete previous images (images whose name starts with paperize_)
+                            <input type="checkbox" class="settingsCheckbox" id="deletePrevImage">
+                        </span>
+                    </span>
+
+                </div>
+
+                <div class="group" title="">
+                    <span class="label">
+                        show a dad joke on start
+                    </span>
+                    <div class="onoffswitch">
+                        <input type="checkbox" class="onoffswitch-checkbox settingsCheckbox" id="showDadJoke" checked>
+                        <label class="onoffswitch-label" for="showDadJoke"></label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="gallery-wrapper" class="animated fadeIn">
+            <div class="panel">
+                <div style="text-align: center;font-size:25px;margin-top:-8px;display: none" id="historyHeader">
+                    HISTORY</div>
+                <select id="galleryCategory" class="galleryUI">
+                    <option value="landscapes" selected>Landcapes</option>
+                    <option value="abstract">Abstract</option>
+                    <option value="nature">Nature</option>
+                    <option value="people">People</option>
+                    <option value="supercars">Super Cars</option>
+                    <option value="art">Art</option>
+                    <option value="animals">Animals</option>
+                    <option value="food">Food</option>
+                    <option value="technology">Technology</option>
+                    <option value="custom">Custom</option>
+                </select>
+                <input type="text" id="customGalleryCategoryInput" class="animated fadeIn" style="display:none"
+                    placeholder="type your category">
+
+                <span class="galleryUI" style="padding-left:10px;position: relative;top:-2px">
+                    <i class="roundedIcon fa fa-search gallery"> </i>
+                </span>
+            </div>
+            <div class="close closeGallery"></div>
+            <div id="galleryCheckmark">
+
+            </div>
+            <div class="gallery-container">
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <div id="bg" class="bg bgImage animated fadeIn">
+        <img id="bgPicture" style="width:100%;height: 100%" src="" />
+    </div>
+    <div class="fade"></div>
+    <div class="progBar">
+        <div id="container">
+
+        </div>
+    </div>
+    <div class="offline">
+        <div class="align-center">
+            <img src="./assets/images/sad.png" style="width:50px;display:inline-block">
+            <div>
+                NO INTERNET CONNECTION
+            </div>
+            <div class="spinner"></div>
+        </div>
+    </div>
+    <div class="loading">
+        <div class="sk-cube-grid">
+            <div class="sk-cube sk-cube1"></div>
+            <div class="sk-cube sk-cube2"></div>
+            <div class="sk-cube sk-cube3"></div>
+            <div class="sk-cube sk-cube4"></div>
+            <div class="sk-cube sk-cube5"></div>
+            <div class="sk-cube sk-cube6"></div>
+            <div class="sk-cube sk-cube7"></div>
+            <div class="sk-cube sk-cube8"></div>
+            <div class="sk-cube sk-cube9"></div>
+        </div>
+        <div class="align-center loadingHeader">SERVING...</div>
+    </div>
+    <div class="c-modal" role="alert">
+        <div class="c-modal-container">
+            <p>A new awesome update is available!
+                <br> Do you want to install it?</p>
+            <ul class="c-modal-buttons">
+                <li>
+                    <a href="#0" class="installUpdate">Yes</a>
+                </li>
+                <li>
+                    <a href="#0" onclick="document.querySelector('.c-modal').classList.remove('is-visible')">No</a>
+                </li>
+            </ul>
+            <a href="#0" class="c-modal-close">Close</a>
+        </div>
+        <!-- c-modal-container -->
+    </div>
+    <!-- c-modal -->
+    <menu id="cmMonitors" class="monitorsMenu context-menu-default">
+
+    </menu>   
+</body>
+<!-- Insert this line above script imports  -->
+<script>
+    if (typeof module === 'object') {
+        window.module = module;
+        module = undefined;
+    }
+</script>
+<script src="./assets/js/jquery.min.js"></script>
+<script src="./assets/js/progressbar.min.js"></script>
+<script src="./assets/js/multiple-select.js"></script>
+<script src="./assets/js/app.js"></script>
+<!-- Insert this line after script imports -->
+<script>
+    if (window.module) module = window.module;
+</script>
+
+</html>
