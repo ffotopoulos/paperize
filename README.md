@@ -1,6 +1,7 @@
 # paperize
 
-A minimal windows automatic wallpaper change app!<br>
+A minimal windows automatic wallpaper change app using images from 
+Unsplash, Pixabay and Pexels!<br>
 https://paperize.co<br><br>
 <img src="https://www.paperize.co/images/app.jpg" width=500/>
 <br>
