@@ -1,5 +1,6 @@
+Notice: This app was created 2 years ago and uses Electron-Forge 5.2.4 <br>
+My original bitbucket repo is located here: https://bitbucket.org/ffotopoulos/paperize
 # paperize
-
 A minimal windows automatic wallpaper change app using images from 
 Unsplash, Pixabay and Pexels!<br>
 https://paperize.co<br><br>
