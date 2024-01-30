@@ -5,7 +5,7 @@ Unsplash, Pixabay and Pexels!<br>
 https://paperize.co<br><br>
 <img src="https://i.postimg.cc/50xCdqcm/1.jpg" width=500/>
 <br>
-<img src="https://i.postimg.cc/Wb9spGB4/2.jpg" width=350/>
+<img src="https://i.postimg.cc/KztR9mZw/4.jpg" width=350/>
 <img src="https://i.postimg.cc/k5SCykBV/3.jpg" width=350/>
 
 ### Prerequisites
