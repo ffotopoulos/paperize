@@ -3,10 +3,10 @@ original bitbucket repo is located here: https://bitbucket.org/ffotopoulos/paper
 A minimal windows automatic wallpaper change app using images from 
 Unsplash, Pixabay and Pexels!<br>
 https://paperize.co<br><br>
-<img src="https://www.paperize.co/images/app.jpg" width=500/>
+<img src="https://i.postimg.cc/50xCdqcm/1.jpg" width=500/>
 <br>
-<img src="https://www.paperize.co/images/settings.jpg" width=350/>
-<img src="https://www.paperize.co/images/gallery.jpg" width=350/>
+<img src="https://i.postimg.cc/Wb9spGB4/2.jpg" width=350/>
+<img src="https://i.postimg.cc/k5SCykBV/3.jpg" width=350/>
 
 ### Prerequisites
 
